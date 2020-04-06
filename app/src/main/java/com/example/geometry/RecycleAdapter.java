@@ -22,6 +22,10 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleV
         stepSloveList.add(stepSlove);
     }
 
+    public static void clear() {
+        stepSloveList.clear();
+    }
+
     static class RecycleViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -36,7 +40,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleV
     @Override
     public RecycleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.step_card, parent, false);
-        return  new RecycleViewHolder(view);
+        return new RecycleViewHolder(view);
     }
 
     @Override
