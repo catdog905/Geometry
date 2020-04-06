@@ -5,13 +5,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
-import androidx.constraintlayout.solver.widgets.Rectangle;
 
 public class GUI extends View {
 
