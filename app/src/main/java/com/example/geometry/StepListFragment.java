@@ -27,8 +27,7 @@ public class StepListFragment extends Fragment {
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
 
-        RecycleAdapter adapter = new RecycleAdapter(new ArrayList<StepSlove>());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(new RecycleAdapter());
 
         return view;
     }

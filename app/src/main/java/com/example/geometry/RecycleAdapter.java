@@ -8,14 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleViewHolder> {
 
     private static List<StepSlove> stepSloveList;
 
-    public RecycleAdapter(List<StepSlove> persons) {
-        stepSloveList = persons;
+    public RecycleAdapter() {
+        stepSloveList = new ArrayList<StepSlove>();
     }
 
     public static void addItem(StepSlove stepSlove) {
@@ -24,6 +25,10 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleV
 
     public static void clear() {
         stepSloveList.clear();
+    }
+
+    public static void addAll(List<StepSlove> steps) {
+        stepSloveList.addAll(steps);
     }
 
     static class RecycleViewHolder extends RecyclerView.ViewHolder {
