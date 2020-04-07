@@ -1,8 +1,11 @@
 package com.example.geometry;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +17,14 @@ import java.util.List;
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleViewHolder> {
 
     private static List<StepSlove> stepSloveList;
+    private static Context context;
 
-    public RecycleAdapter() {
+    public static Context getContext() {
+        return context;
+    }
+
+    public RecycleAdapter(Context context) {
+        RecycleAdapter.context = context;
         stepSloveList = new ArrayList<StepSlove>();
     }
 
@@ -34,10 +43,17 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleV
     static class RecycleViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
+        TextView rule;
+        ImageView openButton;
+        FrameLayout open_layout;
+        boolean open = false;
 
-        public RecycleViewHolder(@NonNull View itemView) {
+        RecycleViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.text);
+            open_layout = itemView.findViewById(R.id.open_layout);
+            rule = itemView.findViewById(R.id.rule);
+            openButton = itemView.findViewById(R.id.openButton);
         }
     }
 
@@ -49,9 +65,29 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.RecycleV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecycleViewHolder holder, int position) {
-        holder.name.setText(stepSloveList.get(position).text);
+    public void onBindViewHolder(@NonNull final RecycleViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.open) {
+                    holder.open_layout.setVisibility(View.GONE);
+                    holder.openButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    holder.open = false;
+                } else {
+                    holder.open_layout.setVisibility(View.VISIBLE);
+                    holder.openButton.setImageResource(R.drawable.ic_clear_black_24dp);
+                    holder.open = true;
+                }
+            }
+        });
+
+        if (position == stepSloveList.size() - 1)
+            holder.itemView.findViewById(R.id.rect).setVisibility(View.GONE);
+
+        holder.name.setText(stepSloveList.get(position).template);
+        holder.rule.setText(stepSloveList.get(position).rule);
     }
+
 
     @Override
     public int getItemCount() {
