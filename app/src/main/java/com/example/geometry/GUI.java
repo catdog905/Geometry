@@ -13,6 +13,8 @@ import android.view.View;
 
 import androidx.constraintlayout.solver.widgets.Rectangle;
 
+import java.util.ArrayList;
+
 public class GUI extends View {
 
     private Figure figure;
@@ -22,6 +24,7 @@ public class GUI extends View {
     Node stopTempNode;
     Line currentLine;
     Node currentNode;
+    Node adjacentNode;
     float lastXTouch;
     float lastYTouch;
     public static int delta = 25;
@@ -60,6 +63,10 @@ public class GUI extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (figure.lines.size()>=1){
+                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(figure.lines.get(0), mx, my);
+                    Log.d("Tag", Float.toString(distance.dist));
+                }
                 currentNode = null;
                 currentLine = null;
                 for (Node node : figure.nodes) {
@@ -86,6 +93,7 @@ public class GUI extends View {
                     figure.nodes.add(stopTempNode);
                 }
                 invalidate();
+                break;
 
             case MotionEvent.ACTION_MOVE:
                 if (currentNode != null){
@@ -104,7 +112,33 @@ public class GUI extends View {
                     tempLine.setStop(stopTempNode);
                     startTempNode.addLine(tempLine);
                 }
+
+                if(currentNode != null) {
+                    double min = delta * delta + 1;
+                    ArrayList<Node> lineAdjacentNodes = new ArrayList<>();
+                    for (Line line : currentNode.lines) {
+                        if (line.start != adjacentNode) {
+                            lineAdjacentNodes.add(line.start);
+                        } else {
+                            lineAdjacentNodes.add(line.stop);
+                        }
+                    }
+                    for (Node node : figure.nodes) {
+                        boolean checkAdjacent = true;
+                        for (Node adjacentNode : lineAdjacentNodes) {
+                            if (node == adjacentNode) {
+                                checkAdjacent = false;
+                                break;
+                            }
+                        }
+                        double len = Math.pow((currentNode.x - node.x), 2) + Math.pow((currentNode.y - node.y), 2);
+                        if (checkAdjacent && node != currentNode && len <= delta * delta && min > len) {
+                            adjacentNode = node;
+                        }
+                    }
+                }
                 invalidate();
+                break;
 
             case MotionEvent.ACTION_UP:
                 if (currentNode != null){
@@ -116,7 +150,16 @@ public class GUI extends View {
                     tempLine.setStop(stopTempNode);
                     figure.lines.add(tempLine);
                 }
+                if(adjacentNode != null)
+                    for (Line line : adjacentNode.lines) {
+                        if (line.start == adjacentNode) {
+                            line.start = currentNode;
+                        } else {
+                            line.stop = currentNode;
+                        }
+                    }
                 invalidate();
+                break;
         }
         return true;
     }

@@ -6,7 +6,7 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 
-public class Line {
+public class Line extends Object{
     Node start;
     Node stop;
     float value;
@@ -23,7 +23,7 @@ public class Line {
     public void setStop(Node stop) {
         this.stop = stop;
         r = createPathFromLine();
-        Log.d("hello", ""+start.x);
+        //Log.d("hello", ""+start.x);
     }
 
     public void setXYNodes(float startX, float startY, float stopX, float stopY) {
@@ -61,4 +61,8 @@ public class Line {
     }
 
 
+    @Override
+    public void moving() {
+
+    }
 }

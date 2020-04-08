@@ -7,6 +7,8 @@ public class Node{
     public float y;
     ArrayList<Line> lines = new ArrayList<>();
 
+    public Node() { }
+
     public Node(float x, float y) {
         this.x = x;
         this.y = y;
