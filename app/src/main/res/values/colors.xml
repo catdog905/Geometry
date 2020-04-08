@@ -5,4 +5,5 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="textColor">#a04343</color>
     <color name="boldTextColor">#a04343</color>
+    <color name="lightThemeColor">#ceb2b2</color>
 </resources>

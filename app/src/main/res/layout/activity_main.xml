@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment android:name="com.example.geometry.StepListFragment"
+    <fragment
+        android:id="@+id/StepList"
+        android:name="com.example.geometry.StepListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/StepList" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
