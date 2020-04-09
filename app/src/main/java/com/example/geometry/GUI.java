@@ -11,8 +11,9 @@ import android.view.View;
 
 public class GUI extends View {
 
-    private Figure figure;
-    private Paint mPaint;
+    Figure figure;
+    Paint mPaintNode;
+    Paint mPaintLine;
     Line tempLine;
     Node startTempNode;
     Node stopTempNode;
@@ -20,25 +21,40 @@ public class GUI extends View {
 
     public GUI(Context context) {
         super(context);
-        initPaintSettings();
+        initPaintSettings(context);
         figure = new Figure();
     }
 
-    private void initPaintSettings(){
-        mPaint = new Paint();
-        mPaint.setStrokeWidth(10);
+    // Перегруженный конструктор для копирования с изменением контекста
+    public GUI(GUI gui, Context context) {
+        super(context);
+        this.figure = gui.figure;
+        this.mPaintNode = gui.mPaintNode;
+        this.mPaintLine = gui.mPaintLine;
+        this.tempLine = gui.tempLine;
+        this.startTempNode = gui.startTempNode;
+        this.stopTempNode = gui.stopTempNode;
+    }
+
+    private void initPaintSettings(Context context) {
+        mPaintNode = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintNode.setStrokeWidth(10);
+        mPaintNode.setColor(context.getColor(R.color.boldThemeColor));
+
+        mPaintLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintLine.setStrokeWidth(5);
+        mPaintLine.setColor(context.getColor(R.color.lightThemeColor));
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPaint.setColor(Color.GRAY);
-        canvas.drawLine(10, 0, 10, 100, mPaint);
-        for (Line line:figure.lines) {
-            canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaint);
+        canvas.drawLine(10, 0, 10, 100, mPaintLine);
+        for (Line line : figure.lines) {
+            canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaintLine);
         }
-        for (Node node:figure.nodes) {
-            canvas.drawCircle(node.x, node.y, 10, mPaint);
+        for (Node node : figure.nodes) {
+            canvas.drawCircle(node.x, node.y, 10, mPaintNode);
         }
     }
 

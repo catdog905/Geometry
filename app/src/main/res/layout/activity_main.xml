@@ -7,14 +7,14 @@
         android:id="@+id/DrawFragment"
         android:name="com.example.geometry.DrawFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/StepFragment"/>
+        android:layout_height="wrap_content" />
 
-    <fragment
-        android:id="@+id/StepFragment"
-        android:name="com.example.geometry.StepListFragment"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentRight="true"
+        android:layout_margin="30dp"
+        android:background="@drawable/ic_calculator"
+        android:id="@+id/solve_button" />
 
 </RelativeLayout>

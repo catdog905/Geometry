@@ -10,8 +10,13 @@ import androidx.fragment.app.Fragment;
 
 public class DrawFragment extends Fragment {
 
+    private static GUI drawCanvas;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return new GUI(this.getContext());
+        if (drawCanvas == null)
+            drawCanvas = new GUI(this.getContext());
+
+        return new GUI(drawCanvas, this.getContext());
     }
 }
