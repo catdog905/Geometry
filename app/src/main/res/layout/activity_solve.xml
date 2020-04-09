@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SolveActivity">
+    tools:context=".SolveActivity"
+    android:background="@android:color/white">
 
     <fragment
         android:id="@+id/TODO"
@@ -14,10 +15,12 @@
 
     <ImageButton
         android:id="@+id/back_button"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:background="@drawable/ic_back" />
+        android:background="@android:color/transparent"
+        android:padding="15dp"
+        android:src="@drawable/ic_back" />
 
     <ImageView
         android:layout_width="match_parent"
