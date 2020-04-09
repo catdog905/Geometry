@@ -1,4 +1,4 @@
-package com.example.geometry.ruca;
+package com.example.geometry;
 
 
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-class GUI extends View {
+public class GUI extends View {
 
     private Figure figure;
     private Paint mPaint;

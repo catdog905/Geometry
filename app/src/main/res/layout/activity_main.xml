@@ -4,9 +4,17 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:id="@+id/StepList"
+        android:id="@+id/DrawFragment"
+        android:name="com.example.geometry.DrawFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/StepFragment"/>
+
+    <fragment
+        android:id="@+id/StepFragment"
         android:name="com.example.geometry.StepListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

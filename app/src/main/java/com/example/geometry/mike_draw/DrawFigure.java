@@ -1,16 +1,17 @@
-package com.example.geometry;
+package com.example.geometry.mike_draw;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.geometry.R;
+
 import java.util.ArrayList;
 
 
-public class DrawFigure extends View {
+class DrawFigure extends View {
     Figure figure;
     private Paint mPaintNode;
     private Paint mPaintLine;
