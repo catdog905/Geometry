@@ -1,4 +1,4 @@
-package com.example.geometry;
+package com.example.geometry.dataModel;
 
 import java.util.ArrayList;
 

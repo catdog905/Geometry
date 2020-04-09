@@ -1,4 +1,4 @@
-package com.example.geometry;
+package com.example.geometry.dataModel;
 
 
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.example.geometry.R;
 
 import java.util.ArrayList;
 

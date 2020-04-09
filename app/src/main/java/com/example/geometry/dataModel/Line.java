@@ -1,9 +1,8 @@
-package com.example.geometry;
+package com.example.geometry.dataModel;
 
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.util.Log;
 
 public class Line extends Object{
     Node start;

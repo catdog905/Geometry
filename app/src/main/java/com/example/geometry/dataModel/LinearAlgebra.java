@@ -1,6 +1,4 @@
-package com.example.geometry;
-
-import android.graphics.Rect;
+package com.example.geometry.dataModel;
 
 public class LinearAlgebra {
 
