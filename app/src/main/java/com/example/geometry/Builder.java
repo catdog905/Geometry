@@ -7,15 +7,22 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.os.Build;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.solver.widgets.Rectangle;
 
 import java.util.ArrayList;
 
-public class GUI extends View {
+public class Builder extends View {
+
+
 
     private Figure figure;
     private Paint mPaint;
@@ -29,9 +36,27 @@ public class GUI extends View {
     float lastYTouch;
     public static int delta = 25;
 
+    Button button;
 
-    public GUI(Context context) {
+    public Builder(Context context) {
         super(context);
+        initPaintSettings();
+        figure = new Figure();
+    }
+
+    public Builder(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initPaintSettings();
+        figure = new Figure();
+    }
+
+    public Builder(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public Builder(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         initPaintSettings();
         figure = new Figure();
     }
@@ -39,6 +64,12 @@ public class GUI extends View {
     private void initPaintSettings(){
         mPaint = new Paint();
         mPaint.setStrokeWidth(10);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec)/2);
     }
 
     @Override

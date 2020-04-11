@@ -1,10 +1,8 @@
 package com.example.geometry;
 
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.util.Log;
 
 public class Line extends Object{
     Node start;
@@ -42,10 +40,10 @@ public class Line extends Object{
         float eA = A/(float)len;
         float eB = B/(float)len;
         Path p = new Path();
-        p.moveTo((int)(start.x+GUI.delta*(-1)*eA), (int)(start.y+GUI.delta*(-1)*eB));
-        p.lineTo((int)(start.x+GUI.delta*eA), (int)(start.y+GUI.delta*eB));
-        p.lineTo((int)(stop.x+GUI.delta*eA), (int)(stop.y+GUI.delta*eB));
-        p.lineTo((int)(stop.x+GUI.delta*(-1)*eA), (int)(stop.y+GUI.delta*(-1)*eB));
+        p.moveTo((int)(start.x+ Builder.delta*(-1)*eA), (int)(start.y+ Builder.delta*(-1)*eB));
+        p.lineTo((int)(start.x+ Builder.delta*eA), (int)(start.y+ Builder.delta*eB));
+        p.lineTo((int)(stop.x+ Builder.delta*eA), (int)(stop.y+ Builder.delta*eB));
+        p.lineTo((int)(stop.x+ Builder.delta*(-1)*eA), (int)(stop.y+ Builder.delta*(-1)*eB));
         p.close();
         mPath = p;
         RectF rectF = new RectF();
