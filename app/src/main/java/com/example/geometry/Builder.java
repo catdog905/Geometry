@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class Builder extends View {
 
-
+    public static int mode;
 
     private Figure figure;
     private Paint mPaint;
