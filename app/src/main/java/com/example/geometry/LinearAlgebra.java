@@ -16,17 +16,14 @@ public class LinearAlgebra {
 
     public static float intersectionNodeCirce(Node node, Circle circle){
         float len = (float)(Math.pow((node.x - circle.Ox), 2) + Math.pow((node.y - circle.Oy), 2));
-        if (len <= Math.pow(circle.R, 2))
-            return (float) Math.sqrt(Math.pow((node.x - circle.Ox), 2) + Math.pow((node.y - circle.Oy), 2));
-        else
-            return 1000*1000*1000;
+        return (float) Math.sqrt(Math.pow((node.x - circle.Ox), 2) + Math.pow((node.y - circle.Oy), 2));
     }
 
     public static float triangleArea (Node node1, Node node2 ,Node node3) {
         return (node2.x - node1.x) * (node3.y - node1.y) - (node2.y - node1.y) * (node3.x - node1.x);
     }
 
-    public static boolean projectionsIntersect (float a, float b, float c, float d) {
+    private static boolean projectionsIntersect (float a, float b, float c, float d) {
         if (a > b)  {
             float temp = a;
             a = b;
@@ -40,11 +37,11 @@ public class LinearAlgebra {
         return Math.max(a,c) <= Math.min(b,d);
     }
 
-    public static float det (float a, float b, float c, float d) {
+    private static float det (float a, float b, float c, float d) {
         return a * d - b * c;
     }
 
-    public static boolean between (float a, float b, float c) {
+    private static boolean between (float a, float b, float c) {
         return Math.min(a,b) <= c + EPS && c <= Math.max(a,b) + EPS;
     }
 
@@ -77,7 +74,7 @@ public class LinearAlgebra {
     }
 
     public static class Distance{
-        public float dist;
+        public float dist = 1000*1000*1000;
         public Node node;
 
         public Distance() { }

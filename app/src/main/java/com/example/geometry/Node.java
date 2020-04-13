@@ -26,11 +26,20 @@ public class Node{
         this.lines = lines;
     }
 
+    public String toString()
+    {
+        String str = Integer.toHexString (hashCode ()) + " x= " + x + "; y= " + y + "; lines = ";
+        for (Line line: lines) {
+            str += Integer.toHexString(line.hashCode()) + " ";
+        }
+        return str;
+    }
+
     public void setXY(float x, float y) {
         this.x = x;
         this.y = y;
         for (Line line: lines) {
-            line.createPathFromLine();
+            line.linearFunc();
         }
     }
 

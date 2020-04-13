@@ -1,18 +1,23 @@
 package com.example.geometry;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -22,19 +27,27 @@ import java.util.ArrayList;
 
 public class Builder extends View {
 
+    public static int delta = 25;
+
     public static int mode;
+    public final static int NODE_MODE = 0;
+    public final static int LINE_MODE = 1;
+    public final static int MOVE_MODE = 2;
+    public final static int ANGLE_MODE = 3;
+
+    Line currentLine;
+    Node currentNode;
+    PointF lastTouch;
+
+    Node startNodeDrawingLine;
+    Node stopNodeDrawingLine;
+
+    Line startLineAngle;
+    Line stopLineAngle;
+
 
     private Figure figure;
     private Paint mPaint;
-    Line tempLine;
-    Node startTempNode;
-    Node stopTempNode;
-    Line currentLine;
-    Node currentNode;
-    Node adjacentNode;
-    float lastXTouch;
-    float lastYTouch;
-    public static int delta = 25;
 
     Button button;
 
@@ -52,6 +65,8 @@ public class Builder extends View {
 
     public Builder(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initPaintSettings();
+        figure = new Figure();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -69,7 +84,6 @@ public class Builder extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec)/2);
     }
 
     @Override
@@ -77,6 +91,8 @@ public class Builder extends View {
         super.onDraw(canvas);
         mPaint.setColor(Color.GRAY);
         for (Line line:figure.lines) {
+
+
             canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaint);
             //canvas.drawPath(line.mPath, mPaint);
         }
@@ -91,104 +107,274 @@ public class Builder extends View {
         float mx = event.getX();
         float my = event.getY();
 
-
+        Log.d("Debug", Debuger.getInfoFromObject(figure));
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (figure.lines.size()>=1){
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(figure.lines.get(0), mx, my);
-                    Log.d("Tag", Float.toString(distance.dist));
-                }
                 currentNode = null;
                 currentLine = null;
+
+                float minDis = delta +1;
                 for (Node node : figure.nodes) {
-                    if (Math.pow((mx - node.x), 2) + Math.pow((my - node.y), 2)  <= delta*delta){
+                    float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
+                    if (curDis < minDis) {
+                        minDis = curDis;
                         currentNode = node;
                         break;
                     }
                 }
+
                 if (currentNode == null) {
                     for (Line line : figure.lines) {
-                        if (line.r.contains((int) mx, (int) my)) {
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                        if (distance.dist <= delta) {
+                            Log.d("Tag", distance.dist + " " + figure.lines.size());
                             currentLine = line;
-                            lastXTouch = mx;
-                            lastYTouch = my;
                             break;
                         }
                     }
                 }
-                if (currentNode == null && currentLine == null) {
-                    startTempNode = new Node(mx, my);
-                    stopTempNode = new Node(mx, my);
-                    tempLine = new Line(startTempNode, stopTempNode);
-                    figure.nodes.add(startTempNode);
-                    figure.nodes.add(stopTempNode);
+
+                switch (mode) {
+                    case Builder.NODE_MODE:
+                        if (currentLine != null){
+                            LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine, mx, my);
+                            Line line1 = new Line(currentLine.start, distance.node);
+                            Line line2 = new Line(distance.node, currentLine.stop);
+                            //TODO Angle in 180
+                            for (int i = 0; i < figure.lines.size(); i++){
+                                if (figure.lines.get(i) == currentLine){
+                                    figure.lines.remove(i);
+                                }
+                            }
+                            for (int i = 0; i < currentLine.start.lines.size(); i++) {
+                                if (currentLine.start.lines.get(i) == currentLine) {
+                                    currentLine.start.lines.remove(i);
+                                    break;
+                                }
+                            }
+                            currentLine.start.addLine(line1);
+                            currentLine.stop.addLine(line2);
+                            distance.node.addLine(line1);
+                            distance.node.addLine(line2);
+                            for (int i = 0; i < currentLine.stop.lines.size(); i++) {
+                                if (currentLine.stop.lines.get(i) == currentLine) {
+                                    currentLine.stop.lines.remove(i);
+                                    break;
+                                }
+                            }
+                            figure.lines.add(line1);
+                            figure.lines.add(line2);
+                            figure.nodes.add(distance.node);
+                        }
+                        if (currentNode == null && currentLine == null)
+                            figure.nodes.add(new Node(mx, my));
+                        break;
+
+                    case Builder.LINE_MODE:
+                        if (currentNode != null)
+                            startNodeDrawingLine = currentNode;
+                        if (currentLine != null) {
+                            LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine, mx, my);
+                            Line line1 = new Line(currentLine.start, distance.node);
+                            Line line2 = new Line(distance.node, currentLine.stop);
+                            for (int i = 0; i < currentLine.start.lines.size(); i++) {
+                                if (currentLine.start.lines.get(i) == currentLine) {
+                                    currentLine.start.lines.remove(i);
+                                    break;
+                                }
+                            }
+                            currentLine.start.addLine(line1);
+                            currentLine.stop.addLine(line2);
+                            distance.node.addLine(line1);
+                            distance.node.addLine(line2);
+                            for (int i = 0; i < currentLine.stop.lines.size(); i++) {
+                                if (currentLine.stop.lines.get(i) == currentLine) {
+                                    currentLine.stop.lines.remove(i);
+                                    break;
+                                }
+                            }
+                            //TODO Angle in 180
+                            for (int i = 0; i < figure.lines.size(); i++){
+                                if (figure.lines.get(i) == currentLine){
+                                    figure.lines.remove(i);
+                                }
+                            }
+                            figure.lines.add(line1);
+                            figure.lines.add(line2);
+                            startNodeDrawingLine = distance.node;
+                            figure.nodes.add(startNodeDrawingLine);
+                        }
+                        if (currentNode == null && currentLine == null) {
+                            startNodeDrawingLine = new Node(mx, my);
+                            figure.nodes.add(startNodeDrawingLine);
+                        }
+                        stopNodeDrawingLine = new Node(mx, my);
+                        break;
+
+                    case Builder.MOVE_MODE:
+                        lastTouch = new PointF(mx, my);
+                        break;
+
+                    case Builder.ANGLE_MODE:
+                        if (currentLine != null)
+                            startLineAngle = currentLine;
+                        break;
                 }
                 invalidate();
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (currentNode != null){
-                    currentNode.setXY(mx, my);
-                }
-                if (currentLine != null) {
-                    float deltaX = mx - lastXTouch;
-                    float deltaY = my - lastYTouch;
-                    currentLine.setXYNodes(currentLine.stop.x + deltaX, currentLine.stop.y + deltaY,
-                            currentLine.start.x + deltaX, currentLine.start.y + deltaY);
-                    lastXTouch = mx;
-                    lastYTouch = my;
-                }
-                if (currentNode == null && currentLine == null) {
-                    stopTempNode.setXY(mx, my);
-                    tempLine.setStop(stopTempNode);
-                    startTempNode.addLine(tempLine);
-                }
+                switch (mode) {
+                    case Builder.NODE_MODE:
+                        if (currentNode != null){
+                            currentNode.setXY(mx, my);
+                        }
+                        break;
 
-                if(currentNode != null) {
-                    double min = delta * delta + 1;
-                    ArrayList<Node> lineAdjacentNodes = new ArrayList<>();
-                    for (Line line : currentNode.lines) {
-                        if (line.start != adjacentNode) {
-                            lineAdjacentNodes.add(line.start);
-                        } else {
-                            lineAdjacentNodes.add(line.stop);
+                    case Builder.LINE_MODE:
+                        stopNodeDrawingLine.setXY(mx, my);
+                        break;
+
+                    case Builder.MOVE_MODE:
+                        if (currentNode != null){
+                            currentNode.setXY(mx, my);
                         }
-                    }
-                    for (Node node : figure.nodes) {
-                        boolean checkAdjacent = true;
-                        for (Node adjacentNode : lineAdjacentNodes) {
-                            if (node == adjacentNode) {
-                                checkAdjacent = false;
-                                break;
-                            }
+                        if (currentLine != null) {
+                            float deltaX = mx - lastTouch.x;
+                            float deltaY = my - lastTouch.y;
+                            currentLine.setXYNodes(currentLine.start.x + deltaX, currentLine.start.y + deltaY,
+                                    currentLine.stop.x + deltaX, currentLine.stop.y + deltaY);
+                            lastTouch.set(mx , my);
                         }
-                        double len = Math.pow((currentNode.x - node.x), 2) + Math.pow((currentNode.y - node.y), 2);
-                        if (checkAdjacent && node != currentNode && len <= delta * delta && min > len) {
-                            adjacentNode = node;
-                        }
-                    }
+                        break;
                 }
                 invalidate();
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (currentNode != null){
-                    currentNode.setXY(mx, my);
-                }
-                if (currentNode == null && currentLine == null) {
-                    stopTempNode.setXY(mx, my);
-                    stopTempNode.addLine(tempLine);
-                    tempLine.setStop(stopTempNode);
-                    figure.lines.add(tempLine);
-                }
-                if(adjacentNode != null)
-                    for (Line line : adjacentNode.lines) {
-                        if (line.start == adjacentNode) {
-                            line.start = currentNode;
-                        } else {
-                            line.stop = currentNode;
+                switch (mode) {
+                    case Builder.NODE_MODE:
+                        if (currentNode != null) {
+                            currentNode.setXY(mx, my);
+                            minDis = delta +1;
+                            Node plusNode = null;
+                            for (Node node : figure.nodes) {
+                                float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
+                                if (curDis < minDis) {
+                                    minDis = curDis;
+                                    plusNode = node;
+                                    break;
+                                }
+                            }
+                            if (plusNode != null) {
+                                for (int i = 0; i < figure.nodes.size(); i++) {
+                                    if (currentNode == figure.nodes.get(i)) {
+                                        figure.nodes.remove(i);
+                                        break;
+                                    }
+                                }
+                                for (Line line: currentNode.lines) {
+                                    if (line.start == currentNode)
+                                        line.start = plusNode;
+                                    else if (line.stop == currentNode)
+                                        line.stop = plusNode;
+                                    plusNode.addLine(line);
+                                }
+                            }
                         }
-                    }
+                        break;
+
+                    case Builder.LINE_MODE:
+                        stopNodeDrawingLine.setXY(mx, my);
+
+                        minDis = delta +1;
+                        Node plusNode = null;
+                        for (Node node : figure.nodes) {
+                            float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
+                            if (curDis < minDis) {
+                                minDis = curDis;
+                                plusNode = node;
+                                break;
+                            }
+                        }
+                        if (plusNode != null) {
+                            stopNodeDrawingLine = plusNode;
+                        }
+
+                        if (plusNode == null) {
+                            for (Line line : figure.lines) {
+                                LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                                if (distance.dist <= delta) {
+                                    Log.d("Tag", distance.dist + " " + figure.lines.size());
+                                    Line line1 = new Line(line.start, distance.node);
+                                    Line line2 = new Line(distance.node, line.stop);
+                                    for (int i = 0; i < line.start.lines.size(); i++) {
+                                        if (line.start.lines.get(i) == line) {
+                                            line.start.lines.remove(i);
+                                            break;
+                                        }
+                                    }
+                                    line.start.addLine(line1);
+                                    line.stop.addLine(line2);
+                                    distance.node.addLine(line1);
+                                    distance.node.addLine(line2);
+                                    for (int i = 0; i < line.stop.lines.size(); i++) {
+                                        if (line.stop.lines.get(i) == line) {
+                                            line.stop.lines.remove(i);
+                                            break;
+                                        }
+                                    }
+                                    //TODO Angle in 180
+                                    for (int i = 0; i < figure.lines.size(); i++){
+                                        if (figure.lines.get(i) == line){
+                                            figure.lines.remove(i);
+                                        }
+                                    }
+                                    figure.lines.add(line1);
+                                    figure.lines.add(line2);
+                                    stopNodeDrawingLine = distance.node;
+                                    break;
+                                }
+                            }
+                        }
+
+                        Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
+                        figure.lines.add(tempLine);
+                        if (plusNode == null)
+                            figure.nodes.add(stopNodeDrawingLine);
+                        startNodeDrawingLine.lines.add(tempLine);
+                        stopNodeDrawingLine.lines.add(tempLine);
+                        break;
+
+                    case Builder.ANGLE_MODE:
+                        for (Line line : figure.lines) {
+                            LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                            if (distance.dist <= delta) {
+                                Log.d("Tag", distance.dist + " " + figure.lines.size());
+                                stopLineAngle = line;
+                                break;
+                            }
+                        }
+
+
+                        float resultVal = Float.parseFloat(MainActivity.editText.getText().toString());
+
+                        if (startLineAngle == stopLineAngle)
+                            currentLine.value = resultVal;
+                        if (startLineAngle != stopLineAngle) {
+                            boolean is_angle = false;
+                            for (Angle angle : figure.angles) {
+                                if ((angle.line1 == startLineAngle && angle.line2 == stopLineAngle) || (angle.line2 == startLineAngle && angle.line1 == stopLineAngle)) {
+                                    angle.valDeg = resultVal;
+                                    is_angle = true;
+                                    break;
+                                }
+                            }
+                            if (is_angle == false)
+                                figure.angles.add(new Angle(startLineAngle, stopLineAngle, resultVal));
+                        }
+                        break;
+                }
                 invalidate();
                 break;
         }

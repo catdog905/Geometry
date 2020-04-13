@@ -33,12 +33,17 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     RelativeLayout layout;
 
+
+    public static EditText editText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
         addList();
         adapter();
+
+        editText = findViewById(R.id.editText);
     }
 
     private void init(){

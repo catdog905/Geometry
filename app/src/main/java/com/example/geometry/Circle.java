@@ -8,4 +8,9 @@ public class Circle {
         Oy = oy;
         R = r;
     }
+
+    public Circle(float ox, float oy) {
+        Ox = ox;
+        Oy = oy;
+    }
 }
