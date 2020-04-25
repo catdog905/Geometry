@@ -1,10 +1,13 @@
 package com.example.geometry;
 
-import android.graphics.Rect;
+
+import java.util.Arrays;
+import java.util.Vector;
 
 public class LinearAlgebra {
 
     final static double EPS = 1E-9;
+    final static int INF = 1000*1000*1000;
 
     public LinearAlgebra() { }
 
@@ -45,7 +48,7 @@ public class LinearAlgebra {
         return Math.min(a,b) <= c + EPS && c <= Math.max(a,b) + EPS;
     }
 
-    public static Node intersect (Line line1, Line line2) {
+    private static Node intersect (Line line1, Line line2) {
         Node a = line1.start;
         Node b = line1.stop;
         Node c = line2.start;
@@ -74,7 +77,7 @@ public class LinearAlgebra {
     }
 
     public static class Distance{
-        public float dist = 1000*1000*1000;
+        public float dist = INF;
         public Node node;
 
         public Distance() { }
@@ -96,5 +99,68 @@ public class LinearAlgebra {
             return new Distance(distance, new Node(x, y));
         else
             return new Distance();
+    }
+
+    public static class GaussMethodSolution{
+        int status;
+        float[][] extended_matrix;
+        int[] where_vars;
+
+        public GaussMethodSolution(int status, float[][] extended_matrix, int[] where_vars) {
+            this.status = status;
+            this.extended_matrix = extended_matrix;
+            this.where_vars = where_vars;
+        }
+    }
+
+    public static GaussMethodSolution gaussMethod(float[][] a) {
+        int n = (int) a.length;
+        int m = (int) a[0].length - 1;
+
+        int[] where = new int[m];
+        for(int i = 0; i < where.length; i++){
+            where[i] = -1;
+        }
+        for (int col=0, row=0; col<m && row<n; ++col) {
+            int sel = row;
+            for (int i=row; i<n; ++i)
+                if (Math.abs(a[i][col]) > Math.abs(a[sel][col]))
+                    sel = i;
+            if (Math.abs(a[sel][col]) < EPS)
+                continue;
+            for (int i=col; i<=m; ++i) {
+                float temp = a[sel][i];
+                a[sel][i] = a[row][i];
+                a[row][i] = temp;
+            }
+            where[col] = row;
+
+            for (int i=0; i<n; ++i)
+                if (i != row) {
+                    double c = a[i][col] / a[row][col];
+                    for (int j=col; j<=m; ++j)
+                        a[i][j] -= a[row][j] * c;
+                }
+            ++row;
+        }
+        float[] ans = new float[m];
+        for(int i = 0; i < ans.length; i++){
+            ans[i] = 0;
+        }
+        for (int i=0; i<m; ++i)
+            if (where[i] != -1)
+                ans[i] = a[where[i]][m]/a[where[i]][i];
+        for (int i=0; i<n; ++i) {
+            double sum = 0;
+            for (int j=0; j<m; ++j)
+                sum += ans[j] * a[i][j];
+            if (Math.abs(sum - a[i][m]) > EPS)
+                return new GaussMethodSolution(1, a, where);
+        }
+
+        for (int i=0; i<m; ++i)
+            if (where[i] == -1)
+                return new GaussMethodSolution(INF, a, where);
+        return new GaussMethodSolution(0, a, where);
     }
 }

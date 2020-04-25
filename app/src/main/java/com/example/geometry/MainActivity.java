@@ -57,7 +57,39 @@ public class MainActivity extends AppCompatActivity {
         builder.setLayoutParams(params);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mRecycleView.setLayoutParams(params);
+        float[][] arr = new float[3][6];
+        arr[0][0] = 1;
+        arr[0][1] = 1;
+        arr[0][2] = 14;
+        arr[0][3] = 0;
+        arr[0][4] = 2;
+        arr[0][5] = 0;
 
+        arr[1][0] = 3;
+        arr[1][1] = 4;
+        arr[1][2] = 2;
+        arr[1][3] = 3;
+        arr[1][4] = 0;
+        arr[1][5] = 1;
+
+        arr[2][0] = 2;
+        arr[2][1] = 3;
+        arr[2][2] = -3;
+        arr[2][3] = 3;
+        arr[2][4] = -2;
+        arr[2][5] = 1;
+        LinearAlgebra.GaussMethodSolution solution = LinearAlgebra.gaussMethod(arr);
+        Log.d("Mat",solution.status + " ");
+        for (float[] anArr : solution.extended_matrix) {
+            String str = "";
+            for (float x: anArr) {
+                str += (float)((int)(x*1000 ))/1000 + " ";
+            }
+            Log.d("Mat",str + " ");
+        }
+        for (float x:solution.where_vars) {
+            Log.d("Mat",x + " ");
+        }
         //layout.addView(mRecycleView);
         //layout.addView(builder);
     }
@@ -102,4 +134,6 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
 
     }
+
+
 }
