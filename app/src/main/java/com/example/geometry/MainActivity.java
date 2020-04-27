@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         arr[2][3] = 3;
         arr[2][4] = -2;
         arr[2][5] = 1;
-        LinearAlgebra.GaussMethodSolution solution = LinearAlgebra.gaussMethod(arr);
+        /*LinearAlgebra.GaussMethodSolution solution = LinearAlgebra.gaussMethod(arr);
         Log.d("Mat",solution.status + " ");
         for (float[] anArr : solution.extended_matrix) {
             String str = "";
@@ -89,9 +89,13 @@ public class MainActivity extends AppCompatActivity {
         }
         for (float x:solution.where_vars) {
             Log.d("Mat",x + " ");
-        }
+        }*/
         //layout.addView(mRecycleView);
         //layout.addView(builder);
+        ExpertSystem.addNewFactsFromExist();
+        for (String str: ExpertSystem.global_facts) {
+            Log.d("str",str + " ");
+        }
     }
     private void addList(){
         ItemAdapter itemAdapter = new ItemAdapter();
