@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setLayoutParams(params);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mRecycleView.setLayoutParams(params);
-        float[][] arr = new float[3][6];
-        arr[0][0] = 1;
+        /*arr[0][0] = 1;
         arr[0][1] = 1;
         arr[0][2] = 14;
         arr[0][3] = 0;
@@ -77,8 +76,28 @@ public class MainActivity extends AppCompatActivity {
         arr[2][2] = -3;
         arr[2][3] = 3;
         arr[2][4] = -2;
-        arr[2][5] = 1;
-        /*LinearAlgebra.GaussMethodSolution solution = LinearAlgebra.gaussMethod(arr);
+        arr[2][5] = 1;*/
+        //layout.addView(mRecycleView);
+        //layout.addView(builder);
+        ExpertSystem.addNewFactsFromExist();
+        ExpertSystem.createExtendedMatrix();
+        ArrayList<ArrayList<Float>> X = ExpertSystem.extended_matrix;
+        Log.d("Mat", X.size() + "");
+        for (int i = 0; i < X.size(); i++) {
+            String str = "";
+            for (int j = 0; j < X.get(i).size(); j++) {
+                str += X.get(i).get(j) + " ";
+            }
+            Log.d("Mat", str);
+        }
+        Log.d("Mat", "*\n\n\n*");
+        float[][] arr = new float[X.size()][X.get(0).size()];
+        for (int i = 0; i < X.size(); i++) {
+            for (int j = 0; j < X.get(0).size(); j++) {
+                arr[i][j] = X.get(i).get(j);
+            }
+        }
+        LinearAlgebra.GaussMethodSolution solution = LinearAlgebra.gaussMethod(arr);
         Log.d("Mat",solution.status + " ");
         for (float[] anArr : solution.extended_matrix) {
             String str = "";
@@ -89,12 +108,6 @@ public class MainActivity extends AppCompatActivity {
         }
         for (float x:solution.where_vars) {
             Log.d("Mat",x + " ");
-        }*/
-        //layout.addView(mRecycleView);
-        //layout.addView(builder);
-        ExpertSystem.addNewFactsFromExist();
-        for (String str: ExpertSystem.global_facts) {
-            Log.d("str",str + " ");
         }
     }
     private void addList(){

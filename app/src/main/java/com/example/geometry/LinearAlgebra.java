@@ -105,6 +105,7 @@ public class LinearAlgebra {
         int status;
         float[][] extended_matrix;
         int[] where_vars;
+        String[] extended_vars;
 
         public GaussMethodSolution(int status, float[][] extended_matrix, int[] where_vars) {
             this.status = status;
