@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         for (float x:solution.where_vars) {
             Log.d("Mat",x + " ");
         }
+        Log.d("Mat", "*\n\n\n*");
     }
     private void addList(){
         ItemAdapter itemAdapter = new ItemAdapter();

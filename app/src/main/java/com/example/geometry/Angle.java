@@ -1,7 +1,7 @@
 package com.example.geometry;
 
 public class Angle {
-    Line line1, line2;
+    public Line line1, line2;
     float valDeg;
 
     public Angle(Line line1, Line line2) {

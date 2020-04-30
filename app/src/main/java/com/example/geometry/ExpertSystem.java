@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExpertSystem {
+
     public static List<String> global_facts = new ArrayList(Arrays.asList("O(belong)AB", "K(belong)AB", "M(belong)AB", "K(belong)AO", "K(belong)AM", "O(belong)AM", "O(belong)KM", "O(belong)KB", "M(belong)KB", "M(belong)OB", "AK=KO", "OM=MB", "KM=8"));
     private static List<List<List<String>>> global_rules = new ArrayList(Arrays.asList(
             Arrays.asList(

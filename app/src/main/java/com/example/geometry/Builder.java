@@ -35,18 +35,19 @@ public class Builder extends View {
     public final static int MOVE_MODE = 2;
     public final static int ANGLE_MODE = 3;
 
-    Line currentLine;
-    Node currentNode;
-    PointF lastTouch;
+    private Line currentLine;
+    private Node currentNode;
+    private PointF lastTouch;
 
-    Node startNodeDrawingLine;
-    Node stopNodeDrawingLine;
+    private Node startNodeDrawingLine;
+    private Node stopNodeDrawingLine;
 
-    Line startLineAngle;
-    Line stopLineAngle;
+    private Line startLineAngle;
+    private Line stopLineAngle;
 
 
     private Figure figure;
+    public ArrayList<ArrayList<String>> global_facts = new ArrayList<>();
     private Paint mPaint;
 
     Button button;
@@ -69,16 +70,82 @@ public class Builder extends View {
         figure = new Figure();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public Builder(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initPaintSettings();
-        figure = new Figure();
-    }
-
     private void initPaintSettings(){
         mPaint = new Paint();
         mPaint.setStrokeWidth(10);
+    }
+
+    public void transformFigureToFacts () {
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        ArrayList<String> nodeLetter = new ArrayList<>();
+        ArrayList<String> nodeIndex = new ArrayList<>();
+        ArrayList<String> lineLetter = new ArrayList<>();
+        ArrayList<String> lineIndex = new ArrayList<>();
+        ArrayList<String> angleLetter = new ArrayList<>();
+        for (int i = 0; i < figure.nodes.size(); i++) {
+            nodeLetter.add(Character.toString(alphabet.charAt(i)));
+            nodeIndex.add(Integer.toHexString(figure.nodes.get(i).hashCode()));
+        }
+        for (int i = 0; i < figure.lines.size(); i++) {
+            String startIndex = Integer.toHexString(figure.lines.get(i).start.hashCode());
+            String startLetter = null;
+            String stopIndex = Integer.toHexString(figure.lines.get(i).stop.hashCode());
+            String stopLetter = null;
+            for (int j = 0; j < nodeIndex.size(); j++) {
+                if (nodeIndex.get(j).equals(startIndex))
+                    startLetter = nodeLetter.get(j);
+                if (nodeIndex.get(j).equals(stopIndex))
+                    stopLetter = nodeLetter.get(j);
+            }
+            if (startLetter != null && stopLetter != null) {
+                lineLetter.add(startLetter + stopLetter);
+                lineIndex.add(Integer.toHexString(figure.lines.get(i).hashCode()));
+            }
+        }
+        for (int i = 0; i < figure.angles.size();i++) {
+            String firstIndex = Integer.toHexString(figure.angles.get(i).line1.hashCode());
+            String firstLineLetter = null;
+            String secondIndex = Integer.toHexString(figure.angles.get(i).line2.hashCode());
+            String secondLineLetter = null;
+            for(int j = 0; j < lineIndex.size(); j++){
+
+
+                if (lineIndex.get(j).equals(firstIndex))
+                    firstLineLetter = lineLetter.get(j);
+                if (lineIndex.get(j).equals(secondIndex))
+                    secondLineLetter = lineLetter.get(j);
+            }
+            if (firstLineLetter != null && secondLineLetter != null) {
+                Character midChar = null;
+                Log.d("Mat", firstLineLetter.length() + " " + secondLineLetter.length());
+                for (int a = 0; a < firstLineLetter.length(); a++){
+                    for (int b = 0; b < secondLineLetter.length(); b++){
+                        if (firstLineLetter.charAt(a) == secondLineLetter.charAt(b)) {
+                            midChar = firstLineLetter.charAt(a);
+                            break;
+                        }
+                    }
+                }
+                String andle = "";
+                for (int a = 0; a < firstLineLetter.length(); a++){
+                    if (firstLineLetter.charAt(a) != midChar) {
+                        andle += firstLineLetter.charAt(a);
+                        break;
+                    }
+                }
+                andle += midChar;
+                for (int b = 0; b < secondLineLetter.length(); b++){
+                    if (secondLineLetter.charAt(b) != midChar) {
+                        andle += secondLineLetter.charAt(b);
+                        break;
+                    }
+                }
+                angleLetter.add(andle);
+            }
+        }
+        global_facts.add(nodeLetter);
+        global_facts.add(lineLetter);
+        global_facts.add(angleLetter);
     }
 
     @Override
@@ -108,6 +175,16 @@ public class Builder extends View {
         float my = event.getY();
 
         Log.d("Debug", Debuger.getInfoFromObject(figure));
+        if (mode == 4) {
+            transformFigureToFacts();
+            for (ArrayList<String> elem : global_facts) {
+                String helpstr = "";
+                for (String el : elem) {
+                    helpstr += el + " ";
+                }
+                Log.d("Mat", helpstr + global_facts.size());
+            }
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 currentNode = null;
