@@ -1,5 +1,10 @@
 package com.example.geometry;
 
+import com.example.geometry.GUI.Angle;
+import com.example.geometry.GUI.Figure;
+import com.example.geometry.GUI.Line;
+import com.example.geometry.GUI.Node;
+
 public class Debuger {
 
     public static String getInfoFromObject(Figure figure) {

@@ -4,22 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import com.example.geometry.GUI.Builder;
 
 import java.util.ArrayList;
 import java.util.List;

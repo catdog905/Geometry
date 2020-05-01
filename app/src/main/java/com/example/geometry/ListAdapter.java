@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.geometry.GUI.Builder;
+
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

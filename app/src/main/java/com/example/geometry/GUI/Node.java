@@ -1,11 +1,11 @@
-package com.example.geometry;
+package com.example.geometry.GUI;
 
 import java.util.ArrayList;
 
 public class Node{
     public float x;
     public float y;
-    ArrayList<Line> lines = new ArrayList<>();
+    public ArrayList<Line> lines = new ArrayList<>();
 
     public Node() { }
 

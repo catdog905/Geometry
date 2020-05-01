@@ -1,8 +1,9 @@
 package com.example.geometry;
 
 
-import java.util.Arrays;
-import java.util.Vector;
+import com.example.geometry.GUI.Circle;
+import com.example.geometry.GUI.Line;
+import com.example.geometry.GUI.Node;
 
 public class LinearAlgebra {
 

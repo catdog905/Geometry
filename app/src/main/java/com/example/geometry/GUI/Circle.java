@@ -1,7 +1,7 @@
-package com.example.geometry;
+package com.example.geometry.GUI;
 
 public class Circle {
-    float Ox, Oy, R;
+    public float Ox, Oy, R;
 
     public Circle(float ox, float oy, float r) {
         Ox = ox;

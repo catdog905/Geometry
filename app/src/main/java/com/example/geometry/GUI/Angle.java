@@ -1,8 +1,8 @@
-package com.example.geometry;
+package com.example.geometry.GUI;
 
 public class Angle {
     public Line line1, line2;
-    float valDeg;
+    public float valDeg;
 
     public Angle(Line line1, Line line2) {
         this.line1 = line1;

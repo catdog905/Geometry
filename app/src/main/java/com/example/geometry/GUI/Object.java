@@ -1,4 +1,4 @@
-package com.example.geometry;
+package com.example.geometry.GUI;
 
 public abstract class Object {
 

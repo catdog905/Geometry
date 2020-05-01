@@ -1,16 +1,14 @@
-package com.example.geometry;
+package com.example.geometry.GUI;
 
 import android.graphics.Path;
-import android.graphics.RectF;
-import android.graphics.Region;
 
 public class Line extends Object{
-    Node start;
-    Node stop;
-    float value;
+    public Node start;
+    public Node stop;
+    public float value;
 
     Path mPath;
-    float A, B, C;
+    public float A, B, C;
 
     public Line(Node start, Node stop) {
         this.start = start;
