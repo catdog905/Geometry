@@ -1,8 +1,10 @@
-package com.example.geometry;
+package com.example.geometry.Output;
 
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.TextAppearanceSpan;
+
+import com.example.geometry.R;
 
 public class StepSlove {
     CharSequence template;

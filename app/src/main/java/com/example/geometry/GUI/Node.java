@@ -1,11 +1,11 @@
-package com.example.geometry.dataModel;
+package com.example.geometry.GUI;
 
 import java.util.ArrayList;
 
 public class Node{
     public float x;
     public float y;
-    ArrayList<Line> lines = new ArrayList<>();
+    public ArrayList<Line> lines = new ArrayList<>();
 
     public Node() { }
 
@@ -26,11 +26,20 @@ public class Node{
         this.lines = lines;
     }
 
+    public String toString()
+    {
+        String str = Integer.toHexString (hashCode ()) + " x= " + x + "; y= " + y + "; lines = ";
+        for (Line line: lines) {
+            str += Integer.toHexString(line.hashCode()) + " ";
+        }
+        return str;
+    }
+
     public void setXY(float x, float y) {
         this.x = x;
         this.y = y;
         for (Line line: lines) {
-            line.createPathFromLine();
+            line.linearFunc();
         }
     }
 

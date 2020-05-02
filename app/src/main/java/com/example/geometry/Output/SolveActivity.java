@@ -1,10 +1,12 @@
-package com.example.geometry;
+package com.example.geometry.Output;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.geometry.R;
 
 public class SolveActivity extends AppCompatActivity {
 
