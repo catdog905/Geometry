@@ -22,6 +22,9 @@ public class LinearAlgebra {
         float len = (float)(Math.pow((node.x - circle.Ox), 2) + Math.pow((node.y - circle.Oy), 2));
         return (float) Math.sqrt(Math.pow((node.x - circle.Ox), 2) + Math.pow((node.y - circle.Oy), 2));
     }
+    public static float intersection2Node(Node node1, Node node2){
+        return intersectionNodeCirce(node1, new Circle(node2));
+    }
 
     public static float triangleArea (Node node1, Node node2 ,Node node3) {
         return (node2.x - node1.x) * (node3.y - node1.y) - (node2.y - node1.y) * (node3.x - node1.x);
@@ -100,6 +103,10 @@ public class LinearAlgebra {
             return new Distance(distance, new Node(x, y));
         else
             return new Distance();
+    }
+
+    public static Distance findDistanceToLine(Line line, Node node) {
+        return findDistanceToLine(line, node.x, node.y);
     }
 
     public static class GaussMethodSolution{

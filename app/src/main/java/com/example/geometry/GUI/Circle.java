@@ -13,4 +13,9 @@ public class Circle {
         Ox = ox;
         Oy = oy;
     }
+
+    public Circle(Node node) {
+        Ox = node.x;
+        Oy = node.y;
+    }
 }

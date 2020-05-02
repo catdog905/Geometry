@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.example.geometry.GUI.Builder;
+import com.example.geometry.GUI.ItemAdapter;
+import com.example.geometry.GUI.ListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

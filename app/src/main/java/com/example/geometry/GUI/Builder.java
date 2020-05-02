@@ -19,6 +19,7 @@ import com.example.geometry.LinearAlgebra;
 import com.example.geometry.MainActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Builder extends View {
 
@@ -111,6 +112,86 @@ public class Builder extends View {
                 angleMode(event, mx, my);
                 break;
         }
+        if(event.getAction() == MotionEvent.ACTION_UP) { //intersections of Node
+            List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
+            for (Node nodei : figure.nodes) {
+                for (Node nodej : figure.nodes) {
+                    if (nodei != nodej && !removeNodes.contains(nodei)) {
+                        float curDis = LinearAlgebra.intersection2Node(nodei, nodej);
+                        if (curDis <= delta) {
+                            nodei.lines.addAll(nodej.lines);
+                            for (Line line : nodei.lines) {
+                                if (line.start == nodej)
+                                    line.start = nodei;
+                                else if (line.stop == nodej)
+                                    line.stop = nodei;
+                            }
+                            removeNodes.add(nodej);
+                        }
+                    }
+                }
+            }
+            figure.nodes.removeAll(removeNodes);
+
+            List<Line> removeLines = new ArrayList<>();
+            List<Line> removeStartLines = new ArrayList<>();
+            List<Line> removeStopLines = new ArrayList<>();
+            for (Node node : figure.nodes) {
+                for (Line line : figure.lines) {
+                    if (node != line.start && node != line.stop) {
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, node);
+                        if (distance.dist <= delta) {
+                            Line line1 = new Line(line.start, distance.node);
+                            Line line2 = new Line(distance.node, line.stop);
+                            for (Line removeLine : line.start.lines) {
+                                if (removeLine == line) {
+                                    removeStartLines.add(removeLine);
+                                    break;
+                                }
+                            }
+                            line.start.lines.removeAll(removeStartLines);
+                            line.start.addLine(line1);
+                            line.stop.addLine(line2);
+                            distance.node.addLine(line1);
+                            distance.node.addLine(line2);
+                            for (Line removeLine : line.stop.lines) {
+                                if (removeLine == line) {
+                                    removeStopLines.add(removeLine);
+                                    break;
+                                }
+                            }
+                            line.stop.lines.removeAll(removeStopLines);
+                            for (Line removeLine : figure.lines) {
+                                if (removeLine == line) {
+                                    removeLines.add(removeLine);
+                                    break;
+                                }
+                            }
+                            figure.lines.add(line1);
+                            figure.lines.add(line2);
+                            for (Line lineOfNode: node.lines) {
+                                distance.node.lines.add(lineOfNode);
+                            }
+                            for (int i = 0; i < figure.nodes.size(); i++){
+                                if(node == figure.nodes.get(i)){
+                                    figure.nodes.set(i, distance.node);
+                                }
+                            }
+                            for (Line lineOfNode: node.lines) {
+                                if (lineOfNode.start == node)
+                                    lineOfNode.start = distance.node;
+                                else if (lineOfNode.stop == node)
+                                    lineOfNode.stop = distance.node;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            figure.lines.removeAll(removeLines);
+
+        }
+
         return true;
     }
 
@@ -249,37 +330,7 @@ public class Builder extends View {
                 }
                 if (currentNode != null)
                     startNodeDrawingLine = currentNode;
-                if (currentLine != null) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine, mx, my);
-                    Line line1 = new Line(currentLine.start, distance.node);
-                    Line line2 = new Line(distance.node, currentLine.stop);
-                    for (int i = 0; i < currentLine.start.lines.size(); i++) {
-                        if (currentLine.start.lines.get(i) == currentLine) {
-                            currentLine.start.lines.remove(i);
-                            break;
-                        }
-                    }
-                    currentLine.start.addLine(line1);
-                    currentLine.stop.addLine(line2);
-                    distance.node.addLine(line1);
-                    distance.node.addLine(line2);
-                    for (int i = 0; i < currentLine.stop.lines.size(); i++) {
-                        if (currentLine.stop.lines.get(i) == currentLine) {
-                            currentLine.stop.lines.remove(i);
-                            break;
-                        }
-                    }
-                    for (int i = 0; i < figure.lines.size(); i++) {
-                        if (figure.lines.get(i) == currentLine) {
-                            figure.lines.remove(i);
-                        }
-                    }
-                    figure.lines.add(line1);
-                    figure.lines.add(line2);
-                    startNodeDrawingLine = distance.node;
-                    figure.nodes.add(startNodeDrawingLine);
-                }
-                if (currentNode == null && currentLine == null) {
+                if (currentNode == null) {
                     startNodeDrawingLine = new Node(mx, my);
                     figure.nodes.add(startNodeDrawingLine);
                 }
@@ -294,61 +345,9 @@ public class Builder extends View {
 
             case MotionEvent.ACTION_UP:
                 stopNodeDrawingLine.setXY(mx, my);
-
-                minDis = delta + 1;
-                Node plusNode = null;
-                for (Node node : figure.nodes) {
-                    float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
-                    if (curDis < minDis) {
-                        minDis = curDis;
-                        plusNode = node;
-                        break;
-                    }
-                }
-                if (plusNode != null) {
-                    stopNodeDrawingLine = plusNode;
-                }
-
-                if (plusNode == null) {
-                    for (Line line : figure.lines) {
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
-                        if (distance.dist <= delta) {
-                            Log.d("Tag", distance.dist + " " + figure.lines.size());
-                            Line line1 = new Line(line.start, distance.node);
-                            Line line2 = new Line(distance.node, line.stop);
-                            for (int i = 0; i < line.start.lines.size(); i++) {
-                                if (line.start.lines.get(i) == line) {
-                                    line.start.lines.remove(i);
-                                    break;
-                                }
-                            }
-                            line.start.addLine(line1);
-                            line.stop.addLine(line2);
-                            distance.node.addLine(line1);
-                            distance.node.addLine(line2);
-                            for (int i = 0; i < line.stop.lines.size(); i++) {
-                                if (line.stop.lines.get(i) == line) {
-                                    line.stop.lines.remove(i);
-                                    break;
-                                }
-                            }
-                            for (int i = 0; i < figure.lines.size(); i++) {
-                                if (figure.lines.get(i) == line) {
-                                    figure.lines.remove(i);
-                                }
-                            }
-                            figure.lines.add(line1);
-                            figure.lines.add(line2);
-                            stopNodeDrawingLine = distance.node;
-                            break;
-                        }
-                    }
-                }
-
                 Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
                 figure.lines.add(tempLine);
-                if (plusNode == null)
-                    figure.nodes.add(stopNodeDrawingLine);
+                figure.nodes.add(stopNodeDrawingLine);
                 startNodeDrawingLine.lines.add(tempLine);
                 stopNodeDrawingLine.lines.add(tempLine);
                 invalidate();
@@ -523,4 +522,6 @@ public class Builder extends View {
         global_facts.add(lineLetter);
         global_facts.add(angleLetter);
     }
+
+    
 }

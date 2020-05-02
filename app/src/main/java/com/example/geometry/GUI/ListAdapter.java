@@ -1,4 +1,4 @@
-package com.example.geometry;
+package com.example.geometry.GUI;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.geometry.GUI.Builder;
+import com.example.geometry.R;
 
 import java.util.List;
 
