@@ -16,6 +16,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.example.geometry.Debuger;
 import com.example.geometry.LinearAlgebra;
 import com.example.geometry.MainActivity;
 import com.example.geometry.R;
@@ -102,6 +103,7 @@ public class Builder extends View {
         for (Node node : figure.nodes) {
             canvas.drawCircle(node.x, node.y, 10, mPaintNode);
         }
+        Log.d("LogCat", Debuger.getInfoFromObject(figure));
     }
 
     @Override
@@ -145,7 +147,8 @@ public class Builder extends View {
                 }
             }
             figure.nodes.removeAll(removeNodes);
-
+            invalidate();
+            
             List<Line> removeLines = new ArrayList<>();
             List<Line> removeStartLines = new ArrayList<>();
             List<Line> removeStopLines = new ArrayList<>();
@@ -203,6 +206,59 @@ public class Builder extends View {
             }
             figure.lines.removeAll(removeLines);
 
+            int n = figure.lines.size();
+            int m = figure.lines.size();
+            for (int l = 0; l <  n; l++) {
+                Line line = figure.lines.get(l);
+                for (int d = 0; d < figure.lines.size(); d++) {
+                    Log.d("HELP", l + "");
+                    Line intersecLine = figure.lines.get(d);
+                    if (line != intersecLine) {
+                        boolean off = false;
+                        for (Line adjLine : intersecLine.start.lines) {
+                            if (adjLine == line)
+                                off = true;
+                        }
+                        for (Line adjLine : intersecLine.stop.lines) {
+                            if (adjLine == line)
+                                off = true;
+                        }
+
+                        if (!off) {
+                            Node intersecNode = LinearAlgebra.intersectLine(line, intersecLine);
+                            if (intersecNode != null) {
+                                Line line11 = new Line(line.start, intersecNode);
+                                Line line12 = new Line(intersecNode, line.stop);
+                                Line line21 = new Line(intersecLine.start, intersecNode);
+                                Line line22 = new Line(intersecNode, intersecLine.stop);
+
+                                figure.lines.remove(line);
+                                figure.lines.remove(intersecLine);
+
+                                line.start.lines.add(line11);
+                                line.stop.lines.add(line12);
+                                intersecLine.start.lines.add(line21);
+                                intersecLine.stop.lines.add(line22);
+
+                                figure.lines.add(line11);
+                                figure.lines.add(line21);
+                                figure.lines.add(line12);
+                                figure.lines.add(line22);
+
+                                intersecNode.lines.add(line11);
+                                intersecNode.lines.add(line21);
+                                intersecNode.lines.add(line12);
+                                intersecNode.lines.add(line22);
+
+                                figure.nodes.add(intersecNode);
+
+                                l--;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return true;
@@ -235,37 +291,6 @@ public class Builder extends View {
                     }
                 }
 
-                if (currentLine != null) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine, mx, my);
-                    Line line1 = new Line(currentLine.start, distance.node);
-                    Line line2 = new Line(distance.node, currentLine.stop);
-                    for (int i = 0; i < figure.lines.size(); i++) {
-                        if (figure.lines.get(i) == currentLine) {
-                            figure.lines.remove(i);
-                        }
-                    }
-                    for (int i = 0; i < currentLine.start.lines.size(); i++) {
-                        if (currentLine.start.lines.get(i) == currentLine) {
-                            currentLine.start.lines.remove(i);
-                            break;
-                        }
-                    }
-                    currentLine.start.addLine(line1);
-                    currentLine.stop.addLine(line2);
-                    distance.node.addLine(line1);
-                    distance.node.addLine(line2);
-                    for (int i = 0; i < currentLine.stop.lines.size(); i++) {
-                        if (currentLine.stop.lines.get(i) == currentLine) {
-                            currentLine.stop.lines.remove(i);
-                            break;
-                        }
-                    }
-                    figure.lines.add(line1);
-                    figure.lines.add(line2);
-                    figure.nodes.add(distance.node);
-                    currentNode = distance.node;
-                    currentLine = null;
-                }
                 if (currentNode == null && currentLine == null)
                     figure.nodes.add(new Node(mx, my));
 
@@ -358,11 +383,13 @@ public class Builder extends View {
 
             case MotionEvent.ACTION_UP:
                 stopNodeDrawingLine.setXY(mx, my);
-                Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
-                figure.lines.add(tempLine);
-                figure.nodes.add(stopNodeDrawingLine);
-                startNodeDrawingLine.lines.add(tempLine);
-                stopNodeDrawingLine.lines.add(tempLine);
+                if (startNodeDrawingLine != stopNodeDrawingLine) {
+                    Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
+                    figure.lines.add(tempLine);
+                    figure.nodes.add(stopNodeDrawingLine);
+                    startNodeDrawingLine.lines.add(tempLine);
+                    stopNodeDrawingLine.lines.add(tempLine);
+                }
                 invalidate();
                 break;
         }
@@ -441,7 +468,7 @@ public class Builder extends View {
                     }
 
 
-                    float resultVal = Float.parseFloat(MainActivity.editText.getText().toString());
+                    float resultVal = 10.0f; //Float.parseFloat(MainActivity.editText.getText().toString());
 
                     if (startLineAngle == stopLineAngle)
                         currentLine.value = resultVal;

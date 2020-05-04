@@ -51,7 +51,7 @@ public class LinearAlgebra {
         return Math.min(a,b) <= c + EPS && c <= Math.max(a,b) + EPS;
     }
 
-    private static Node intersect (Line line1, Line line2) {
+    public static Node intersectLine(Line line1, Line line2) {
         Node a = line1.start;
         Node b = line1.stop;
         Node c = line2.start;
@@ -72,10 +72,10 @@ public class LinearAlgebra {
             res = det (A1, C1, A2, C2) == 0 && det (B1, C1, B2, C2) == 0
                     && projectionsIntersect(a.x, b.x, c.x, d.x)
                     && projectionsIntersect(a.y, b.y, c.y, d.y);
-        if (res){
+        if (res && zn != 0){
             return new Node(x, y);
         } else {
-            return new Node();
+            return null;
         }
     }
 
