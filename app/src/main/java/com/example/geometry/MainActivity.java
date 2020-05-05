@@ -2,18 +2,37 @@ package com.example.geometry;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.geometry.GUI.Builder;
+import com.example.geometry.GUI.DrawerAdapter;
 import com.example.geometry.GUI.ItemAdapter;
+import com.example.geometry.GUI.ItemModel;
 import com.example.geometry.GUI.ListAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecycleView;
     private List<ItemAdapter> mList = new ArrayList<>();
     private ListAdapter mAdapter;
-    ListView listView;
+    Button listView;
     RelativeLayout layout;
 
-    ImageButton solve_button;
+    private AppBarConfiguration mAppBarConfiguration;
 
-    ImageButton circleMode;
-    ImageButton lineMode;
-    ImageButton moveMode;
-    ImageButton angleMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,35 +62,27 @@ public class MainActivity extends AppCompatActivity {
         builder = new Builder(this);
         layout = new RelativeLayout(this);
 
-        circleMode = findViewById(R.id.circle);
-        lineMode = findViewById(R.id.line);
-        moveMode = findViewById(R.id.move);
-        angleMode = findViewById(R.id.angle);
-
-        circleMode.setOnClickListener(new View.OnClickListener() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Builder.mode = Builder.CIRCLE_MODE;
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
-        lineMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Builder.mode = Builder.LINE_MODE;
-            }
-        });
-        moveMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Builder.mode = Builder.MOVE_MODE;
-            }
-        });
-        angleMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Builder.mode = Builder.ANGLE_MODE;
-            }
-        });
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.layout.activity_main, R.id.nav_gallery, R.id.nav_slideshow)
+                .setDrawerLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
         /*mRecycleView = findViewById(R.id.recycler_view);//new RecyclerView(this);
 
@@ -191,5 +198,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
 
 }

@@ -7,4 +7,5 @@
     <color name="lightThemeColor">#ceb2b2</color>
     <color name="backgroundColor">#f7f4f4</color>
     <color name="backgroundGrayColor">#ececec</color>
+    <color name="backgroundPinkColor">#efe9e9</color>
 </resources>
