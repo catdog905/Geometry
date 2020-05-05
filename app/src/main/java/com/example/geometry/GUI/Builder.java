@@ -26,13 +26,13 @@ import java.util.List;
 
 public class Builder extends View {
 
-    private static int delta = 50;
+    private static int delta = 25;
 
     public static int mode;
-    private final static int NODE_MODE = 0;
-    private final static int LINE_MODE = 1;
-    private final static int MOVE_MODE = 2;
-    private final static int ANGLE_MODE = 3;
+    public final static int CIRCLE_MODE = 0;
+    public final static int LINE_MODE = 1;
+    public final static int MOVE_MODE = 2;
+    public final static int ANGLE_MODE = 3;
 
     private Line currentLine;
     private Node currentNode;
@@ -112,9 +112,6 @@ public class Builder extends View {
         float mx = event.getX();
         float my = event.getY();
         switch (mode) {
-            case NODE_MODE:
-                nodeMode(event, mx, my);
-                break;
             case LINE_MODE:
                 lineMode(event, mx, my);
                 break;
@@ -262,82 +259,6 @@ public class Builder extends View {
         }
 
         return true;
-    }
-
-    private void nodeMode(MotionEvent event, float mx, float my) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                currentNode = null;
-                currentLine = null;
-
-                float minDis = delta + 1;
-                for (Node node : figure.nodes) {
-                    float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
-                    if (curDis < minDis) {
-                        minDis = curDis;
-                        currentNode = node;
-                        break;
-                    }
-                }
-
-                if (currentNode == null) {
-                    for (Line line : figure.lines) {
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
-                        if (distance.dist <= delta) {
-                            Log.d("Tag", distance.dist + " " + figure.lines.size());
-                            currentLine = line;
-                            break;
-                        }
-                    }
-                }
-
-                if (currentNode == null && currentLine == null)
-                    figure.nodes.add(new Node(mx, my));
-
-                invalidate();
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                if (currentNode != null) {
-                    currentNode.setXY(mx, my);
-                }
-                invalidate();
-                break;
-
-            case MotionEvent.ACTION_UP:
-                if (currentNode != null) {
-                    currentNode.setXY(mx, my);
-                    if (currentLine != null) {
-                        minDis = delta + 1;
-                        Node plusNode = null;
-                        for (Node node : figure.nodes) {
-                            float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
-                            if (curDis < minDis) {
-                                minDis = curDis;
-                                plusNode = node;
-                                break;
-                            }
-                        }
-                        if (plusNode != null) {
-                            for (int i = 0; i < figure.nodes.size(); i++) {
-                                if (currentNode == figure.nodes.get(i)) {
-                                    figure.nodes.remove(i);
-                                    break;
-                                }
-                            }
-                            for (Line line : currentNode.lines) {
-                                if (line.start == currentNode)
-                                    line.start = plusNode;
-                                else if (line.stop == currentNode)
-                                    line.stop = plusNode;
-                                plusNode.addLine(line);
-                            }
-                        }
-                    }
-                }
-                invalidate();
-                break;
-        }
     }
 
     private void lineMode(MotionEvent event, float mx, float my) { //TODO: Add intersect lines func

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Geometry</string>
+    <string name="open_menu">open menu</string>
+    <string name="solve_task">solve task</string>
+    <string name="draw_circle">draw circle</string>
+    <string name="draw_line">draw line</string>
+    <string name="draw_move">draw move</string>
+    <string name="draw_angle">draw angle</string>
 </resources>

@@ -1,10 +1,8 @@
 package com.example.geometry;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.geometry.GUI.Builder;
 import com.example.geometry.GUI.ItemAdapter;
 import com.example.geometry.GUI.ListAdapter;
-import com.example.geometry.Output.SolveActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,23 +29,55 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton solve_button;
 
-    public static EditText editText;
+    ImageButton circleMode;
+    ImageButton lineMode;
+    ImageButton moveMode;
+    ImageButton angleMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-        addList();
-        adapter();
-
-        editText = findViewById(R.id.editText);
+        //addList();
+        //adapter();
     }
 
     private void init(){
         setContentView(R.layout.activity_main);
         builder = new Builder(this);
         layout = new RelativeLayout(this);
-        mRecycleView = findViewById(R.id.recycler_view);//new RecyclerView(this);
+
+        circleMode = findViewById(R.id.circle);
+        lineMode = findViewById(R.id.line);
+        moveMode = findViewById(R.id.move);
+        angleMode = findViewById(R.id.angle);
+
+        circleMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Builder.mode = Builder.CIRCLE_MODE;
+            }
+        });
+        lineMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Builder.mode = Builder.LINE_MODE;
+            }
+        });
+        moveMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Builder.mode = Builder.MOVE_MODE;
+            }
+        });
+        angleMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Builder.mode = Builder.ANGLE_MODE;
+            }
+        });
+
+        /*mRecycleView = findViewById(R.id.recycler_view);//new RecyclerView(this);
 
 
         solve_button = findViewById(R.id.solve_button);
