@@ -28,7 +28,7 @@ public class Builder extends View {
 
     private static int delta = 25;
 
-    public static int mode;
+    public static int mode = 1;
     public final static int CIRCLE_MODE = 0;
     public final static int LINE_MODE = 1;
     public final static int MOVE_MODE = 2;
