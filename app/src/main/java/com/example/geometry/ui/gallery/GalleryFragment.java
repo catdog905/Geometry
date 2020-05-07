@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.geometry.GUI.Builder;
+import com.example.geometry.GUI.InputHandler;
 import com.example.geometry.MainActivity;
 import com.example.geometry.R;
 
@@ -50,25 +51,25 @@ public class GalleryFragment extends Fragment {
         circleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Builder.mode = Builder.CIRCLE_MODE;
+                InputHandler.mode = InputHandler.CIRCLE_MODE;
             }
         });
         lineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Builder.mode = Builder.LINE_MODE;
+                InputHandler.mode = InputHandler.LINE_MODE;
             }
         });
         moveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Builder.mode = Builder.MOVE_MODE;
+                InputHandler.mode = InputHandler.MOVE_MODE;
             }
         });
         angleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Builder.mode = Builder.ANGLE_MODE;
+                InputHandler.mode = InputHandler.ANGLE_MODE;
             }
         });
         return root;

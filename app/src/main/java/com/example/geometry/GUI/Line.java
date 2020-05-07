@@ -2,12 +2,11 @@ package com.example.geometry.GUI;
 
 import android.graphics.Path;
 
-public class Line extends Object{
+public class Line {
     public Node start;
     public Node stop;
     public float value;
 
-    Path mPath;
     public float A, B, C;
 
     public Line(Node start, Node stop) {
@@ -31,7 +30,7 @@ public class Line extends Object{
     public String toString()
     {
         String str = Integer.toHexString (hashCode ()) + " start= " +  Integer.toHexString(start.hashCode()) +
-                "; stop= " + Integer.toHexString(stop.hashCode()) + "; val = " + value + "; ABC= " + A +" " + B + " " + C+ ";";
+                "; stop= " + Integer.toHexString(stop.hashCode()) + "; val = " + value + ";";
         return str;
     }
 
@@ -45,11 +44,5 @@ public class Line extends Object{
         A = 1/(stop.x-start.x);
         B = 1/(start.y-stop.y);
         C =start.y/(stop.y-start.y) - start.x/(stop.x-start.x);
-    }
-
-
-    @Override
-    public void moving() {
-
     }
 }

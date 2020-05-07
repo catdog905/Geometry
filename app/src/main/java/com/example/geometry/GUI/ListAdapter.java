@@ -33,7 +33,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "Input mode = " + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                Builder.mode = viewHolder.getAdapterPosition();
+                InputHandler.mode = viewHolder.getAdapterPosition();
             }
         });
 

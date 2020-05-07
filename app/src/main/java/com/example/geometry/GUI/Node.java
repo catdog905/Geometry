@@ -2,10 +2,11 @@ package com.example.geometry.GUI;
 
 import java.util.ArrayList;
 
-public class Node{
+public class Node {
     public float x;
     public float y;
     public ArrayList<Line> lines = new ArrayList<>();
+    public ArrayList<Node> subNodes = new ArrayList<>();
 
     public Node() { }
 
