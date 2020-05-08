@@ -78,6 +78,19 @@ public class LinearAlgebra {
             return null;
         }
     }
+    public static Node intersectInfLine(Line line1, Line line2) {
+        float zn = det(line1.A, line1.B, line2.A, line2.B);
+        boolean res = false;
+        float x = 0;
+        float y = 0;
+        if (zn != 0) {
+            x = -det(line1.C, line1.B, line2.C, line2.B) * 1 / zn;
+            y = -det(line1.A, line1.C, line2.A, line2.C) * 1 / zn;
+            return new Node(x, y);
+        } else {
+            return null;
+        }
+    }
 
     public static class Distance{
         public float dist = INF;

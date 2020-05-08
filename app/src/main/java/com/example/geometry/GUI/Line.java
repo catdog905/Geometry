@@ -12,6 +12,12 @@ public class Line {
 
     public float A, B, C;
 
+    public Line(float a, float b, float c) {
+        A = a;
+        B = b;
+        C = c;
+    }
+
     public Line(Node start, Node stop) {
         this.start = start;
         this.stop = stop;

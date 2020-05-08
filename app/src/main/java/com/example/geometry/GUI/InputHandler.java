@@ -130,8 +130,11 @@ public class InputHandler {
             case MotionEvent.ACTION_DOWN:
                 if (currentNode != null)
                     startNodeDrawingLine = currentNode;
-                else
+                else {
                     startNodeDrawingLine = new Node(mx, my);
+                    currentNode = startNodeDrawingLine;
+                    findIntersections();
+                }
                 figureUI.nodes.add(startNodeDrawingLine);
                 stopNodeDrawingLine = new Node(mx, my);
                 Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
@@ -177,21 +180,22 @@ public class InputHandler {
                 if (currentLine != null) {
                     Float finalStartX = null, finalStartY = null;
                     Float finalStopX = null, finalStopY = null;
+                    currentLine.C = -1 * (currentLine.A*mx + currentLine.B*my);
                     if (currentLine.start.parentLine != null){
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine.start.parentLine, mx, my);
-                        if (distance != null) {
-                            currentLine.start.lambda = (currentLine.start.parentLine.start.x - distance.node.x) / (distance.node.x - currentLine.start.parentLine.stop.x);
-                            finalStartX = distance.node.x;
-                            finalStartY = distance.node.y;
+                        Node intersectNode = LinearAlgebra.intersectInfLine(currentLine, currentLine.start.parentLine);
+                        if (intersectNode != null) {
+                            currentLine.start.lambda = (currentLine.start.parentLine.start.x - intersectNode.x) / (intersectNode.x - currentLine.start.parentLine.stop.x);
+                            finalStartX = intersectNode.x;
+                            finalStartY = intersectNode.y;
 
                         }
                     }
                     if (currentLine.stop.parentLine != null){
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine.stop.parentLine, mx, my);
-                        if (distance != null) {
-                            currentLine.stop.lambda = (currentLine.stop.parentLine.start.x - distance.node.x) / (distance.node.x - currentLine.stop.parentLine.stop.x);
-                            finalStopX = distance.node.x;
-                            finalStopY = distance.node.y;
+                        Node intersectNode = LinearAlgebra.intersectInfLine(currentLine, currentLine.stop.parentLine);
+                        if (intersectNode != null) {
+                            currentLine.stop.lambda = (currentLine.stop.parentLine.start.x - intersectNode.x) / (intersectNode.x - currentLine.stop.parentLine.stop.x);
+                            finalStopX = intersectNode.x;
+                            finalStopY = intersectNode.y;
                         }
                     }
                     if (finalStartX == null){
