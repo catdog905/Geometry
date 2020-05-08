@@ -20,6 +20,9 @@ public class FigureUI {
     public void drawFigure(Canvas canvas) {
         for (Line line : lines) {
             canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaintLine);
+            for (Node node : line.subNodes){
+                canvas.drawCircle(node.x, node.y, 10, mPaintNode);
+            }
         }
         for (Node node : nodes) {
             canvas.drawCircle(node.x, node.y, 10, mPaintNode);

@@ -101,7 +101,7 @@ public class LinearAlgebra {
         if (between(line.start.x, line.stop.x, x) && between (line.start.y, line.stop.y, y))
             return new Distance(distance, new Node(x, y));
         else
-            return new Distance();
+            return null;
     }
 
     public static Distance findDistanceToLine(Line line, Node node) {

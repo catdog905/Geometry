@@ -6,7 +6,8 @@ public class Node {
     public float x;
     public float y;
     public ArrayList<Line> lines = new ArrayList<>();
-    public ArrayList<Node> subNodes = new ArrayList<>();
+    public Line parentLine = null;
+    public float lambda;
 
     public Node() { }
 
@@ -42,6 +43,11 @@ public class Node {
         for (Line line: lines) {
             line.linearFunc();
         }
+    }
+
+    public void fitXYofParent() {
+        x = (parentLine.start.x + lambda * parentLine.stop.x) / (1 + lambda);
+        y = (parentLine.start.y + lambda * parentLine.stop.y) / (1 + lambda);
     }
 
     public void addLine(Line line) {

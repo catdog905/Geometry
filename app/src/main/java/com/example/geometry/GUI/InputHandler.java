@@ -51,11 +51,12 @@ public class InputHandler {
         if (currentNode == null && currentLine == null) {
             for (Line line : figureUI.lines) {
                 LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
-                if (distance.dist <= delta) {
-                    Log.d("Tag", distance.dist + " " + figureUI.lines.size());
-                    currentLine = line;
-                    break;
-                }
+                if (distance != null)
+                    if (distance.dist <= delta) {
+                        Log.d("Tag", distance.dist + " " + figureUI.lines.size());
+                        currentLine = line;
+                        break;
+                    }
             }
         }
         switch (mode) {
@@ -71,9 +72,6 @@ public class InputHandler {
                 angleMode(event, mx, my);
                 break;
         }
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            //findIntersections();
-        }
         if(event.getAction() == MotionEvent.ACTION_UP) {
             findIntersections();
             currentNode = null;
@@ -85,7 +83,7 @@ public class InputHandler {
         if(currentNode != null) {
             List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
             for (Node node : figureUI.nodes) {
-                if (currentNode != node && !removeNodes.contains(currentNode)) {
+                if (currentNode != node && currentNode != stopNodeDrawingLine && currentNode != startNodeDrawingLine && !removeNodes.contains(currentNode)) {
                     float curDis = LinearAlgebra.intersection2Node(currentNode, node);
                     if (curDis <= delta) {
                         currentNode.lines.addAll(node.lines);
@@ -101,70 +99,41 @@ public class InputHandler {
             }
             figureUI.nodes.removeAll(removeNodes);
 
-            List<Line> removeLines = new ArrayList<>();
-            List<Line> removeStartLines = new ArrayList<>();
-            List<Line> removeStopLines = new ArrayList<>();
             for (Line line : figureUI.lines) {
-                if (currentNode != line.start && currentNode != line.stop) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, currentNode);
-                    if (distance.dist <= delta) {
-                        Line line1 = new Line(line.start, distance.node);
-                        Line line2 = new Line(distance.node, line.stop);
-                        for (Line removeLine : line.start.lines) {
-                            if (removeLine == line) {
-                                removeStartLines.add(removeLine);
-                                break;
-                            }
-                        }
-                        line.start.lines.removeAll(removeStartLines);
-                        line.start.addLine(line1);
-                        line.stop.addLine(line2);
-                        distance.node.addLine(line1);
-                        distance.node.addLine(line2);
-                        for (Line removeLine : line.stop.lines) {
-                            if (removeLine == line) {
-                                removeStopLines.add(removeLine);
-                                break;
-                            }
-                        }
-                        line.stop.lines.removeAll(removeStopLines);
-                        for (Line removeLine : figureUI.lines) {
-                            if (removeLine == line) {
-                                removeLines.add(removeLine);
-                                break;
-                            }
-                        }
-                        figureUI.lines.add(line1);
-                        figureUI.lines.add(line2);
-                        for (Line lineOfNode : currentNode.lines) {
-                            distance.node.lines.add(lineOfNode);
-                        }
-                        for (int i = 0; i < figureUI.nodes.size(); i++) {
-                            if (currentNode == figureUI.nodes.get(i)) {
-                                figureUI.nodes.set(i, distance.node);
-                            }
-                        }
-                        for (Line lineOfNode : currentNode.lines) {
-                            if (lineOfNode.start == currentNode)
-                                lineOfNode.start = distance.node;
-                            else if (lineOfNode.stop == currentNode)
-                                lineOfNode.stop = distance.node;
-                        }
+                boolean checkLines = true;
+                for (Line adjLine : line.start.lines)
+                    if (adjLine.start == currentNode || adjLine.stop == currentNode) {
+                        checkLines = false;
                         break;
                     }
+                for (Line adjLine : line.stop.lines)
+                    if (adjLine.start == currentNode || adjLine.stop == currentNode || !checkLines) {
+                        checkLines = false;
+                        break;
+                    }
+                if (currentNode != line.start && currentNode != line.stop && checkLines) {
+                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, currentNode);
+                    if (distance != null)
+                        if (distance.dist <= delta*2) {
+                            currentNode.lambda = (line.start.x - distance.node.x) / (distance.node.x - line.stop.x);
+                            currentNode.parentLine = line;
+                            line.subNodes.add(currentNode);
+                            break;
+                        }
                 }
             }
-            figureUI.lines.removeAll(removeLines);
         }
     }
 
     private void lineMode(MotionEvent event, float mx, float my) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                startNodeDrawingLine = new Node(mx, my);
+                if (currentNode != null)
+                    startNodeDrawingLine = currentNode;
+                else
+                    startNodeDrawingLine = new Node(mx, my);
                 figureUI.nodes.add(startNodeDrawingLine);
                 stopNodeDrawingLine = new Node(mx, my);
-                currentNode = startNodeDrawingLine;
                 Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
                 figureUI.lines.add(tempLine);
                 figureUI.nodes.add(stopNodeDrawingLine);
@@ -179,6 +148,8 @@ public class InputHandler {
 
             case MotionEvent.ACTION_UP:
                 stopNodeDrawingLine.setXY(mx, my);
+                startNodeDrawingLine = null;
+                stopNodeDrawingLine = null;
                 break;
         }
     }
@@ -190,13 +161,54 @@ public class InputHandler {
 
             case MotionEvent.ACTION_MOVE:
                 if (currentNode != null) {
-                    currentNode.setXY(mx, my);
+                    if (currentNode.parentLine != null){
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentNode.parentLine, mx, my);
+                        if (distance != null) {
+                            currentNode.lambda = (currentNode.parentLine.start.x - distance.node.x) / (distance.node.x - currentNode.parentLine.stop.x);
+                            currentNode.setXY(distance.node.x, distance.node.y);
+                        }
+                    } else
+                        currentNode.setXY(mx, my);
+                    for (Line line : currentNode.lines){
+                        for (Node node : line.subNodes)
+                            node.fitXYofParent();
+                    }
                 }
                 if (currentLine != null) {
-                    float deltaX = mx - lastTouch.x;
-                    float deltaY = my - lastTouch.y;
-                    currentLine.setXYNodes(currentLine.start.x + deltaX, currentLine.start.y + deltaY,
-                            currentLine.stop.x + deltaX, currentLine.stop.y + deltaY);
+                    Float finalStartX = null, finalStartY = null;
+                    Float finalStopX = null, finalStopY = null;
+                    if (currentLine.start.parentLine != null){
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine.start.parentLine, mx, my);
+                        if (distance != null) {
+                            currentLine.start.lambda = (currentLine.start.parentLine.start.x - distance.node.x) / (distance.node.x - currentLine.start.parentLine.stop.x);
+                            finalStartX = distance.node.x;
+                            finalStartY = distance.node.y;
+
+                        }
+                    }
+                    if (currentLine.stop.parentLine != null){
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentLine.stop.parentLine, mx, my);
+                        if (distance != null) {
+                            currentLine.stop.lambda = (currentLine.stop.parentLine.start.x - distance.node.x) / (distance.node.x - currentLine.stop.parentLine.stop.x);
+                            finalStopX = distance.node.x;
+                            finalStopY = distance.node.y;
+                        }
+                    }
+                    if (finalStartX == null){
+                        float deltaX = mx - lastTouch.x;
+                        float deltaY = my - lastTouch.y;
+                        finalStartX = currentLine.start.x + deltaX;
+                        finalStartY = currentLine.start.y + deltaY;
+                    }
+                    if (finalStopX == null){
+                        float deltaX = mx - lastTouch.x;
+                        float deltaY = my - lastTouch.y;
+                        finalStopX = currentLine.stop.x + deltaX;
+                        finalStopY = currentLine.stop.y + deltaY;
+                    }
+                    currentLine.setXYNodes(finalStartX, finalStartY, finalStopX, finalStopY);
+                    for (Node node : currentLine.subNodes)
+                        node.fitXYofParent();
                     lastTouch.set(mx, my);
                 }
                 break;
@@ -204,11 +216,12 @@ public class InputHandler {
             case MotionEvent.ACTION_UP:
                 for (Line line : figureUI.lines) {
                     LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
-                    if (distance.dist <= delta) {
-                        Log.d("Tag", distance.dist + " " + figureUI.lines.size());
-                        stopLineAngle = line;
-                        break;
-                    }
+                    if (distance != null)
+                        if (distance.dist <= delta) {
+                            Log.d("Tag", distance.dist + " " + figureUI.lines.size());
+                            stopLineAngle = line;
+                            break;
+                        }
                 }
         }
     }

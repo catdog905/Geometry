@@ -2,10 +2,13 @@ package com.example.geometry.GUI;
 
 import android.graphics.Path;
 
+import java.util.ArrayList;
+
 public class Line {
     public Node start;
     public Node stop;
     public float value;
+    public ArrayList<Node> subNodes = new ArrayList<>();
 
     public float A, B, C;
 
