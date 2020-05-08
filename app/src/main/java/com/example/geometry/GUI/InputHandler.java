@@ -37,7 +37,7 @@ public class InputHandler {
         float my = event.getY();
 
         float minDis = delta + 1;
-        if (currentNode == null) {
+        if (currentNode == null && currentLine == null) {
             for (Node node : figureUI.nodes) {
                 float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
                 if (curDis < minDis) {
@@ -93,6 +93,16 @@ public class InputHandler {
                             else if (line.stop == node)
                                 line.stop = currentNode;
                         }
+                        if (currentNode.parentLine != null)
+                            if (currentNode.parentLine.start == node || currentNode.parentLine.stop == node){
+                                currentNode.parentLine.subNodes.remove(node);
+                                currentNode.parentLine = null;
+                            }
+                        if (node.parentLine != null)
+                            if (node.parentLine.start == node || node.parentLine.stop == node){
+                                node.parentLine.subNodes.remove(node);
+                                node.parentLine = null;
+                            }
                         removeNodes.add(node);
                     }
                 }
