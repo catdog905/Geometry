@@ -21,6 +21,7 @@ import com.example.geometry.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Builder extends View {
 
@@ -28,6 +29,7 @@ public class Builder extends View {
     private FigureUI figureUI;
     InputHandler inputHandler;
     public ArrayList<ArrayList<String>> global_facts = new ArrayList<>();
+    Stack<StepInput> stepInputStack = new Stack<>();
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -76,7 +78,9 @@ public class Builder extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        inputHandler.catchTouch(event);
+        StepInput temp = inputHandler.catchTouch(event);
+        if (temp != null)
+            stepInputStack.push(temp);
         invalidate();
         return true;
     }

@@ -28,11 +28,13 @@ public class InputHandler {
     private Line startLineAngle;
     private Line stopLineAngle;
 
+    StepInput stepInput = null;
+
     public InputHandler(FigureUI figureUI) {
         this.figureUI = figureUI;
     }
 
-    public void catchTouch(MotionEvent event) {
+    public StepInput catchTouch(MotionEvent event) {
         float mx = event.getX();
         float my = event.getY();
 
@@ -59,24 +61,26 @@ public class InputHandler {
                     }
             }
         }
+        StepInput stepInput = new StepInput();
         switch (mode) {
             case LINE_MODE:
-                lineMode(event, mx, my);
+                stepInput = lineMode(event, mx, my);
                 break;
 
             case MOVE_MODE:
-                moveMode(event, mx, my);
+                stepInput = moveMode(event, mx, my);
                 break;
 
             case ANGLE_MODE:
-                angleMode(event, mx, my);
+                stepInput = angleMode(event, mx, my);
                 break;
         }
         if(event.getAction() == MotionEvent.ACTION_UP) {
-            findIntersections();
+            //findIntersections();
             currentNode = null;
             currentLine = null;
         }
+        return stepInput;
     }
 
     private void findIntersections() {
@@ -135,9 +139,10 @@ public class InputHandler {
         }
     }
 
-    private void lineMode(MotionEvent event, float mx, float my) {
+    private StepInput lineMode(MotionEvent event, float mx, float my) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                stepInput = new StepInput();
                 if (currentNode != null)
                     startNodeDrawingLine = currentNode;
                 else {
@@ -145,11 +150,14 @@ public class InputHandler {
                     currentNode = startNodeDrawingLine;
                     findIntersections();
                 }
-                figureUI.nodes.add(startNodeDrawingLine);
+                figureUI.nodes.add(startNodeDrawingLine);;
+                stepInput.pushAction(new ActionCreate<>(startNodeDrawingLine));
                 stopNodeDrawingLine = new Node(mx, my);
                 Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
                 figureUI.lines.add(tempLine);
+                stepInput.pushAction(new ActionCreate<>(tempLine));
                 figureUI.nodes.add(stopNodeDrawingLine);
+                stepInput.pushAction(new ActionCreate<>(stopNodeDrawingLine));
                 startNodeDrawingLine.lines.add(tempLine);
                 stopNodeDrawingLine.lines.add(tempLine);
                 break;
@@ -160,14 +168,23 @@ public class InputHandler {
                 break;
 
             case MotionEvent.ACTION_UP:
+                Node temp = null;
+                try {
+                    temp = (Node) stopNodeDrawingLine.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
                 stopNodeDrawingLine.setXY(mx, my);
+                stepInput.pushAction(new ActionMove<>(temp, stopNodeDrawingLine));
                 startNodeDrawingLine = null;
                 stopNodeDrawingLine = null;
-                break;
+                return stepInput;
         }
+        return null;
     }
 
-    private void moveMode(MotionEvent event, float mx, float my) {
+    private StepInput moveMode(MotionEvent event, float mx, float my) {
+        StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 lastTouch = new PointF(mx, my);
@@ -238,9 +255,11 @@ public class InputHandler {
                         }
                 }
         }
+        return stepInput;
     }
 
-    private void angleMode(MotionEvent event, float mx, float my) {
+    private StepInput angleMode(MotionEvent event, float mx, float my) {
+        StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (currentLine != null)
@@ -276,78 +295,6 @@ public class InputHandler {
                     break;
                 }
         }
-    }
-
-    private void transformFigureToFacts() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        ArrayList<String> nodeLetter = new ArrayList<>();
-        ArrayList<String> nodeIndex = new ArrayList<>();
-        ArrayList<String> lineLetter = new ArrayList<>();
-        ArrayList<String> lineIndex = new ArrayList<>();
-        ArrayList<String> angleLetter = new ArrayList<>();
-        for (int i = 0; i < figureUI.nodes.size(); i++) {
-            nodeLetter.add(Character.toString(alphabet.charAt(i)));
-            nodeIndex.add(Integer.toHexString(figureUI.nodes.get(i).hashCode()));
-        }
-        for (int i = 0; i < figureUI.lines.size(); i++) {
-            String startIndex = Integer.toHexString(figureUI.lines.get(i).start.hashCode());
-            String startLetter = null;
-            String stopIndex = Integer.toHexString(figureUI.lines.get(i).stop.hashCode());
-            String stopLetter = null;
-            for (int j = 0; j < nodeIndex.size(); j++) {
-                if (nodeIndex.get(j).equals(startIndex))
-                    startLetter = nodeLetter.get(j);
-                if (nodeIndex.get(j).equals(stopIndex))
-                    stopLetter = nodeLetter.get(j);
-            }
-            if (startLetter != null && stopLetter != null) {
-                lineLetter.add(startLetter + stopLetter);
-                lineIndex.add(Integer.toHexString(figureUI.lines.get(i).hashCode()));
-            }
-        }
-        for (int i = 0; i < figureUI.angles.size(); i++) {
-            String firstIndex = Integer.toHexString(figureUI.angles.get(i).line1.hashCode());
-            String firstLineLetter = null;
-            String secondIndex = Integer.toHexString(figureUI.angles.get(i).line2.hashCode());
-            String secondLineLetter = null;
-            for (int j = 0; j < lineIndex.size(); j++) {
-
-
-                if (lineIndex.get(j).equals(firstIndex))
-                    firstLineLetter = lineLetter.get(j);
-                if (lineIndex.get(j).equals(secondIndex))
-                    secondLineLetter = lineLetter.get(j);
-            }
-            if (firstLineLetter != null && secondLineLetter != null) {
-                Character midChar = null;
-                Log.d("Mat", firstLineLetter.length() + " " + secondLineLetter.length());
-                for (int a = 0; a < firstLineLetter.length(); a++) {
-                    for (int b = 0; b < secondLineLetter.length(); b++) {
-                        if (firstLineLetter.charAt(a) == secondLineLetter.charAt(b)) {
-                            midChar = firstLineLetter.charAt(a);
-                            break;
-                        }
-                    }
-                }
-                String andle = "";
-                for (int a = 0; a < firstLineLetter.length(); a++) {
-                    if (firstLineLetter.charAt(a) != midChar) {
-                        andle += firstLineLetter.charAt(a);
-                        break;
-                    }
-                }
-                andle += midChar;
-                for (int b = 0; b < secondLineLetter.length(); b++) {
-                    if (secondLineLetter.charAt(b) != midChar) {
-                        andle += secondLineLetter.charAt(b);
-                        break;
-                    }
-                }
-                angleLetter.add(andle);
-            }
-        }
-        //global_facts.add(nodeLetter);
-        //global_facts.add(lineLetter);
-        //global_facts.add(angleLetter);
+        return stepInput;
     }
 }

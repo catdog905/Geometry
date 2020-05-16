@@ -1,8 +1,10 @@
 package com.example.geometry.GUI;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
-public class Node {
+public class Node implements Cloneable{
     public float x;
     public float y;
     public ArrayList<Line> lines = new ArrayList<>();
@@ -52,5 +54,11 @@ public class Node {
 
     public void addLine(Line line) {
         lines.add(line);
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
