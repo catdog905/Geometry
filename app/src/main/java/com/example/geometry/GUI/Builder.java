@@ -81,6 +81,7 @@ public class Builder extends View {
         StepInput temp = inputHandler.catchTouch(event);
         if (temp != null)
             stepInputStack.push(temp);
+        //Log.d("debug", Debuger.getStackTraceOfInputHandler(stepInputStack) + "1");
         invalidate();
         return true;
     }

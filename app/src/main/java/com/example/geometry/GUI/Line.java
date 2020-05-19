@@ -38,8 +38,8 @@ public class Line {
 
     public String toString()
     {
-        String str = Integer.toHexString (hashCode ()) + " start= " +  Integer.toHexString(start.hashCode()) +
-                "; stop= " + Integer.toHexString(stop.hashCode()) + "; val = " + value + ";";
+        String str = Integer.toHexString (hashCode ()) + " start= " +  Integer.toHexString(start.hashCode()) + " " + start.toString() +
+                "; stop= " + Integer.toHexString(stop.hashCode()) + " " + stop.toString() + "; val = " + value + ";";
         return str;
     }
 

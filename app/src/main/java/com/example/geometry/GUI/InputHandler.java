@@ -9,18 +9,19 @@ import com.example.geometry.LinearAlgebra;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputHandler {
+public class InputHandler<T> {
     private static int delta = 25;
     public static int mode = 1;
     public final static int CIRCLE_MODE = 0;
     public final static int LINE_MODE = 1;
     public final static int MOVE_MODE = 2;
     public final static int ANGLE_MODE = 3;
-    private Node currentNode = null;
-    private Line currentLine = null;
+    private T currentElem;
     FigureUI figureUI;
 
     private PointF lastTouch;
+    private Node startMoveNode;
+    private Line startMoveLine;
 
     private Node startNodeDrawingLine;
     private Node stopNodeDrawingLine;
@@ -38,27 +39,29 @@ public class InputHandler {
         float mx = event.getX();
         float my = event.getY();
 
-        float minDis = delta + 1;
-        if (currentNode == null && currentLine == null) {
-            for (Node node : figureUI.nodes) {
-                float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
-                if (curDis < minDis) {
-                    minDis = curDis;
-                    currentNode = node;
-                    break;
-                }
-            }
-        }
-
-        if (currentNode == null && currentLine == null) {
-            for (Line line : figureUI.lines) {
-                LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
-                if (distance != null)
-                    if (distance.dist <= delta) {
-                        Log.d("Tag", distance.dist + " " + figureUI.lines.size());
-                        currentLine = line;
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            float minDis = delta + 1;
+            if (currentElem == null) {
+                for (Node node : figureUI.nodes) {
+                    float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
+                    if (curDis < minDis) {
+                        minDis = curDis;
+                        currentElem = (T) node;
                         break;
                     }
+                }
+            }
+
+            if (currentElem == null) {
+                for (Line line : figureUI.lines) {
+                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                    if (distance != null)
+                        if (distance.dist <= delta) {
+                            Log.d("Tag", distance.dist + " " + figureUI.lines.size());
+                            currentElem = (T) line;
+                            break;
+                        }
+                }
             }
         }
         StepInput stepInput = new StepInput();
@@ -77,30 +80,29 @@ public class InputHandler {
         }
         if(event.getAction() == MotionEvent.ACTION_UP) {
             //findIntersections();
-            currentNode = null;
-            currentLine = null;
+            currentElem = null;;
         }
         return stepInput;
     }
 
     private void findIntersections() {
-        if(currentNode != null) {
+        if(currentElem != null) {
             List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
             for (Node node : figureUI.nodes) {
-                if (currentNode != node && currentNode != stopNodeDrawingLine && currentNode != startNodeDrawingLine && !removeNodes.contains(currentNode)) {
-                    float curDis = LinearAlgebra.intersection2Node(currentNode, node);
+                if (currentElem != node && currentElem != stopNodeDrawingLine && currentElem != startNodeDrawingLine && !removeNodes.contains(currentElem)) {
+                    float curDis = LinearAlgebra.intersection2Node((Node) currentElem, node);
                     if (curDis <= delta) {
-                        currentNode.lines.addAll(node.lines);
-                        for (Line line : currentNode.lines) {
+                        ((Node) currentElem).lines.addAll(node.lines);
+                        for (Line line : ((Node) currentElem).lines) {
                             if (line.start == node)
-                                line.start = currentNode;
+                                line.start = (Node) currentElem;
                             else if (line.stop == node)
-                                line.stop = currentNode;
+                                line.stop = (Node) currentElem;
                         }
-                        if (currentNode.parentLine != null)
-                            if (currentNode.parentLine.start == node || currentNode.parentLine.stop == node){
-                                currentNode.parentLine.subNodes.remove(node);
-                                currentNode.parentLine = null;
+                        if (((Node) currentElem).parentLine != null)
+                            if (((Node) currentElem).parentLine.start == node || ((Node) currentElem).parentLine.stop == node){
+                                ((Node) currentElem).parentLine.subNodes.remove(node);
+                                ((Node) currentElem).parentLine = null;
                             }
                         if (node.parentLine != null)
                             if (node.parentLine.start == node || node.parentLine.stop == node){
@@ -116,22 +118,22 @@ public class InputHandler {
             for (Line line : figureUI.lines) {
                 boolean checkLines = true;
                 for (Line adjLine : line.start.lines)
-                    if (adjLine.start == currentNode || adjLine.stop == currentNode) {
+                    if (adjLine.start == currentElem || adjLine.stop == currentElem) {
                         checkLines = false;
                         break;
                     }
                 for (Line adjLine : line.stop.lines)
-                    if (adjLine.start == currentNode || adjLine.stop == currentNode || !checkLines) {
+                    if (adjLine.start == currentElem || adjLine.stop == currentElem || !checkLines) {
                         checkLines = false;
                         break;
                     }
-                if (currentNode != line.start && currentNode != line.stop && checkLines) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, currentNode);
+                if (currentElem != line.start && currentElem != line.stop && checkLines) {
+                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, (Node) currentElem);
                     if (distance != null)
                         if (distance.dist <= delta*2) {
-                            currentNode.lambda = (line.start.x - distance.node.x) / (distance.node.x - line.stop.x);
-                            currentNode.parentLine = line;
-                            line.subNodes.add(currentNode);
+                            ((Node) currentElem).lambda = (line.start.x - distance.node.x) / (distance.node.x - line.stop.x);
+                            ((Node) currentElem).parentLine = line;
+                            line.subNodes.add((Node) currentElem);
                             break;
                         }
                 }
@@ -143,11 +145,11 @@ public class InputHandler {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 stepInput = new StepInput();
-                if (currentNode != null)
-                    startNodeDrawingLine = currentNode;
+                if (currentElem != null)
+                    startNodeDrawingLine = (Node) currentElem;
                 else {
                     startNodeDrawingLine = new Node(mx, my);
-                    currentNode = startNodeDrawingLine;
+                    currentElem = (T) startNodeDrawingLine;
                     findIntersections();
                 }
                 figureUI.nodes.add(startNodeDrawingLine);;
@@ -164,7 +166,7 @@ public class InputHandler {
 
             case MotionEvent.ACTION_MOVE:
                 stopNodeDrawingLine.setXY(mx, my);
-                currentNode = stopNodeDrawingLine;
+                currentElem = (T) stopNodeDrawingLine;
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -187,40 +189,44 @@ public class InputHandler {
         StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                //if (currentElem != null)
+                //    startMoveNode = (Node) currentElem;
+                //if (currentElem != null)
+                //    startMoveLine = (Line) currentElem;
                 lastTouch = new PointF(mx, my);
 
             case MotionEvent.ACTION_MOVE:
-                if (currentNode != null) {
-                    if (currentNode.parentLine != null){
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(currentNode.parentLine, mx, my);
+                if (currentElem != null && currentElem instanceof Node) {
+                    if (((Node) currentElem).parentLine != null){
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(((Node) currentElem).parentLine, mx, my);
                         if (distance != null) {
-                            currentNode.lambda = (currentNode.parentLine.start.x - distance.node.x) / (distance.node.x - currentNode.parentLine.stop.x);
-                            currentNode.setXY(distance.node.x, distance.node.y);
+                            ((Node) currentElem).lambda = (((Node) currentElem).parentLine.start.x - distance.node.x) / (distance.node.x - ((Node) currentElem).parentLine.stop.x);
+                            ((Node) currentElem).setXY(distance.node.x, distance.node.y);
                         }
                     } else
-                        currentNode.setXY(mx, my);
-                    for (Line line : currentNode.lines){
+                        ((Node) currentElem).setXY(mx, my);
+                    for (Line line : ((Node) currentElem).lines){
                         for (Node node : line.subNodes)
                             node.fitXYofParent();
                     }
                 }
-                if (currentLine != null) {
+                if (currentElem != null && currentElem instanceof Line) {
                     Float finalStartX = null, finalStartY = null;
                     Float finalStopX = null, finalStopY = null;
-                    currentLine.C = -1 * (currentLine.A*mx + currentLine.B*my);
-                    if (currentLine.start.parentLine != null){
-                        Node intersectNode = LinearAlgebra.intersectInfLine(currentLine, currentLine.start.parentLine);
+                    ((Line) currentElem).C = -1 * (((Line) currentElem).A*mx + ((Line) currentElem).B*my);
+                    if (((Line) currentElem).start.parentLine != null){
+                        Node intersectNode = LinearAlgebra.intersectInfLine(((Line) currentElem), ((Line) currentElem).start.parentLine);
                         if (intersectNode != null) {
-                            currentLine.start.lambda = (currentLine.start.parentLine.start.x - intersectNode.x) / (intersectNode.x - currentLine.start.parentLine.stop.x);
+                            ((Line) currentElem).start.lambda = (((Line) currentElem).start.parentLine.start.x - intersectNode.x) / (intersectNode.x - ((Line) currentElem).start.parentLine.stop.x);
                             finalStartX = intersectNode.x;
                             finalStartY = intersectNode.y;
 
                         }
                     }
-                    if (currentLine.stop.parentLine != null){
-                        Node intersectNode = LinearAlgebra.intersectInfLine(currentLine, currentLine.stop.parentLine);
+                    if (((Line) currentElem).stop.parentLine != null){
+                        Node intersectNode = LinearAlgebra.intersectInfLine(((Line) currentElem), ((Line) currentElem).stop.parentLine);
                         if (intersectNode != null) {
-                            currentLine.stop.lambda = (currentLine.stop.parentLine.start.x - intersectNode.x) / (intersectNode.x - currentLine.stop.parentLine.stop.x);
+                            ((Line) currentElem).stop.lambda = (((Line) currentElem).stop.parentLine.start.x - intersectNode.x) / (intersectNode.x - ((Line) currentElem).stop.parentLine.stop.x);
                             finalStopX = intersectNode.x;
                             finalStopY = intersectNode.y;
                         }
@@ -228,17 +234,17 @@ public class InputHandler {
                     if (finalStartX == null){
                         float deltaX = mx - lastTouch.x;
                         float deltaY = my - lastTouch.y;
-                        finalStartX = currentLine.start.x + deltaX;
-                        finalStartY = currentLine.start.y + deltaY;
+                        finalStartX = ((Line) currentElem).start.x + deltaX;
+                        finalStartY = ((Line) currentElem).start.y + deltaY;
                     }
                     if (finalStopX == null){
                         float deltaX = mx - lastTouch.x;
                         float deltaY = my - lastTouch.y;
-                        finalStopX = currentLine.stop.x + deltaX;
-                        finalStopY = currentLine.stop.y + deltaY;
+                        finalStopX = ((Line) currentElem).stop.x + deltaX;
+                        finalStopY = ((Line) currentElem).stop.y + deltaY;
                     }
-                    currentLine.setXYNodes(finalStartX, finalStartY, finalStopX, finalStopY);
-                    for (Node node : currentLine.subNodes)
+                    ((Line) currentElem).setXYNodes(finalStartX, finalStartY, finalStopX, finalStopY);
+                    for (Node node : ((Line) currentElem).subNodes)
                         node.fitXYofParent();
                     lastTouch.set(mx, my);
                 }
@@ -254,16 +260,21 @@ public class InputHandler {
                             break;
                         }
                 }
+                if (currentElem != null)
+                    stepInput.pushAction(new ActionMove<>(startMoveNode, currentElem));
+                if (currentElem != null)
+                    stepInput.pushAction(new ActionMove<>(startMoveLine, currentElem));
+                return stepInput;
         }
-        return stepInput;
+        return null;
     }
 
     private StepInput angleMode(MotionEvent event, float mx, float my) {
         StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (currentLine != null)
-                    startLineAngle = currentLine;
+                if (currentElem != null)
+                    startLineAngle = (Line) currentElem;
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -279,7 +290,7 @@ public class InputHandler {
                     float resultVal = 10.0f; //Float.parseFloat(MainActivity.editText.getText().toString());
 
                     if (startLineAngle == stopLineAngle)
-                        currentLine.value = resultVal;
+                        ((Line) currentElem).value = resultVal;
                     if (startLineAngle != stopLineAngle) {
                         boolean is_angle = false;
                         for (Angle angle : figureUI.angles) {
