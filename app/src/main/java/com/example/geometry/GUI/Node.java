@@ -2,6 +2,8 @@ package com.example.geometry.GUI;
 
 import androidx.annotation.NonNull;
 
+import com.example.geometry.LinearAlgebra;
+
 import java.util.ArrayList;
 
 public class Node implements Cloneable{
@@ -39,17 +41,20 @@ public class Node implements Cloneable{
         return str;
     }
 
-    public void setXY(float x, float y) {
-        this.x = x;
-        this.y = y;
-        for (Line line: lines) {
-            line.linearFunc();
-        }
-    }
+    //public void setXY(float x, float y) {
+    //    this.x = x;
+    //    this.y = y;
+    //    for (Line line: lines) {
+    //        line.linearFunc();
+    //    }
+    //}
 
-    public void fitXYofParent() {
+    public void fit() {
         x = (parentLine.start.x + lambda * parentLine.stop.x) / (1 + lambda);
         y = (parentLine.start.y + lambda * parentLine.stop.y) / (1 + lambda);
+        for (Line line:lines) {
+            line.fit();
+        }
     }
 
     public void addLine(Line line) {
@@ -60,5 +65,28 @@ public class Node implements Cloneable{
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }
+
+    public void move(Node touch) {
+        if (parentLine != null){
+            LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(parentLine, touch.x, touch.y);
+            if (distance != null) {
+                lambda = (parentLine.start.x - distance.node.x) / (distance.node.x - parentLine.stop.x);
+                x = distance.node.x;
+                y = distance.node.y;
+            }
+        } else {
+            x = touch.x;
+            y = touch.y;
+        }
+        for (Line line : lines){
+            line.linearFunc();
+            for (Node node : line.subNodes)
+                node.fit();
+        }
+    }
+
+    public void countLambda(Line line) {
+        lambda = (line.start.x - x) / (x - line.stop.x);
     }
 }

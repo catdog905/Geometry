@@ -43,11 +43,11 @@ public class LinearAlgebra {
         return Math.max(a,c) <= Math.min(b,d);
     }
 
-    private static float det (float a, float b, float c, float d) {
+    public static float det (float a, float b, float c, float d) {
         return a * d - b * c;
     }
 
-    private static boolean between (float a, float b, float c) {
+    public static boolean between (float a, float b, float c) {
         return Math.min(a,b) <= c + EPS && c <= Math.max(a,b) + EPS;
     }
 

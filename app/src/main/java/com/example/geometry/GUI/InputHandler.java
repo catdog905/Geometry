@@ -20,8 +20,6 @@ public class InputHandler<T> {
     FigureUI figureUI;
 
     private PointF lastTouch;
-    private Node startMoveNode;
-    private Line startMoveLine;
 
     private Node startNodeDrawingLine;
     private Node stopNodeDrawingLine;
@@ -79,65 +77,69 @@ public class InputHandler<T> {
                 break;
         }
         if(event.getAction() == MotionEvent.ACTION_UP) {
-            //findIntersections();
-            currentElem = null;;
+            findIntersections();
+            currentElem = null;
         }
         return stepInput;
     }
 
     private void findIntersections() {
         if(currentElem != null) {
+            if (currentElem instanceof Node) {
             List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
-            for (Node node : figureUI.nodes) {
-                if (currentElem != node && currentElem != stopNodeDrawingLine && currentElem != startNodeDrawingLine && !removeNodes.contains(currentElem)) {
-                    float curDis = LinearAlgebra.intersection2Node((Node) currentElem, node);
-                    if (curDis <= delta) {
-                        ((Node) currentElem).lines.addAll(node.lines);
-                        for (Line line : ((Node) currentElem).lines) {
-                            if (line.start == node)
-                                line.start = (Node) currentElem;
-                            else if (line.stop == node)
-                                line.stop = (Node) currentElem;
+                for (Node node : figureUI.nodes) {
+                    if (currentElem != node && currentElem != stopNodeDrawingLine && currentElem != startNodeDrawingLine && !removeNodes.contains(currentElem)) {
+                        float curDis = LinearAlgebra.intersection2Node((Node) currentElem, node);
+                        if (curDis <= delta) {
+                            ((Node) currentElem).lines.addAll(node.lines);
+                            for (Line line : ((Node) currentElem).lines) {
+                                if (line.start == node)
+                                    line.start = (Node) currentElem;
+                                else if (line.stop == node)
+                                    line.stop = (Node) currentElem;
+                            }
+                            if (((Node) currentElem).parentLine != null)
+                                if (((Node) currentElem).parentLine.start == node || ((Node) currentElem).parentLine.stop == node) {
+                                    ((Node) currentElem).parentLine.subNodes.remove(node);
+                                    ((Node) currentElem).parentLine = null;
+                                }
+                            if (node.parentLine != null)
+                                if (node.parentLine.start == node || node.parentLine.stop == node) {
+                                    node.parentLine.subNodes.remove(node);
+                                    node.parentLine = null;
+                                }
+                            removeNodes.add(node);
                         }
-                        if (((Node) currentElem).parentLine != null)
-                            if (((Node) currentElem).parentLine.start == node || ((Node) currentElem).parentLine.stop == node){
-                                ((Node) currentElem).parentLine.subNodes.remove(node);
-                                ((Node) currentElem).parentLine = null;
-                            }
-                        if (node.parentLine != null)
-                            if (node.parentLine.start == node || node.parentLine.stop == node){
-                                node.parentLine.subNodes.remove(node);
-                                node.parentLine = null;
-                            }
-                        removeNodes.add(node);
                     }
                 }
-            }
-            figureUI.nodes.removeAll(removeNodes);
+                figureUI.nodes.removeAll(removeNodes);
 
-            for (Line line : figureUI.lines) {
-                boolean checkLines = true;
-                for (Line adjLine : line.start.lines)
-                    if (adjLine.start == currentElem || adjLine.stop == currentElem) {
-                        checkLines = false;
-                        break;
-                    }
-                for (Line adjLine : line.stop.lines)
-                    if (adjLine.start == currentElem || adjLine.stop == currentElem || !checkLines) {
-                        checkLines = false;
-                        break;
-                    }
-                if (currentElem != line.start && currentElem != line.stop && checkLines) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, (Node) currentElem);
-                    if (distance != null)
-                        if (distance.dist <= delta*2) {
-                            ((Node) currentElem).lambda = (line.start.x - distance.node.x) / (distance.node.x - line.stop.x);
-                            ((Node) currentElem).parentLine = line;
-                            line.subNodes.add((Node) currentElem);
+                for (Line line : figureUI.lines) {
+                    boolean checkLines = true;
+                    for (Line adjLine : line.start.lines)
+                        if (adjLine.start == currentElem || adjLine.stop == currentElem) {
+                            checkLines = false;
                             break;
                         }
+                    for (Line adjLine : line.stop.lines)
+                        if (adjLine.start == currentElem || adjLine.stop == currentElem || !checkLines) {
+                            checkLines = false;
+                            break;
+                        }
+                    if (currentElem != line.start && currentElem != line.stop && checkLines) {
+                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, (Node) currentElem);
+                        if (distance != null)
+                            if (distance.dist <= delta*2) {
+                                ((Node) currentElem).lambda = (line.start.x - distance.node.x) / (distance.node.x - line.stop.x);
+                                ((Node) currentElem).parentLine = line;
+                                line.subNodes.add((Node) currentElem);
+                                break;
+                            }
+                    }
                 }
             }
+
+
         }
     }
 
@@ -145,7 +147,7 @@ public class InputHandler<T> {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 stepInput = new StepInput();
-                if (currentElem != null)
+                if (currentElem != null && currentElem instanceof Node)
                     startNodeDrawingLine = (Node) currentElem;
                 else {
                     startNodeDrawingLine = new Node(mx, my);
@@ -165,7 +167,7 @@ public class InputHandler<T> {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                stopNodeDrawingLine.setXY(mx, my);
+                stopNodeDrawingLine.move(new Node(mx, my));
                 currentElem = (T) stopNodeDrawingLine;
                 break;
 
@@ -176,7 +178,7 @@ public class InputHandler<T> {
                 } catch (CloneNotSupportedException e) {
                     e.printStackTrace();
                 }
-                stopNodeDrawingLine.setXY(mx, my);
+                stopNodeDrawingLine.move(new Node(mx, my));
                 stepInput.pushAction(new ActionMove<>(temp, stopNodeDrawingLine));
                 startNodeDrawingLine = null;
                 stopNodeDrawingLine = null;
@@ -189,81 +191,34 @@ public class InputHandler<T> {
         StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //if (currentElem != null)
-                //    startMoveNode = (Node) currentElem;
-                //if (currentElem != null)
-                //    startMoveLine = (Line) currentElem;
                 lastTouch = new PointF(mx, my);
 
             case MotionEvent.ACTION_MOVE:
-                if (currentElem != null && currentElem instanceof Node) {
-                    if (((Node) currentElem).parentLine != null){
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(((Node) currentElem).parentLine, mx, my);
-                        if (distance != null) {
-                            ((Node) currentElem).lambda = (((Node) currentElem).parentLine.start.x - distance.node.x) / (distance.node.x - ((Node) currentElem).parentLine.stop.x);
-                            ((Node) currentElem).setXY(distance.node.x, distance.node.y);
-                        }
-                    } else
-                        ((Node) currentElem).setXY(mx, my);
-                    for (Line line : ((Node) currentElem).lines){
-                        for (Node node : line.subNodes)
-                            node.fitXYofParent();
-                    }
-                }
-                if (currentElem != null && currentElem instanceof Line) {
-                    Float finalStartX = null, finalStartY = null;
-                    Float finalStopX = null, finalStopY = null;
-                    ((Line) currentElem).C = -1 * (((Line) currentElem).A*mx + ((Line) currentElem).B*my);
-                    if (((Line) currentElem).start.parentLine != null){
-                        Node intersectNode = LinearAlgebra.intersectInfLine(((Line) currentElem), ((Line) currentElem).start.parentLine);
-                        if (intersectNode != null) {
-                            ((Line) currentElem).start.lambda = (((Line) currentElem).start.parentLine.start.x - intersectNode.x) / (intersectNode.x - ((Line) currentElem).start.parentLine.stop.x);
-                            finalStartX = intersectNode.x;
-                            finalStartY = intersectNode.y;
-
-                        }
-                    }
-                    if (((Line) currentElem).stop.parentLine != null){
-                        Node intersectNode = LinearAlgebra.intersectInfLine(((Line) currentElem), ((Line) currentElem).stop.parentLine);
-                        if (intersectNode != null) {
-                            ((Line) currentElem).stop.lambda = (((Line) currentElem).stop.parentLine.start.x - intersectNode.x) / (intersectNode.x - ((Line) currentElem).stop.parentLine.stop.x);
-                            finalStopX = intersectNode.x;
-                            finalStopY = intersectNode.y;
-                        }
-                    }
-                    if (finalStartX == null){
-                        float deltaX = mx - lastTouch.x;
-                        float deltaY = my - lastTouch.y;
-                        finalStartX = ((Line) currentElem).start.x + deltaX;
-                        finalStartY = ((Line) currentElem).start.y + deltaY;
-                    }
-                    if (finalStopX == null){
-                        float deltaX = mx - lastTouch.x;
-                        float deltaY = my - lastTouch.y;
-                        finalStopX = ((Line) currentElem).stop.x + deltaX;
-                        finalStopY = ((Line) currentElem).stop.y + deltaY;
-                    }
-                    ((Line) currentElem).setXYNodes(finalStartX, finalStartY, finalStopX, finalStopY);
-                    for (Node node : ((Line) currentElem).subNodes)
-                        node.fitXYofParent();
-                    lastTouch.set(mx, my);
-                }
+                if (currentElem instanceof Node)
+                    ((Node)currentElem).move(new Node(mx, my));
+                else if (currentElem instanceof Line)
+                    ((Line)currentElem).move(new Node(mx, my), lastTouch);
+                lastTouch.set(mx, my);
                 break;
 
             case MotionEvent.ACTION_UP:
-                for (Line line : figureUI.lines) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
-                    if (distance != null)
-                        if (distance.dist <= delta) {
-                            Log.d("Tag", distance.dist + " " + figureUI.lines.size());
-                            stopLineAngle = line;
-                            break;
-                        }
-                }
-                if (currentElem != null)
-                    stepInput.pushAction(new ActionMove<>(startMoveNode, currentElem));
-                if (currentElem != null)
-                    stepInput.pushAction(new ActionMove<>(startMoveLine, currentElem));
+                //if (currentElem instanceof Node)
+                //    ((Node)currentElem).fit();
+                //else if (currentElem instanceof Line)
+                //    ((Line)currentElem).fit();
+                //for (Line line : figureUI.lines) {
+                //    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                //    if (distance != null)
+                //        if (distance.dist <= delta) {
+                //            Log.d("Tag", distance.dist + " " + figureUI.lines.size());
+                //            stopLineAngle = line;
+                //            break;
+                //        }
+                //}
+                //if (currentElem != null)
+                //    stepInput.pushAction(new ActionMove<>(startMoveNode, currentElem));
+                //if (currentElem != null)
+                //    stepInput.pushAction(new ActionMove<>(startMoveLine, currentElem));
                 return stepInput;
         }
         return null;
