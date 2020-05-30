@@ -3,6 +3,7 @@ package com.example.geometry.GUI;
 public class Angle {
     public Line line1, line2;
     public float valDeg;
+    public String name;
 
     public Angle(Line line1, Line line2) {
         this.line1 = line1;

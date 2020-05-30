@@ -41,7 +41,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Builder builder;
     private RecyclerView mRecycleView;
     private List<ItemAdapter> mList = new ArrayList<>();
     private ListAdapter mAdapter;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
         setContentView(R.layout.activity_main);
-        builder = new Builder(this);
+
         layout = new RelativeLayout(this);
 
         drawer = findViewById(R.id.drawer_layout);

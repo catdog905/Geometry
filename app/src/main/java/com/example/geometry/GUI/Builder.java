@@ -1,6 +1,7 @@
 package com.example.geometry.GUI;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -26,33 +28,34 @@ import java.util.Stack;
 public class Builder extends View {
 
 
-    private FigureUI figureUI;
+    public FigureUI figureUI;
     InputHandler inputHandler;
-    public ArrayList<ArrayList<String>> global_facts = new ArrayList<>();
+    public ArrayList<String> facts = new ArrayList<>();
     Stack<StepInput> stepInputStack = new Stack<>();
+    Builder builder;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public Builder(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public Builder(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public Builder(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void init() {
+    private void init(Context context) {
         Paint mPaintNode = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintNode.setStrokeWidth(10);
         mPaintNode.setColor(getContext().getColor(R.color.boldThemeColor));

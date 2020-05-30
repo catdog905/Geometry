@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public class Line {
     public Node start;
     public Node stop;
-    public float value;
+    public Float value = null;
     public ArrayList<Node> subNodes = new ArrayList<>();
+    public String name;
 
     public float A, B, C;
 

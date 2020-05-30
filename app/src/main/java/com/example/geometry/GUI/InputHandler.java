@@ -16,6 +16,7 @@ public class InputHandler<T> {
     public final static int LINE_MODE = 1;
     public final static int MOVE_MODE = 2;
     public final static int ANGLE_MODE = 3;
+    public static String ANGLE_TEXT = "3";
     private T currentElem;
     FigureUI figureUI;
 
@@ -151,10 +152,10 @@ public class InputHandler<T> {
                     startNodeDrawingLine = (Node) currentElem;
                 else {
                     startNodeDrawingLine = new Node(mx, my);
+                    figureUI.nodes.add(startNodeDrawingLine);
                     currentElem = (T) startNodeDrawingLine;
                     findIntersections();
                 }
-                figureUI.nodes.add(startNodeDrawingLine);;
                 stepInput.pushAction(new ActionCreate<>(startNodeDrawingLine));
                 stopNodeDrawingLine = new Node(mx, my);
                 Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
@@ -235,18 +236,21 @@ public class InputHandler<T> {
             case MotionEvent.ACTION_UP:
                 for (Line line : figureUI.lines) {
                     LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                    if (distance == null)
+                        continue;
                     if (distance.dist <= delta) {
                         Log.d("Tag", distance.dist + " " + figureUI.lines.size());
                         stopLineAngle = line;
-                        break;
                     }
 
 
-                    float resultVal = 10.0f; //Float.parseFloat(MainActivity.editText.getText().toString());
+                    float resultVal = Integer.parseInt(ANGLE_TEXT); //Float.parseFloat(MainActivity.editText.getText().toString());
 
-                    if (startLineAngle == stopLineAngle)
+                    if (startLineAngle == stopLineAngle) {
                         ((Line) currentElem).value = resultVal;
-                    if (startLineAngle != stopLineAngle) {
+                        break;
+                    }
+                    if (startLineAngle != null && stopLineAngle != null) {
                         boolean is_angle = false;
                         for (Angle angle : figureUI.angles) {
                             if ((angle.line1 == startLineAngle && angle.line2 == stopLineAngle) || (angle.line2 == startLineAngle && angle.line1 == stopLineAngle)) {
@@ -258,7 +262,6 @@ public class InputHandler<T> {
                         if (!is_angle)
                             figureUI.angles.add(new Angle(startLineAngle, stopLineAngle, resultVal));
                     }
-                    break;
                 }
         }
         return stepInput;

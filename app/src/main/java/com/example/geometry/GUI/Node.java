@@ -12,6 +12,7 @@ public class Node implements Cloneable{
     public ArrayList<Line> lines = new ArrayList<>();
     public Line parentLine = null;
     public float lambda;
+    public String name;
 
     public Node() { }
 

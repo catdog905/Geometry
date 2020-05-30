@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.gallery.GalleryFragment">
+    tools:context=".ui.gallery.BuilderFragment">
 
         <com.example.geometry.GUI.Builder
             android:id="@+id/builder"
@@ -90,7 +90,19 @@
                 android:background="@drawable/angle"
                 android:layout_margin="10dp"
                 android:contentDescription="@string/draw_angle" />
+
         </LinearLayout>
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="290dp"
+        android:layout_height="98dp"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="3"
+        android:textSize="36sp" />
 
-    </RelativeLayout>
+
+</RelativeLayout>
