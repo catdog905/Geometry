@@ -100,9 +100,7 @@ public class Line {
         start.y = finalStartY;
         stop.x = finalStopX;
         stop.y = finalStopY;
-        for (Node node : subNodes)
-            node.fit();
-        linearFunc(start.x, start.y, stop.x, stop.y);
+        fit();
     }
 
     public Node intersectWithOtherLineInf(Line line) {
@@ -122,6 +120,8 @@ public class Line {
     public void fit() {
         linearFunc();
         for (Node node:subNodes)
-            node.fit();
+            node.fit(this);
+        start.fit(this);
+        stop.fit(this);
     }
 }

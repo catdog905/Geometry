@@ -49,11 +49,14 @@ public class Node implements Cloneable{
     //    }
     //}
 
-    public void fit() {
-        x = (parentLine.start.x + lambda * parentLine.stop.x) / (1 + lambda);
-        y = (parentLine.start.y + lambda * parentLine.stop.y) / (1 + lambda);
+    public void fit(Line moveLine) {
+        if (parentLine != null) {
+            x = (parentLine.start.x + lambda * parentLine.stop.x) / (1 + lambda);
+            y = (parentLine.start.y + lambda * parentLine.stop.y) / (1 + lambda);
+        }
         for (Line line:lines) {
-            line.fit();
+            if (line != moveLine)
+                line.linearFunc();
         }
     }
 
@@ -82,7 +85,7 @@ public class Node implements Cloneable{
         for (Line line : lines){
             line.linearFunc();
             for (Node node : line.subNodes)
-                node.fit();
+                node.fit(null);
         }
     }
 
