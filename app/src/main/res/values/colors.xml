@@ -6,4 +6,8 @@
     <color name="boldThemeColor">#a04343</color>
     <color name="lightThemeColor">#ceb2b2</color>
     <color name="backgroundColor">#f7f4f4</color>
+    <color name="backgroundGrayColor">#ececec</color>
+    <color name="grayColor">#666666</color>
+    <color name="redColor">#a04343</color>
+    <color name="backgroundPinkColor">#efe9e9</color>
 </resources>

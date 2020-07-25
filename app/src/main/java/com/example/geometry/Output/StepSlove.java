@@ -11,14 +11,14 @@ public class StepSlove {
     CharSequence rule;
 
     public StepSlove(String template, String rule, String... args) {
-        SpannableStringBuilder sb = new SpannableStringBuilder().append(formatString(template, R.style.Text));
+        //SpannableStringBuilder sb = new SpannableStringBuilder().append(formatString(template, R.style.Text));
         for (String item : args) {
-            int index = sb.toString().indexOf("%");
-            sb.replace(index, index + 2, formatString(item, R.style.BoldText));
+        //    int index = sb.toString().indexOf("%");
+        //    sb.replace(index, index + 2, formatString(item, R.style.BoldText));
         }
 
-        this.template = sb.subSequence(0, sb.length());
-        this.rule = formatString(rule, R.style.Text).subSequence(0, rule.length());
+        //this.template = sb.subSequence(0, sb.length());
+        //this.rule = formatString(rule, R.style.Text).subSequence(0, rule.length());
     }
 
     private SpannableString formatString(String string, int styleId) {
