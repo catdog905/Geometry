@@ -47,7 +47,7 @@ public class InputHandler<T> {
             float minDis = delta + 1;
             if (currentElem == null) {
                 for (Node node : figureUI.nodes) {
-                    float curDis = LinearAlgebra.intersectionNodeCirce(new Node(mx, my), new Circle(node.x, node.y));
+                    float curDis = new Node(mx, my).intersectionWithCirce(new Circle(node.x, node.y));
                     if (curDis < minDis) {
                         minDis = curDis;
                         currentElem = (T) node;
@@ -58,7 +58,7 @@ public class InputHandler<T> {
 
             if (currentElem == null) {
                 for (Line line : figureUI.lines) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                    Distance distance = new Node(mx, my).findDistanceToLine(line);
                     if (distance != null)
                         if (distance.dist <= delta) {
                             Log.d("Tag", distance.dist + " " + figureUI.lines.size());
@@ -95,7 +95,7 @@ public class InputHandler<T> {
             List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
                 for (Node node : figureUI.nodes) {
                     if (currentElem != node && currentElem != stopNodeDrawingLine && currentElem != startNodeDrawingLine && !removeNodes.contains(currentElem)) {
-                        float curDis = LinearAlgebra.intersection2Node((Node) currentElem, node);
+                        float curDis = ((Node) currentElem).intersectionWithNode(node);
                         if (curDis <= delta) {
                             ((Node) currentElem).lines.addAll(node.lines);
                             for (Line line : ((Node) currentElem).lines) {
@@ -133,7 +133,7 @@ public class InputHandler<T> {
                             break;
                         }
                     if (currentElem != line.start && currentElem != line.stop && checkLines) {
-                        LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, (Node) currentElem);
+                        Distance distance = ((Node) currentElem).findDistanceToLine(line);
                         if (distance != null)
                             if (distance.dist <= delta*2) {
                                 ((Node) currentElem).lambda = (line.start.x - distance.node.x) / (distance.node.x - line.stop.x);
@@ -240,7 +240,7 @@ public class InputHandler<T> {
 
             case MotionEvent.ACTION_UP:
                 for (Line line : figureUI.lines) {
-                    LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(line, mx, my);
+                    Distance distance = new Node(mx, my).findDistanceToLine(line);
                     if (distance == null)
                         continue;
                     if (distance.dist <= delta) {
