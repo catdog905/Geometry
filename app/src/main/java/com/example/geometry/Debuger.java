@@ -1,9 +1,6 @@
 package com.example.geometry;
 
-import com.example.geometry.GUI.Angle;
-import com.example.geometry.GUI.FigureUI;
-import com.example.geometry.GUI.Line;
-import com.example.geometry.GUI.Node;
+import com.example.geometry.FigureModel.FigureUI;
 import com.example.geometry.GUI.StepInput;
 
 import java.util.Stack;

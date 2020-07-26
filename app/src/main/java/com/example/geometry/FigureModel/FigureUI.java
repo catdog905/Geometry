@@ -1,8 +1,7 @@
-package com.example.geometry.GUI;
+package com.example.geometry.FigureModel;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -10,6 +9,7 @@ public class FigureUI {
     public ArrayList<Line> lines = new ArrayList<>();
     public ArrayList<Node> nodes = new ArrayList<>();
     public ArrayList<Angle> angles = new ArrayList<>();
+    public ArrayList<String> facts = new ArrayList<>();
     private Paint mPaintLine;
     private Paint mPaintNode;
 
@@ -46,7 +46,7 @@ public class FigureUI {
             }
         }
     }
-    public ArrayList<String> createFirstFacts() {
+    public void createFirstFacts() {
         createObjNames();
         ArrayList<String> facts = new ArrayList<>();
         for (Line line:lines) {
@@ -60,6 +60,6 @@ public class FigureUI {
         for (Angle angle: angles){
             facts.add(angle.name + "=" + angle.valDeg);
         }
-        return facts;
+        this.facts = facts;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.geometry.GUI;
+package com.example.geometry.FigureModel;
 
 public class Circle {
     public float Ox, Oy, R;

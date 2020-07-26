@@ -1,7 +1,5 @@
-package com.example.geometry.GUI;
+package com.example.geometry.FigureModel;
 
-import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PointF;
 
 import com.example.geometry.LinearAlgebra;

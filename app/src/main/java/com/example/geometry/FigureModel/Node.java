@@ -1,4 +1,4 @@
-package com.example.geometry.GUI;
+package com.example.geometry.FigureModel;
 
 import androidx.annotation.NonNull;
 
@@ -67,7 +67,7 @@ public class Node implements Cloneable{
 
     @NonNull
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 

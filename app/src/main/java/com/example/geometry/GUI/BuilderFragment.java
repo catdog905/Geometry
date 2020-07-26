@@ -1,4 +1,4 @@
-package com.example.geometry.ui.gallery;
+package com.example.geometry.GUI;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,25 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.example.geometry.GUI.Builder;
-import com.example.geometry.GUI.InputHandler;
 import com.example.geometry.MainActivity;
 import com.example.geometry.R;
-
-import java.util.ArrayList;
 
 
 public class BuilderFragment extends Fragment {
 
-    Builder builder;
+    BuilderFigure builderFigure;
     ImageButton menuButton;
     ImageButton circleButton;
     ImageButton lineButton;
@@ -41,7 +33,7 @@ public class BuilderFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
-        builder = root.findViewById(R.id.builder);
+        builderFigure = root.findViewById(R.id.builder);
         menuButton = root.findViewById(R.id.menu_button);
         circleButton  = root.findViewById(R.id.circle);
         lineButton = root.findViewById(R.id.line);
@@ -83,12 +75,12 @@ public class BuilderFragment extends Fragment {
                 InputHandler.mode = InputHandler.ANGLE_MODE;
             }
         });
-        backButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(d new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                builder.facts = builder.figureUI.createFirstFacts();
+                builderFigure.getFigureUI().createFirstFacts();
                 String str = "";
-                for (String fact : builder.facts){
+                for (String fact : builderFigure.getFigureUI().facts){
                     str += fact + " ";
                 }
                 Log.d("FUItoF", str);

@@ -1,4 +1,4 @@
-package com.example.geometry.GUI;
+package com.example.geometry.FigureModel;
 
 public class Angle {
     public Line line1, line2;
