@@ -1,8 +1,8 @@
 package com.example.geometry;
 
-import com.example.geometry.GUI.Circle;
-import com.example.geometry.GUI.Line;
-import com.example.geometry.GUI.Node;
+import com.example.geometry.FigureModel.Circle;
+import com.example.geometry.FigureModel.Line;
+import com.example.geometry.FigureModel.Node;
 
 public class LinearAlgebra {
 

@@ -4,6 +4,11 @@ import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.example.geometry.FigureModel.Angle;
+import com.example.geometry.FigureModel.Circle;
+import com.example.geometry.FigureModel.FigureUI;
+import com.example.geometry.FigureModel.Line;
+import com.example.geometry.FigureModel.Node;
 import com.example.geometry.LinearAlgebra;
 
 import java.util.ArrayList;
