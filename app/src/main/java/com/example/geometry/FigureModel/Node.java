@@ -2,6 +2,7 @@ package com.example.geometry.FigureModel;
 
 import androidx.annotation.NonNull;
 
+import com.example.geometry.GUI.Distance;
 import com.example.geometry.LinearAlgebra;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class Node implements Cloneable{
 
     public void move(Node touch) {
         if (parentLine != null){
-            LinearAlgebra.Distance distance = LinearAlgebra.findDistanceToLine(parentLine, touch.x, touch.y);
+            Distance distance = touch.findDistanceToLine(parentLine);
             if (distance != null) {
                 lambda = (parentLine.start.x - distance.node.x) / (distance.node.x - parentLine.stop.x);
                 x = distance.node.x;
@@ -92,5 +93,18 @@ public class Node implements Cloneable{
 
     public void countLambda(Line line) {
         lambda = (line.start.x - x) / (x - line.stop.x);
+    }
+
+    public float intersectionWithCirce(Circle circle){
+        float len = (float)(Math.pow((x - circle.Ox), 2) + Math.pow((y - circle.Oy), 2));
+        return (float) Math.sqrt(Math.pow((x - circle.Ox), 2) + Math.pow((y - circle.Oy), 2));
+    }
+
+    public float intersectionWithNode(Node node){
+        return this.intersectionWithCirce(new Circle(node));
+    }
+
+    public Distance findDistanceToLine(Line line) {
+        return line.findDistanceToPoint(x, y);
     }
 }

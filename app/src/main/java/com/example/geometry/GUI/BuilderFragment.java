@@ -75,7 +75,7 @@ public class BuilderFragment extends Fragment {
                 InputHandler.mode = InputHandler.ANGLE_MODE;
             }
         });
-        backButton.setOnClickListener(d new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 builderFigure.getFigureUI().createFirstFacts();

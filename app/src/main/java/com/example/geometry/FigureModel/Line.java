@@ -2,9 +2,14 @@ package com.example.geometry.FigureModel;
 
 import android.graphics.PointF;
 
+import com.example.geometry.GUI.Distance;
 import com.example.geometry.LinearAlgebra;
 
 import java.util.ArrayList;
+
+import static com.example.geometry.LinearAlgebra.between;
+import static com.example.geometry.LinearAlgebra.det2D;
+import static com.example.geometry.LinearAlgebra.projectionsIntersect;
 
 public class Line {
     public Node start;
@@ -64,7 +69,7 @@ public class Line {
         C = -1 * (A*touch.x + B*touch.y);
         if (start.parentLine != null){
             Node intersectNode = intersectWithOtherLineInf(start.parentLine);
-            if (!(LinearAlgebra.between (start.parentLine.start.x, start.parentLine.stop.x, intersectNode.x) && LinearAlgebra.between (start.parentLine.start.y, start.parentLine.stop.y, intersectNode.y)))
+            if (!(between (start.parentLine.start.x, start.parentLine.stop.x, intersectNode.x) && between (start.parentLine.start.y, start.parentLine.stop.y, intersectNode.y)))
                 return;
             if (intersectNode != null) {
                 start.lambda = (start.parentLine.start.x - intersectNode.x) / (intersectNode.x - start.parentLine.stop.x);
@@ -75,7 +80,7 @@ public class Line {
         }
         if (stop.parentLine != null){
             Node intersectNode = intersectWithOtherLineInf(stop.parentLine);
-            if (!(LinearAlgebra.between (stop.parentLine.start.x, stop.parentLine.stop.x, intersectNode.x) && LinearAlgebra.between (stop.parentLine.start.y, stop.parentLine.stop.y, intersectNode.y)))
+            if (!(between (stop.parentLine.start.x, stop.parentLine.stop.x, intersectNode.x) && between (stop.parentLine.start.y, stop.parentLine.stop.y, intersectNode.y)))
                 return;
             if (intersectNode != null) {
                 stop.lambda = (stop.parentLine.start.x - intersectNode.x) / (intersectNode.x - stop.parentLine.stop.x);
@@ -103,13 +108,13 @@ public class Line {
     }
 
     public Node intersectWithOtherLineInf(Line line) {
-        float zn = LinearAlgebra.det(A, B, line.A, line.B);
+        float zn = det2D(A, B, line.A, line.B);
         boolean res = false;
         float x = 0;
         float y = 0;
         if (zn != 0) {
-            x = -LinearAlgebra.det(C, B, line.C, line.B) * 1 / zn;
-            y = -LinearAlgebra.det(A, C, line.A, line.C) * 1 / zn;
+            x = -det2D(C, B, line.C, line.B) * 1 / zn;
+            y = -det2D(A, C, line.A, line.C) * 1 / zn;
             return new Node(x, y);
         } else {
             return null;
@@ -122,5 +127,66 @@ public class Line {
             node.fit(this);
         start.fit(this);
         stop.fit(this);
+    }
+
+    public Node intersectWithOtherLine(Line line) {
+        Node a = start;
+        Node b = stop;
+        Node c = line.start;
+        Node d = line.stop;
+        float A1 = a.y-b.y,  B1 = b.x-a.x,  C1 = -A1*a.x - B1*a.y;
+        float A2 = c.y-d.y,  B2 = d.x-c.x,  C2 = -A2*c.x - B2*c.y;
+        float zn = det2D (A1, B1, A2, B2);
+        boolean res = false;
+        float x = 0;
+        float y = 0;
+        if (zn != 0) {
+            x = -det2D(C1, B1, C2, B2) * 1 / zn;
+            y = -det2D(A1, C1, A2, C2) * 1 / zn;
+            res = between (a.x, b.x, x) && between (a.y, b.y, y)
+                    && between (c.x, d.x, x) && between (c.y, d.y, y);
+        }
+        else
+            res = det2D (A1, C1, A2, C2) == 0 && det2D (B1, C1, B2, C2) == 0
+                    && projectionsIntersect(a.x, b.x, c.x, d.x)
+                    && projectionsIntersect(a.y, b.y, c.y, d.y);
+        if (res && zn != 0){
+            return new Node(x, y);
+        } else {
+            return null;
+        }
+    }
+
+    public void doLineFrom2Nodes(Node start, Node stop) {
+        A = 1/(stop.x-start.x);
+        B = 1/(start.y-stop.y);
+        C = start.y/(stop.y-start.y) - start.x/(stop.x-start.x);
+    }
+
+    public Distance findDistanceToPoint(float mx, float my) {
+        float a = A;
+        float b = B;
+        float c = C;
+        float distance = (float) (Math.abs(a*mx+b*my+c)/Math.sqrt(a*a + b*b));
+        float x = (b*(b*mx - a*my) - a*c)/(a*a + b*b);
+        float y = (a*(-b*mx+a*my) - b*c)/(a*a + b*b);
+        if (between(start.x, stop.x, x) && between (start.y, stop.y, y))
+            return new Distance(distance, new Node(x, y));
+        else
+            return null;
+    }
+
+    public Node intersectWithInfLine(Line line) {
+        float zn = det2D(A, B, line.A, line.B);
+        boolean res = false;
+        float x = 0;
+        float y = 0;
+        if (zn != 0) {
+            x = -det2D(C, B, line.C, line.B) * 1 / zn;
+            y = -det2D(A, C, line.A, line.C) * 1 / zn;
+            return new Node(x, y);
+        } else {
+            return null;
+        }
     }
 }
