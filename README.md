@@ -1,4 +1,3 @@
-# Geometry
 <img src="https://github.com/ruca905/Geometry/blob/add_readme/title.png?raw=true" 
      alt="Title">
 
