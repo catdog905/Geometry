@@ -1,5 +1,4 @@
-<img src="https://github.com/ruca905/Geometry/blob/add_readme/title.png?raw=true" 
-     alt="Title">
+![title](title.png)
 
 ## Description
 Geometry is project which helps students to solve planimetry exercises. In core, this project use expert system which find solving step by step while is checking all rules defined in data base. Now the progect is still in development process. 
