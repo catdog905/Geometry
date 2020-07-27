@@ -26,7 +26,7 @@ public class BuilderFragment extends Fragment {
     ImageButton angleButton;
     ImageButton backButton;
     ImageButton solveButton;
-    EditText editText;
+    static EditText editText;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,

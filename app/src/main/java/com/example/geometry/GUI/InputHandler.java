@@ -249,8 +249,10 @@ public class InputHandler<T> {
                     }
 
 
-                    float resultVal = Integer.parseInt(ANGLE_TEXT); //Float.parseFloat(MainActivity.editText.getText().toString());
+                    float resultVal = Integer.parseInt(BuilderFragment.editText.getText().toString()); //Float.parseFloat(MainActivity.editText.getText().toString());
 
+                    if (currentElem == null)
+                        continue;
                     if (startLineAngle == stopLineAngle) {
                         ((Line) currentElem).value = resultVal;
                         break;

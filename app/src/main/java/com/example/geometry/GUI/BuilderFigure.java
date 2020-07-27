@@ -3,6 +3,7 @@ package com.example.geometry.GUI;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -55,7 +56,11 @@ public class BuilderFigure extends View {
         mPaintLine.setStrokeWidth(5);
         mPaintLine.setColor(getContext().getColor(R.color.lightThemeColor));
 
-        figureUI = new FigureUI(mPaintLine, mPaintNode);
+        Paint mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintText.setColor(Color.BLACK);
+        mPaintText.setTextSize(50);
+
+        figureUI = new FigureUI(mPaintLine, mPaintNode, mPaintText);
         inputHandler = new InputHandler(figureUI);
     }
 

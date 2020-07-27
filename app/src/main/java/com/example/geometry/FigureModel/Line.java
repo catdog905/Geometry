@@ -1,5 +1,6 @@
 package com.example.geometry.FigureModel;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 
 import com.example.geometry.GUI.Distance;
@@ -188,5 +189,15 @@ public class Line {
         } else {
             return null;
         }
+    }
+
+    public PointF getCenterPoint() {
+        return new PointF((start.x + stop.x) / 2, (start.y + stop.y) / 2);
+    }
+
+    public float getAngleWithLine(Line line) {
+        linearFunc();
+        float A2 = line.A, B2 = line.B;
+        return (A * A2 + B * B2) / ((float) Math.sqrt(A*A + B*B) * (float)Math.sqrt(A2*A2 + B2*B2));
     }
 }

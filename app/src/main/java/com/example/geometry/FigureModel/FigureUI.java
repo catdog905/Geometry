@@ -1,7 +1,9 @@
 package com.example.geometry.FigureModel;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 
 import java.util.ArrayList;
 
@@ -12,10 +14,13 @@ public class FigureUI {
     public ArrayList<String> facts = new ArrayList<>();
     private Paint mPaintLine;
     private Paint mPaintNode;
+    private Paint mPaintText;
 
-    public FigureUI(Paint mPaintLine, Paint mPaintNode) {
+
+    public FigureUI(Paint mPaintLine, Paint mPaintNode, Paint mPaintText) {
         this.mPaintLine = mPaintLine;
         this.mPaintNode = mPaintNode;
+        this.mPaintText = mPaintText;
     }
 
     public void drawFigure(Canvas canvas) {
@@ -25,9 +30,19 @@ public class FigureUI {
                 node.fit(line);
                 canvas.drawCircle(node.x, node.y, 10, mPaintNode);
             }
+            if (line.value != null) {
+                PointF tempPoint = line.getCenterPoint();
+                canvas.drawText(line.value.toString(), tempPoint.x, tempPoint.y, mPaintText);
+            }
         }
         for (Node node : nodes) {
             canvas.drawCircle(node.x, node.y, 10, mPaintNode);
+        }
+        for (Angle angle : angles) {
+            if (angle.valDeg != null) {
+                PointF tempPoint = angle.getPointOnBisectorInRadius(100.0f);
+                canvas.drawText(angle.valDeg.toString(), tempPoint.x, tempPoint.y, mPaintText);
+            }
         }
     }
     private void createObjNames() {
