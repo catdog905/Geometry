@@ -9,7 +9,6 @@ public class FigureUI {
     public ArrayList<Line> lines = new ArrayList<>();
     public ArrayList<Node> nodes = new ArrayList<>();
     public ArrayList<Angle> angles = new ArrayList<>();
-    public ArrayList<String> facts = new ArrayList<>();
     private Paint mPaintLine;
     private Paint mPaintNode;
 
@@ -18,6 +17,10 @@ public class FigureUI {
         this.mPaintNode = mPaintNode;
     }
 
+    /**
+     * Draw all objects of figureUI on canvas
+     * @param canvas
+     */
     public void drawFigure(Canvas canvas) {
         for (Line line : lines) {
             canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaintLine);
@@ -30,6 +33,10 @@ public class FigureUI {
             canvas.drawCircle(node.x, node.y, 10, mPaintNode);
         }
     }
+
+    /**
+     * Give names to all objects in figureUI
+     */
     private void createObjNames() {
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int i = 0; i < nodes.size(); i++) {
@@ -46,7 +53,11 @@ public class FigureUI {
             }
         }
     }
-    public void createFirstFacts() {
+
+    /**
+     * Create facts from figureUI
+     */
+    public ArrayList<String> createFirstFacts() {
         createObjNames();
         ArrayList<String> facts = new ArrayList<>();
         for (Line line:lines) {
@@ -60,6 +71,6 @@ public class FigureUI {
         for (Angle angle: angles){
             facts.add(angle.name + "=" + angle.valDeg);
         }
-        this.facts = facts;
+        return facts;
     }
 }
