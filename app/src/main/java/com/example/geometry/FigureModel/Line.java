@@ -124,9 +124,9 @@ public class Line {
     public void fit() {
         linearFunc();
         for (Node node:subNodes)
-            node.fit(this);
-        start.fit(this);
-        stop.fit(this);
+            node.fitPositionRelativelyParentLine();
+        start.fitPositionRelativelyParentLine();
+        stop.fitPositionRelativelyParentLine();
     }
 
     public Node intersectWithOtherLine(Line line) {

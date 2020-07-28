@@ -22,7 +22,7 @@ public class FigureUI {
         for (Line line : lines) {
             canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaintLine);
             for (Node node : line.subNodes){
-                node.fit(line);
+                node.fitPositionRelativelyParentLine();
                 canvas.drawCircle(node.x, node.y, 10, mPaintNode);
             }
         }
