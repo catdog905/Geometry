@@ -1,5 +1,7 @@
 package com.example.geometry.FigureModel;
 
+import androidx.annotation.NonNull;
+
 public class Angle {
     public Line line1, line2;
     public float valDeg;
@@ -20,9 +22,7 @@ public class Angle {
         this.valDeg = valDeg;
     }
 
-    public String toString()
-    {
-        String str = Integer.toHexString(hashCode()) + " line1= " + Integer.toHexString(line1.hashCode()) + " line2= " + Integer.toHexString(line2.hashCode()) + " deg= " + valDeg;
-        return str;
+    @NonNull public String toString() {
+        return Integer.toHexString(hashCode()) + " line1= " + Integer.toHexString(line1.hashCode()) + " line2= " + Integer.toHexString(line2.hashCode()) + " deg= " + valDeg;
     }
 }

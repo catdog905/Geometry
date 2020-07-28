@@ -78,12 +78,12 @@ public class BuilderFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                builderFigure.getFigureUI().createFirstFacts();
-                String str = "";
-                for (String fact : builderFigure.getFigureUI().facts){
-                    str += fact + " ";
-                }
-                Log.d("FUItoF", str);
+                //builderFigure.getFigureUI().createFirstFacts();
+                //String str = "";
+                //for (String fact : builderFigure.getFigureUI().facts){
+                //    str += fact + " ";
+                //}
+                //Log.d("FUItoF", str);
             }
         });
         solveButton.setOnClickListener(new View.OnClickListener() {

@@ -2,6 +2,8 @@ package com.example.geometry.FigureModel;
 
 import android.graphics.PointF;
 
+import androidx.annotation.NonNull;
+
 import com.example.geometry.GUI.Distance;
 import com.example.geometry.LinearAlgebra;
 
@@ -17,14 +19,7 @@ public class Line {
     public Float value = null;
     public ArrayList<Node> subNodes = new ArrayList<>();
     public String name;
-
     public float A, B, C;
-
-    public Line(float a, float b, float c) {
-        A = a;
-        B = b;
-        C = c;
-    }
 
     public Line(Node start, Node stop) {
         this.start = start;
@@ -32,38 +27,38 @@ public class Line {
         linearFunc(start.x, start.y, stop.x, stop.y);
     }
 
-    public void setStop(Node stop) {
-        this.stop = stop;
-        //Log.d("hello", ""+start.x);
-        linearFunc(start.x, start.y, stop.x, stop.y);
-    }
-
-    //public void setXYNodes(float startX, float startY, float stopX, float stopY) {
-    //    start.setXY(startX, startY);
-    //    stop.setXY(stopX, stopY);
-    //    linearFunc(start.x, start.y, stop.x, stop.y);
-    //}
-
-    public String toString()
-    {
+    @NonNull public String toString() {
         String str = Integer.toHexString (hashCode ()) + " start= " +  Integer.toHexString(start.hashCode()) + " " + start.toString() +
                 "; stop= " + Integer.toHexString(stop.hashCode()) + " " + stop.toString() + "; val = " + value + ";";
         return str;
     }
 
+    /**
+     * Build A, B, C form x1, y1, x2, y2
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
     public void linearFunc(float x1, float y1, float x2, float y2) {
         A = 1/(x2-x1);
         B = 1/(y1-y2);
         C =y1/(y2-y1) - x1/(x2-x1);
     }
 
+    /**
+     * Build A, B, C from start and stop nodes
+     */
     public void linearFunc() {
-        A = 1/(stop.x-start.x);
-        B = 1/(start.y-stop.y);
-        C =start.y/(stop.y-start.y) - start.x/(stop.x-start.x);
+        linearFunc(start.x, start.y, stop.x, stop.y);
     }
 
-    public void move(Node touch, PointF lastTouch) {
+    /**
+     * Move line according with touch
+     * @param touch
+     * @param lastTouch
+     */
+    public void move(@NonNull Node touch, PointF lastTouch) {
         Float finalStartX = null, finalStartY = null;
         Float finalStopX = null, finalStopY = null;
         C = -1 * (A*touch.x + B*touch.y);
@@ -105,9 +100,9 @@ public class Line {
         stop.x = finalStopX;
         stop.y = finalStopY;
         fit();
-    }
+    } //TODO: create tests for this func
 
-    public Node intersectWithOtherLineInf(Line line) {
+    public Node intersectWithOtherLineInf(@NonNull Line line) {
         float zn = det2D(A, B, line.A, line.B);
         boolean res = false;
         float x = 0;
@@ -121,48 +116,23 @@ public class Line {
         }
     }
 
+    /**
+     * Fit A, B, C and dependent objects
+     */
     public void fit() {
         linearFunc();
         for (Node node:subNodes)
-            node.fit(this);
-        start.fit(this);
-        stop.fit(this);
+            node.fitPositionRelativelyParentLine();
+        start.fitPositionRelativelyParentLine();
+        stop.fitPositionRelativelyParentLine();
     }
 
-    public Node intersectWithOtherLine(Line line) {
-        Node a = start;
-        Node b = stop;
-        Node c = line.start;
-        Node d = line.stop;
-        float A1 = a.y-b.y,  B1 = b.x-a.x,  C1 = -A1*a.x - B1*a.y;
-        float A2 = c.y-d.y,  B2 = d.x-c.x,  C2 = -A2*c.x - B2*c.y;
-        float zn = det2D (A1, B1, A2, B2);
-        boolean res = false;
-        float x = 0;
-        float y = 0;
-        if (zn != 0) {
-            x = -det2D(C1, B1, C2, B2) * 1 / zn;
-            y = -det2D(A1, C1, A2, C2) * 1 / zn;
-            res = between (a.x, b.x, x) && between (a.y, b.y, y)
-                    && between (c.x, d.x, x) && between (c.y, d.y, y);
-        }
-        else
-            res = det2D (A1, C1, A2, C2) == 0 && det2D (B1, C1, B2, C2) == 0
-                    && projectionsIntersect(a.x, b.x, c.x, d.x)
-                    && projectionsIntersect(a.y, b.y, c.y, d.y);
-        if (res && zn != 0){
-            return new Node(x, y);
-        } else {
-            return null;
-        }
-    }
-
-    public void doLineFrom2Nodes(Node start, Node stop) {
-        A = 1/(stop.x-start.x);
-        B = 1/(start.y-stop.y);
-        C = start.y/(stop.y-start.y) - start.x/(stop.x-start.x);
-    }
-
+    /**
+     * Find distance to Point
+     * @param mx
+     * @param my
+     * @return distance or null in Distance class
+     */
     public Distance findDistanceToPoint(float mx, float my) {
         float a = A;
         float b = B;
@@ -174,19 +144,5 @@ public class Line {
             return new Distance(distance, new Node(x, y));
         else
             return null;
-    }
-
-    public Node intersectWithInfLine(Line line) {
-        float zn = det2D(A, B, line.A, line.B);
-        boolean res = false;
-        float x = 0;
-        float y = 0;
-        if (zn != 0) {
-            x = -det2D(C, B, line.C, line.B) * 1 / zn;
-            y = -det2D(A, C, line.A, line.C) * 1 / zn;
-            return new Node(x, y);
-        } else {
-            return null;
-        }
     }
 }

@@ -47,7 +47,7 @@ public class InputHandler<T> {
             float minDis = delta + 1;
             if (currentElem == null) {
                 for (Node node : figureUI.nodes) {
-                    float curDis = new Node(mx, my).intersectionWithCirce(new Circle(node.x, node.y));
+                    float curDis = new Node(mx, my).findDistanceToCirceCenter(new Circle(node.x, node.y));
                     if (curDis < minDis) {
                         minDis = curDis;
                         currentElem = (T) node;
@@ -95,7 +95,7 @@ public class InputHandler<T> {
             List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
                 for (Node node : figureUI.nodes) {
                     if (currentElem != node && currentElem != stopNodeDrawingLine && currentElem != startNodeDrawingLine && !removeNodes.contains(currentElem)) {
-                        float curDis = ((Node) currentElem).intersectionWithNode(node);
+                        float curDis = ((Node) currentElem).findDistanceToNode(node);
                         if (curDis <= delta) {
                             ((Node) currentElem).lines.addAll(node.lines);
                             for (Line line : ((Node) currentElem).lines) {
