@@ -15,26 +15,12 @@ public class Node implements Cloneable{
     public float lambda;
     public String name;
 
-    public Node() { }
-
     public Node(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public Node(float x, float y, Line line) {
-        this.x = x;
-        this.y = y;
-        lines.add(line);
-    }
-
-    public Node(float x, float y, ArrayList<Line> lines) {
-        this.x = x;
-        this.y = y;
-        this.lines = lines;
-    }
-
-    public String toString() {
+    @NonNull public String toString() {
         String str = Integer.toHexString (hashCode ()) + " x= " + x + "; y= " + y + "; lines = ";
         for (Line line: lines) {
             str += Integer.toHexString(line.hashCode()) + " ";
@@ -71,8 +57,7 @@ public class Node implements Cloneable{
     }
 
     @NonNull
-    @Override
-    public Object clone() throws CloneNotSupportedException {
+    @Override public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
