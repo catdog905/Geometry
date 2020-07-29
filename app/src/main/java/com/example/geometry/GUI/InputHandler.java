@@ -4,12 +4,13 @@ import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import androidx.annotation.NonNull;
+
 import com.example.geometry.FigureModel.Angle;
 import com.example.geometry.FigureModel.Circle;
-import com.example.geometry.FigureModel.FigureUI;
+import com.example.geometry.FigureModel.FigureUISingleton;
 import com.example.geometry.FigureModel.Line;
 import com.example.geometry.FigureModel.Node;
-import com.example.geometry.LinearAlgebra;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class InputHandler<T> {
     public final static int ANGLE_MODE = 3;
     public static String ANGLE_TEXT = "3";
     private T currentElem;
-    FigureUI figureUI;
+    FigureUISingleton figureUISingleton;
 
     private PointF lastTouch;
 
@@ -35,8 +36,8 @@ public class InputHandler<T> {
 
     StepInput stepInput = null;
 
-    public InputHandler(FigureUI figureUI) {
-        this.figureUI = figureUI;
+    public InputHandler(@NonNull FigureUISingleton figureUISingleton) {
+        this.figureUISingleton = figureUISingleton;
     }
 
     public StepInput catchTouch(MotionEvent event) {
@@ -46,7 +47,7 @@ public class InputHandler<T> {
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
             float minDis = delta + 1;
             if (currentElem == null) {
-                for (Node node : figureUI.nodes) {
+                for (Node node : figureUISingleton.nodes) {
                     float curDis = new Node(mx, my).findDistanceToCirceCenter(new Circle(node.x, node.y));
                     if (curDis < minDis) {
                         minDis = curDis;
@@ -57,11 +58,11 @@ public class InputHandler<T> {
             }
 
             if (currentElem == null) {
-                for (Line line : figureUI.lines) {
+                for (Line line : figureUISingleton.lines) {
                     Distance distance = new Node(mx, my).findDistanceToLine(line);
                     if (distance != null)
                         if (distance.dist <= delta) {
-                            Log.d("Tag", distance.dist + " " + figureUI.lines.size());
+                            Log.d("Tag", distance.dist + " " + figureUISingleton.lines.size());
                             currentElem = (T) line;
                             break;
                         }
@@ -93,7 +94,7 @@ public class InputHandler<T> {
         if(currentElem != null) {
             if (currentElem instanceof Node) {
             List<Node> removeNodes = new ArrayList<>();//intersection 2 Node
-                for (Node node : figureUI.nodes) {
+                for (Node node : figureUISingleton.nodes) {
                     if (currentElem != node && currentElem != stopNodeDrawingLine && currentElem != startNodeDrawingLine && !removeNodes.contains(currentElem)) {
                         float curDis = ((Node) currentElem).findDistanceToNode(node);
                         if (curDis <= delta) {
@@ -118,9 +119,9 @@ public class InputHandler<T> {
                         }
                     }
                 }
-                figureUI.nodes.removeAll(removeNodes);
+                figureUISingleton.nodes.removeAll(removeNodes);
 
-                for (Line line : figureUI.lines) {
+                for (Line line : figureUISingleton.lines) {
                     boolean checkLines = true;
                     for (Line adjLine : line.start.lines)
                         if (adjLine.start == currentElem || adjLine.stop == currentElem) {
@@ -157,16 +158,16 @@ public class InputHandler<T> {
                     startNodeDrawingLine = (Node) currentElem;
                 else {
                     startNodeDrawingLine = new Node(mx, my);
-                    figureUI.nodes.add(startNodeDrawingLine);
+                    figureUISingleton.nodes.add(startNodeDrawingLine);
                     currentElem = (T) startNodeDrawingLine;
                     findIntersections();
                 }
                 stepInput.pushAction(new ActionCreate<>(startNodeDrawingLine));
                 stopNodeDrawingLine = new Node(mx, my);
                 Line tempLine = new Line(startNodeDrawingLine, stopNodeDrawingLine);
-                figureUI.lines.add(tempLine);
+                figureUISingleton.lines.add(tempLine);
                 stepInput.pushAction(new ActionCreate<>(tempLine));
-                figureUI.nodes.add(stopNodeDrawingLine);
+                figureUISingleton.nodes.add(stopNodeDrawingLine);
                 stepInput.pushAction(new ActionCreate<>(stopNodeDrawingLine));
                 startNodeDrawingLine.lines.add(tempLine);
                 stopNodeDrawingLine.lines.add(tempLine);
@@ -239,12 +240,12 @@ public class InputHandler<T> {
                 break;
 
             case MotionEvent.ACTION_UP:
-                for (Line line : figureUI.lines) {
+                for (Line line : figureUISingleton.lines) {
                     Distance distance = new Node(mx, my).findDistanceToLine(line);
                     if (distance == null)
                         continue;
                     if (distance.dist <= delta) {
-                        Log.d("Tag", distance.dist + " " + figureUI.lines.size());
+                        Log.d("Tag", distance.dist + " " + figureUISingleton.lines.size());
                         stopLineAngle = line;
                     }
 
@@ -257,7 +258,7 @@ public class InputHandler<T> {
                     }
                     if (startLineAngle != null && stopLineAngle != null) {
                         boolean is_angle = false;
-                        for (Angle angle : figureUI.angles) {
+                        for (Angle angle : figureUISingleton.angles) {
                             if ((angle.line1 == startLineAngle && angle.line2 == stopLineAngle) || (angle.line2 == startLineAngle && angle.line1 == stopLineAngle)) {
                                 angle.valDeg = resultVal;
                                 is_angle = true;
@@ -265,7 +266,7 @@ public class InputHandler<T> {
                             }
                         }
                         if (!is_angle)
-                            figureUI.angles.add(new Angle(startLineAngle, stopLineAngle, resultVal));
+                            figureUISingleton.angles.add(new Angle(startLineAngle, stopLineAngle, resultVal));
                     }
                 }
         }

@@ -5,16 +5,25 @@ import android.graphics.Paint;
 
 import java.util.ArrayList;
 
-public class FigureUI {
+public class FigureUISingleton {
     public ArrayList<Line> lines = new ArrayList<>();
     public ArrayList<Node> nodes = new ArrayList<>();
     public ArrayList<Angle> angles = new ArrayList<>();
     private Paint mPaintLine;
     private Paint mPaintNode;
 
-    public FigureUI(Paint mPaintLine, Paint mPaintNode) {
+    private static FigureUISingleton instance;
+
+    private FigureUISingleton (Paint mPaintLine, Paint mPaintNode){
         this.mPaintLine = mPaintLine;
         this.mPaintNode = mPaintNode;
+    }
+
+    public static FigureUISingleton getInstance(Paint mPaintLine, Paint mPaintNode){
+        if (null == instance){
+            instance = new FigureUISingleton(mPaintLine, mPaintNode);
+        }
+        return instance;
     }
 
     /**

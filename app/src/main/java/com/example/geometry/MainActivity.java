@@ -19,15 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView mRecycleView;
-    Button listView;
-    RelativeLayout layout;
-
-
-
-    private AppBarConfiguration mAppBarConfiguration;
-
     public static DrawerLayout drawer;
 
     @Override
@@ -39,13 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private void init(){
         setContentView(R.layout.activity_main);
 
-        layout = new RelativeLayout(this);
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_gallery)
-                .setDrawerLayout(drawer)
-                .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navigationView, navController);
 
