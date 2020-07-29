@@ -1,6 +1,7 @@
 package com.example.geometry.GUI;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.geometry.MainActivity;
+import com.example.geometry.MathModel;
 import com.example.geometry.R;
 
 
@@ -77,7 +79,9 @@ public class BuilderFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //builderFigure.getFigureUI().createFirstFacts();
+                MathModel mathModel = new MathModel();
+                mathModel.getFactsFromFigure(builderFigure.getFigureUISingleton());
+
                 //String str = "";
                 //for (String fact : builderFigure.getFigureUI().facts){
                 //    str += fact + " ";

@@ -46,8 +46,8 @@ public class FigureUISingleton {
     /**
      * Give names to all objects in figureUI
      */
-    private void createObjNames() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public void createObjNames() {
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TODO: inf count of node names
         for (int i = 0; i < nodes.size(); i++) {
             nodes.get(i).name = Character.toString(alphabet.charAt(i));
         }
@@ -61,25 +61,5 @@ public class FigureUISingleton {
                 angle.name = "<" + angle.line1.name.charAt(1) + angle.line1.name.charAt(0) + angle.line2.name.charAt(0);
             }
         }
-    }
-
-    /**
-     * Create facts from figureUI
-     */
-    public ArrayList<String> createFirstFacts() {
-        createObjNames();
-        ArrayList<String> facts = new ArrayList<>();
-        for (Line line:lines) {
-            if (line.value != null){
-                facts.add(line.name + "=" + line.value);
-            }
-            for (Node node :line.subNodes){
-                facts.add(node.name + "(belong)" + line.name);
-            }
-        }
-        for (Angle angle: angles){
-            facts.add(angle.name + "=" + angle.valDeg);
-        }
-        return facts;
     }
 }
