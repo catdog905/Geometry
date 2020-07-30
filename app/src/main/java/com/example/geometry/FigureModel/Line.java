@@ -180,4 +180,41 @@ public class Line {
         else
             return null;
     }
+
+    /**
+     * Return start or stop or subNode which less to PointF
+     * @return start or stop
+     */
+    public Node getNodeInLessDistance(PointF point) {
+        Node temp;
+        float distance;
+        if (start.findDistanceToPoint(point) > stop.findDistanceToPoint(point)) {
+            temp =  stop;
+            distance = stop.findDistanceToPoint(point);
+        }
+        else {
+            temp = start;
+            distance = start.findDistanceToPoint(point);
+        }
+        for (Node node:subNodes) {
+            if (node.findDistanceToPoint(point) < distance){
+                temp = node;
+                distance = node.findDistanceToPoint(point);
+            }
+        }
+        return temp;
+    }
+
+    /**
+     * Return start or stop which less to PointF
+     * @return start or stop
+     */
+    public Node getStartStopNodeInLessDistance(PointF point) {
+        if (start.findDistanceToPoint(point) > stop.findDistanceToPoint(point)) {
+            return stop;
+        }
+        else {
+            return start;
+        }
+    }
 }

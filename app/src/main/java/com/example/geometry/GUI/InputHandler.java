@@ -1,5 +1,6 @@
 package com.example.geometry.GUI;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -32,6 +33,8 @@ public class InputHandler<T> {
     private Node startNodeDrawingLine;
     private Node stopNodeDrawingLine;
 
+    private Node centerAngleNode;
+    private Node firstAngleNode;
 
     private Line startLineAngle;
     private Line stopLineAngle;
@@ -237,8 +240,14 @@ public class InputHandler<T> {
         StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (currentElem instanceof Line)
+                if (currentElem instanceof Line) {
                     startLineAngle = (Line) currentElem;
+                    centerAngleNode = startLineAngle.getNodeInLessDistance(new PointF(mx, my));
+                    if (centerAngleNode != startLineAngle.start && centerAngleNode != startLineAngle.stop)
+                        firstAngleNode = startLineAngle.getStartStopNodeInLessDistance(new PointF(mx, my));
+                    else
+                        firstAngleNode = startLineAngle.getOtherNode(centerAngleNode);
+                }
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -259,83 +268,22 @@ public class InputHandler<T> {
                             ((Line) currentElem).value = resultVal;
                             break;
                         }
-                        //if (startLineAngle != null && stopLineAngle != null) {
-                        //    boolean is_angle = false;
-                        //    for (Angle angle : figureUISingleton.angles) {
-                        //        if ((angle.line1 == startLineAngle && angle.line2 == stopLineAngle) || (angle.line2 == startLineAngle && angle.line1 == stopLineAngle)) {
-                        //            angle.valDeg = resultVal;
-                        //            is_angle = true;
-                        //            break;
-                        //        }
-                        //    }
-                        //    if (!is_angle)
-                        //        figureUISingleton.angles.add(new Angle(startLineAngle, stopLineAngle, resultVal));
-                        //}
-                    }
-                if (currentElem instanceof Node) {
-                    PointF vec = new PointF(mx - ((Node)currentElem).x, my - ((Node)currentElem).y);
-                    if (vec.x == 0 && vec.y == 0)
-                        break;
-                    ArrayList<PointF> rayArray = new ArrayList<>();
-                    for (int i = 0; i < ((Node)currentElem).lines.size(); i++) {
-                        float x = ((Node)currentElem).lines.get(i).getOtherNode(((Node)currentElem)).x - ((Node)currentElem).x;
-                        float y = ((Node)currentElem).lines.get(i).getOtherNode(((Node)currentElem)).y - ((Node)currentElem).y;
-                        rayArray.add(new PointF(x, y));
-                    }
-                    if (((Node) currentElem).parentLine != null) {
-                        float x = ((Node) currentElem).parentLine.start.x - ((Node)currentElem).x;
-                        float y = ((Node) currentElem).parentLine.start.y - ((Node)currentElem).y;
-                        rayArray.add(new PointF(x, y));
-                        x = ((Node) currentElem).parentLine.stop.x - ((Node)currentElem).x;
-                        y = ((Node) currentElem).parentLine.stop.y - ((Node)currentElem).y;
-                        rayArray.add(new PointF(x, y));
-                    }
-                    if (rayArray.size() < 2)
-                        break;
-
-                    int idAbove = 0, idBellow = 1;
-                    float min = 1000000000;
-                    for (int i = 0; i < rayArray.size(); i++) {
-                        for (int j = 0; j < rayArray.size(); j++) {
-                            if (i != j) {
-                                float cosAboveVec = LinearAlgebra.getCosFrom2Vec(rayArray.get(i), vec);
-                                float cosBellowVec = LinearAlgebra.getCosFrom2Vec(rayArray.get(j), vec);
-                                float cosAboveBellow = LinearAlgebra.getCosFrom2Vec(rayArray.get(j), rayArray.get(i));
-                                if (cosAboveBellow > cosAboveVec && cosAboveBellow > cosBellowVec)
-                                    if (min > cosAboveBellow){
-                                        idAbove = i;
-                                        idBellow = j;
-                                        min = cosAboveBellow;
-                                    }
+                        if (startLineAngle != null && stopLineAngle != null) {
+                            boolean is_angle = false;
+                            Node secondAngleNode = stopLineAngle.getStartStopNodeInLessDistance(new PointF(mx, my));
+                            if (secondAngleNode == centerAngleNode)
+                                secondAngleNode = stopLineAngle.getOtherNode(centerAngleNode);
+                            for (Angle angle : figureUISingleton.angles) {
+                                if (angle.center == centerAngleNode && ((angle.node1 == firstAngleNode && angle.node2 == secondAngleNode) || (angle.node1 == secondAngleNode && angle.node2 == firstAngleNode))) {
+                                    angle.valDeg = resultVal;
+                                    is_angle = true;
+                                    break;
+                                }
                             }
+                            if (!is_angle && centerAngleNode.lines.contains(startLineAngle) && centerAngleNode.lines.contains(stopLineAngle))
+                                figureUISingleton.angles.add(new Angle(centerAngleNode, firstAngleNode, secondAngleNode, resultVal));
                         }
-                        //float cosAboveI = LinearAlgebra.getCosFrom2Vec(rayArray.get(idAbove), rayArray.get(i));
-                        //float cosBellowI = LinearAlgebra.getCosFrom2Vec(rayArray.get(idBellow), rayArray.get(i));
-                        //float cosAboveVec = LinearAlgebra.getCosFrom2Vec(rayArray.get(idAbove), vec);
-                        //float cosBellowVec = LinearAlgebra.getCosFrom2Vec(rayArray.get(idBellow), vec);
-                        //float cosAboveBellow = LinearAlgebra.getCosFrom2Vec(rayArray.get(idBellow), rayArray.get(idAbove));
-                        //if (min == 0 && cosAboveBellow > cosAboveVec && cosAboveBellow > cosBellowVec)
-                        //    min = cosAboveBellow;
-                        //if (cosAboveI > cosAboveVec) {
-                        //    float tempMin = LinearAlgebra.getCosFrom2Vec(rayArray.get(i), rayArray.get(idAbove));
-                        //    if (min == 0)
-                        //        idBellow = i;
-                        //    if (tempMin < min){
-                        //        idBellow = i;
-                        //        min = tempMin;
-                        //    }
-                        //} else if (cosBellowI > cosBellowVec) {
-                        //    float tempMin = LinearAlgebra.getCosFrom2Vec(rayArray.get(i), rayArray.get(idBellow));
-                        //    if (min == 0)
-                        //        idAbove = i;
-                        //    if (tempMin < min){
-                        //        idAbove = i;
-                        //        min = tempMin;
-                        //    }
-                        //}
                     }
-                    figureUISingleton.angles.add(new Angle((Node)currentElem, ((Node)currentElem).lines.get(idAbove).getOtherNode(((Node)currentElem)), ((Node)currentElem).lines.get(idBellow).getOtherNode(((Node)currentElem)), Integer.parseInt(ANGLE_TEXT)));
-                }
         }
         return stepInput;
     }

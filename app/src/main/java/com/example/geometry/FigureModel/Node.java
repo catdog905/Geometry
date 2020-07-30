@@ -1,5 +1,7 @@
 package com.example.geometry.FigureModel;
 
+import android.graphics.PointF;
+
 import androidx.annotation.NonNull;
 
 import com.example.geometry.GUI.Distance;
@@ -87,6 +89,15 @@ public class Node implements Cloneable{
      */
     public float findDistanceToCirceCenter(@NonNull Circle circle) {
         return (float) Math.sqrt(Math.pow((x - circle.Ox), 2) + Math.pow((y - circle.Oy), 2));
+    }
+
+    /**
+     * Find distance to PointF
+     * @param node
+     * @return distance in float
+     */
+    public float findDistanceToPoint(@NonNull PointF node) {
+        return this.findDistanceToCirceCenter(new Circle(node));
     }
 
     /**

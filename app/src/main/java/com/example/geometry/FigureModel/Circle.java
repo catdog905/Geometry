@@ -1,5 +1,7 @@
 package com.example.geometry.FigureModel;
 
+import android.graphics.PointF;
+
 public class Circle {
     public float Ox, Oy, R;
 
@@ -17,5 +19,10 @@ public class Circle {
     public Circle(Node node) {
         Ox = node.x;
         Oy = node.y;
+    }
+
+    public Circle(PointF point) {
+        Ox = point.x;
+        Oy = point.y;
     }
 }

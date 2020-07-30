@@ -54,12 +54,8 @@ public class FigureUISingleton {
         for (Line line: lines) {
             line.name = line.start.name + line.stop.name;
         }
-        //for (Angle angle: angles) {
-        //    if (angle.line1.name.charAt(0) == angle.line2.name.charAt(0)) {
-        //        angle.name = "<" + angle.line1.name.charAt(1) + angle.line1.name.charAt(0) + angle.line2.name.charAt(1);
-        //    } else if (angle.line1.name.charAt(0) == angle.line2.name.charAt(1)){
-        //        angle.name = "<" + angle.line1.name.charAt(1) + angle.line1.name.charAt(0) + angle.line2.name.charAt(0);
-        //    }
-        //}
+        for (Angle angle: angles) {
+            angle.name = "<" + angle.node1.name + angle.center.name + angle.node2.name;
+        }
     }
 }
