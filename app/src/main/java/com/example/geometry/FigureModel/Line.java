@@ -28,8 +28,8 @@ public class Line {
     }
 
     @NonNull public String toString() {
-        String str = Integer.toHexString (hashCode ()) + " start= " +  Integer.toHexString(start.hashCode()) + " " + start.toString() +
-                "; stop= " + Integer.toHexString(stop.hashCode()) + " " + stop.toString() + "; val = " + value + ";";
+        String str = Integer.toHexString (hashCode ()) + " start= " +  Integer.toHexString(start.hashCode())+
+                "; stop= " + Integer.toHexString(stop.hashCode()) + "; val = " + value + ";";
         return str;
     }
 
@@ -142,6 +142,41 @@ public class Line {
         float y = (a*(-b*mx+a*my) - b*c)/(a*a + b*b);
         if (between(start.x, stop.x, x) && between (start.y, stop.y, y))
             return new Distance(distance, new Node(x, y));
+        else
+            return null;
+    }
+
+    /**
+     * Check this.Line to belong in line
+     * @param line
+     * @return intersect Node or null if it is not exist
+     */
+    public Node isBelongLine(@NonNull Line line) {
+        if (line.start == start || line.start == stop) {
+            return line.start;
+        }
+        if (line.stop == start || line.stop == stop) {
+            return line.stop;
+        }
+        if (line.subNodes.contains(start)) {
+            return start;
+        }
+        if (line.subNodes.contains(stop)) {
+            return stop;
+        }
+        return null;
+    }
+
+    /**
+     * Return start or stop if ono of them not equals node, or null
+     * @param node
+     * @return node or null
+     */
+    public Node getOtherNode (Node node) {
+        if (start == node)
+            return stop;
+        else if (stop == node)
+            return start;
         else
             return null;
     }
