@@ -1,5 +1,6 @@
 package com.example.geometry.GUI;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,6 +12,7 @@ import com.example.geometry.FigureModel.Circle;
 import com.example.geometry.FigureModel.FigureUISingleton;
 import com.example.geometry.FigureModel.Line;
 import com.example.geometry.FigureModel.Node;
+import com.example.geometry.LinearAlgebra;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,9 @@ public class InputHandler<T> {
 
     private Node startNodeDrawingLine;
     private Node stopNodeDrawingLine;
+
+    private Node centerAngleNode;
+    private Node firstAngleNode;
 
     private Line startLineAngle;
     private Line stopLineAngle;
@@ -235,40 +240,50 @@ public class InputHandler<T> {
         StepInput stepInput = new StepInput();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (currentElem != null)
+                if (currentElem instanceof Line) {
                     startLineAngle = (Line) currentElem;
+                    centerAngleNode = startLineAngle.getNodeInLessDistance(new PointF(mx, my));
+                    if (centerAngleNode != startLineAngle.start && centerAngleNode != startLineAngle.stop)
+                        firstAngleNode = startLineAngle.getStartStopNodeInLessDistance(new PointF(mx, my));
+                    else
+                        firstAngleNode = startLineAngle.getOtherNode(centerAngleNode);
+                }
                 break;
 
             case MotionEvent.ACTION_UP:
-                for (Line line : figureUISingleton.lines) {
-                    Distance distance = new Node(mx, my).findDistanceToLine(line);
-                    if (distance == null)
-                        continue;
-                    if (distance.dist <= delta) {
-                        Log.d("Tag", distance.dist + " " + figureUISingleton.lines.size());
-                        stopLineAngle = line;
-                    }
-
-
-                    float resultVal = Integer.parseInt(ANGLE_TEXT); //Float.parseFloat(MainActivity.editText.getText().toString());
-
-                    if (startLineAngle == stopLineAngle) {
-                        ((Line) currentElem).value = resultVal;
-                        break;
-                    }
-                    if (startLineAngle != null && stopLineAngle != null) {
-                        boolean is_angle = false;
-                        for (Angle angle : figureUISingleton.angles) {
-                            if ((angle.line1 == startLineAngle && angle.line2 == stopLineAngle) || (angle.line2 == startLineAngle && angle.line1 == stopLineAngle)) {
-                                angle.valDeg = resultVal;
-                                is_angle = true;
-                                break;
-                            }
+                if (currentElem instanceof Line)
+                    for (Line line : figureUISingleton.lines) {
+                        Distance distance = new Node(mx, my).findDistanceToLine(line);
+                        if (distance == null)
+                            continue;
+                        if (distance.dist <= delta) {
+                            Log.d("Tag", distance.dist + " " + figureUISingleton.lines.size());
+                            stopLineAngle = line;
                         }
-                        if (!is_angle)
-                            figureUISingleton.angles.add(new Angle(startLineAngle, stopLineAngle, resultVal));
+
+
+                        float resultVal = Integer.parseInt(ANGLE_TEXT); //Float.parseFloat(MainActivity.editText.getText().toString());
+
+                        if (startLineAngle == stopLineAngle) {
+                            ((Line) currentElem).value = resultVal;
+                            break;
+                        }
+                        if (startLineAngle != null && stopLineAngle != null) {
+                            boolean is_angle = false;
+                            Node secondAngleNode = stopLineAngle.getStartStopNodeInLessDistance(new PointF(mx, my));
+                            if (secondAngleNode == centerAngleNode)
+                                secondAngleNode = stopLineAngle.getOtherNode(centerAngleNode);
+                            for (Angle angle : figureUISingleton.angles) {
+                                if (angle.center == centerAngleNode && ((angle.node1 == firstAngleNode && angle.node2 == secondAngleNode) || (angle.node1 == secondAngleNode && angle.node2 == firstAngleNode))) {
+                                    angle.valDeg = resultVal;
+                                    is_angle = true;
+                                    break;
+                                }
+                            }
+                            if (!is_angle && centerAngleNode.lines.contains(startLineAngle) && centerAngleNode.lines.contains(stopLineAngle))
+                                figureUISingleton.angles.add(new Angle(centerAngleNode, firstAngleNode, secondAngleNode, resultVal));
+                        }
                     }
-                }
         }
         return stepInput;
     }
