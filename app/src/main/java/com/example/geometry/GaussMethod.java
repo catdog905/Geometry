@@ -1,20 +1,24 @@
 package com.example.geometry;
 
+import java.util.ArrayList;
+
 import static com.example.geometry.LinearAlgebra.EPS;
 import static com.example.geometry.LinearAlgebra.INF;
 
 public class GaussMethod {
-    public float[][] a;
+    public Matrix<Float> matrix;
     public int status;
     public int[] where_vars;
 
-    public GaussMethod(float[][] a) {
-        this.a = a;
+    public GaussMethod(Matrix<Float> matrix) {
+        this.matrix = matrix;
     }
 
-    public void gaussMethodSolve(float[][] a) {
-        int n = (int) a.length;
-        int m = (int) a[0].length - 1;
+    public void gaussMethodSolve() {
+
+        ArrayList<ArrayList<Float>> a = matrix.matrix;
+        int n = (int) a.size();
+        int m = (int) a.get(0).size() - 1;
 
         int[] where = new int[m];
         for(int i = 0; i < where.length; i++){
@@ -23,22 +27,22 @@ public class GaussMethod {
         for (int col=0, row=0; col<m && row<n; ++col) {
             int sel = row;
             for (int i=row; i<n; ++i)
-                if (Math.abs(a[i][col]) > Math.abs(a[sel][col]))
+                if (Math.abs(a.get(i).get(col)) > Math.abs(a.get(sel).get(col)))
                     sel = i;
-            if (Math.abs(a[sel][col]) < EPS)
+            if (Math.abs(a.get(sel).get(col)) < EPS)
                 continue;
             for (int i=col; i<=m; ++i) {
-                float temp = a[sel][i];
-                a[sel][i] = a[row][i];
-                a[row][i] = temp;
+                float temp = a.get(sel).get(i);
+                a.get(sel).set(i, a.get(row).get(i));
+                a.get(row).set(i, temp);
             }
             where[col] = row;
 
             for (int i=0; i<n; ++i)
                 if (i != row) {
-                    double c = a[i][col] / a[row][col];
+                    float c = a.get(i).get(col) / a.get(row).get(col);
                     for (int j=col; j<=m; ++j)
-                        a[i][j] -= a[row][j] * c;
+                        a.get(i).set(j, a.get(row).get(j) * c);
                 }
             ++row;
         }
@@ -48,12 +52,12 @@ public class GaussMethod {
         }
         for (int i=0; i<m; ++i)
             if (where[i] != -1)
-                ans[i] = a[where[i]][m]/a[where[i]][i];
+                ans[i] = a.get(where[i]).get(m)/a.get(where[i]).get(i);
         for (int i=0; i<n; ++i) {
             double sum = 0;
             for (int j=0; j<m; ++j)
-                sum += ans[j] * a[i][j];
-            if (Math.abs(sum - a[i][m]) > EPS){
+                sum += ans[j] * a.get(i).get(j);
+            if (Math.abs(sum - a.get(i).get(m)) > EPS){
                 status = 1;
                 where_vars = where;
                 return;
@@ -68,6 +72,5 @@ public class GaussMethod {
             }
         status = 0;
         where_vars = where;
-        return;
     }
 }

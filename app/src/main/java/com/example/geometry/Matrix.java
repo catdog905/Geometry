@@ -12,4 +12,5 @@ public class Matrix<T> {
     public Matrix(ArrayList<ArrayList<T>> matrix) {
         this.matrix = matrix;
     }
+
 }
