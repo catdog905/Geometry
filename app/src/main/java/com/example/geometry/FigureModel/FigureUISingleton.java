@@ -47,9 +47,14 @@ public class FigureUISingleton {
      * Give names to all objects in figureUI
      */
     public void createObjNames() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TODO: inf count of node names
+        int number = 0;
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int i = 0; i < nodes.size(); i++) {
-            nodes.get(i).name = Character.toString(alphabet.charAt(i));
+            String numNode = "";
+            if (number >= alphabet.length())
+                numNode = Integer.toString(number / alphabet.length());
+            nodes.get(i).name = alphabet.charAt(i) + numNode;
+            number++;
         }
         for (Line line: lines) {
             line.name = line.start.name + line.stop.name;
