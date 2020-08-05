@@ -13,16 +13,15 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.example.geometry.FigureModel.FigureUI;
+import com.example.geometry.FigureModel.FigureUISingleton;
 import com.example.geometry.R;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class BuilderFigure extends View {
 
 
-    private FigureUI figureUI;
+    private FigureUISingleton figureUISingleton = null;
     private InputHandler inputHandler;
     private Stack<StepInput> stepInputStack = new Stack<>();
 
@@ -60,8 +59,8 @@ public class BuilderFigure extends View {
         mPaintText.setColor(Color.BLACK);
         mPaintText.setTextSize(50);
 
-        figureUI = new FigureUI(mPaintLine, mPaintNode, mPaintText);
-        inputHandler = new InputHandler(figureUI);
+        figureUISingleton = FigureUISingleton.getInstance(mPaintLine, mPaintNode, mPaintText);
+        inputHandler = new InputHandler(figureUISingleton);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class BuilderFigure extends View {
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        figureUI.drawFigure(canvas);
+        figureUISingleton.drawFigure(canvas);
     }
 
     @Override
@@ -85,7 +84,7 @@ public class BuilderFigure extends View {
         return true;
     }
 
-    public FigureUI getFigureUI() {
-        return figureUI;
+    public FigureUISingleton getFigureUISingleton() {
+        return figureUISingleton;
     }
 }

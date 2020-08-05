@@ -3,11 +3,11 @@ package com.example.geometry;
 import java.util.ArrayList;
 
 public class Fact {
-    ArrayList<String> conditions;
-    ArrayList<String> consequences;
+    String statements;
+    Boolean isRight;
 
-    public Fact(ArrayList<String> conditions, ArrayList<String> consequences) {
-        this.conditions = conditions;
-        this.consequences = consequences;
+    public Fact(String statements, Boolean isRight) {
+        this.statements = statements;
+        this.isRight = isRight;
     }
 }

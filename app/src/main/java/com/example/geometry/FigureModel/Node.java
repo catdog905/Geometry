@@ -1,5 +1,7 @@
 package com.example.geometry.FigureModel;
 
+import android.graphics.PointF;
+
 import androidx.annotation.NonNull;
 
 import com.example.geometry.GUI.Distance;
@@ -15,27 +17,12 @@ public class Node implements Cloneable{
     public float lambda;
     public String name;
 
-    public Node() { }
-
     public Node(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public Node(float x, float y, Line line) {
-        this.x = x;
-        this.y = y;
-        lines.add(line);
-    }
-
-    public Node(float x, float y, ArrayList<Line> lines) {
-        this.x = x;
-        this.y = y;
-        this.lines = lines;
-    }
-
-    public String toString()
-    {
+    @NonNull public String toString() {
         String str = Integer.toHexString (hashCode ()) + " x= " + x + "; y= " + y + "; lines = ";
         for (Line line: lines) {
             str += Integer.toHexString(line.hashCode()) + " ";
@@ -43,36 +30,44 @@ public class Node implements Cloneable{
         return str;
     }
 
-    //public void setXY(float x, float y) {
-    //    this.x = x;
-    //    this.y = y;
-    //    for (Line line: lines) {
-    //        line.linearFunc();
-    //    }
-    //}
+    /**
+     * Fit position of node`s lines relatively parentLine of this node
+     */
+    public void fitPositionOfLines() {
+        for (Line line:lines) {
+            line.linearFunc();
+        }
+    }
 
-    public void fit(Line moveLine) {
+    /**
+     * Fit node`s position and position of its lines relatively parentLine of this node
+     */
+    public void fitPositionRelativelyParentLine() {
         if (parentLine != null) {
             x = (parentLine.start.x + lambda * parentLine.stop.x) / (1 + lambda);
             y = (parentLine.start.y + lambda * parentLine.stop.y) / (1 + lambda);
         }
-        for (Line line:lines) {
-            if (line != moveLine)
-                line.linearFunc();
-        }
+        fitPositionOfLines();
     }
 
-    public void addLine(Line line) {
+    /**
+     * Add line to lines
+     * @param line
+     */
+    public void addLine(@NonNull Line line) {
         lines.add(line);
     }
 
     @NonNull
-    @Override
-    public Object clone() throws CloneNotSupportedException {
+    @Override public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
-    public void move(Node touch) {
+    /**
+     * Move node to touch position in according parentLine if it is
+     * @param touch
+     */
+    public void move(@NonNull Node touch) {
         if (parentLine != null){
             Distance distance = touch.findDistanceToLine(parentLine);
             if (distance != null) {
@@ -84,27 +79,42 @@ public class Node implements Cloneable{
             x = touch.x;
             y = touch.y;
         }
-        for (Line line : lines){
-            line.linearFunc();
-            for (Node node : line.subNodes)
-                node.fit(null);
-        }
+        fitPositionOfLines();
     }
 
-    public void countLambda(Line line) {
-        lambda = (line.start.x - x) / (x - line.stop.x);
-    }
-
-    public float intersectionWithCirce(Circle circle){
-        float len = (float)(Math.pow((x - circle.Ox), 2) + Math.pow((y - circle.Oy), 2));
+    /**
+     * Find distance to Circle center
+     * @param circle
+     * @return distance in float
+     */
+    public float findDistanceToCirceCenter(@NonNull Circle circle) {
         return (float) Math.sqrt(Math.pow((x - circle.Ox), 2) + Math.pow((y - circle.Oy), 2));
     }
 
-    public float intersectionWithNode(Node node){
-        return this.intersectionWithCirce(new Circle(node));
+    /**
+     * Find distance to PointF
+     * @param node
+     * @return distance in float
+     */
+    public float findDistanceToPoint(@NonNull PointF node) {
+        return this.findDistanceToCirceCenter(new Circle(node));
     }
 
-    public Distance findDistanceToLine(Line line) {
+    /**
+     * Find distance to Node
+     * @param node
+     * @return distance in float
+     */
+    public float findDistanceToNode(@NonNull Node node) {
+        return this.findDistanceToCirceCenter(new Circle(node));
+    }
+
+    /**
+     * Find distance to Line
+     * @param line
+     * @return distance in float
+     */
+    public Distance findDistanceToLine(@NonNull Line line) {
         return line.findDistanceToPoint(x, y);
     }
 }

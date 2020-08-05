@@ -1,13 +1,13 @@
 package com.example.geometry;
 
-import com.example.geometry.FigureModel.FigureUI;
+import com.example.geometry.FigureModel.FigureUISingleton;
 import com.example.geometry.GUI.StepInput;
 
 import java.util.Stack;
 
 public class Debuger {
 
-    public static String getInfoFromObject(FigureUI figureUI) {
+    public static String getInfoFromObject(FigureUISingleton figureUISingleton) {
         String str = "\n";
         //for (Line line: figureUI.lines) {
         //    str += line.toString() + "\n";

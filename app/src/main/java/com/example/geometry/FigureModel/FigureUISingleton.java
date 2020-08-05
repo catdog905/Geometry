@@ -1,33 +1,43 @@
 package com.example.geometry.FigureModel;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
 import java.util.ArrayList;
 
-public class FigureUI {
+public class FigureUISingleton {
     public ArrayList<Line> lines = new ArrayList<>();
     public ArrayList<Node> nodes = new ArrayList<>();
     public ArrayList<Angle> angles = new ArrayList<>();
-    public ArrayList<String> facts = new ArrayList<>();
     private Paint mPaintLine;
     private Paint mPaintNode;
     private Paint mPaintText;
 
+    private static FigureUISingleton instance;
 
-    public FigureUI(Paint mPaintLine, Paint mPaintNode, Paint mPaintText) {
+    private FigureUISingleton (Paint mPaintLine, Paint mPaintNode, Paint mPaintText){
         this.mPaintLine = mPaintLine;
         this.mPaintNode = mPaintNode;
         this.mPaintText = mPaintText;
     }
 
+    public static FigureUISingleton getInstance(Paint mPaintLine, Paint mPaintNode, Paint mPaintText){
+        if (null == instance){
+            instance = new FigureUISingleton(mPaintLine, mPaintNode, mPaintText);
+        }
+        return instance;
+    }
+
+    /**
+     * Draw all objects of figureUI on canvas
+     * @param canvas
+     */
     public void drawFigure(Canvas canvas) {
         for (Line line : lines) {
             canvas.drawLine(line.start.x, line.start.y, line.stop.x, line.stop.y, mPaintLine);
             for (Node node : line.subNodes){
-                node.fit(line);
+                node.fitPositionRelativelyParentLine();
                 canvas.drawCircle(node.x, node.y, 10, mPaintNode);
             }
             if (line.value != null) {
@@ -45,36 +55,25 @@ public class FigureUI {
             }
         }
     }
-    private void createObjNames() {
+
+    /**
+     * Give names to all objects in figureUI
+     */
+    public void createObjNames() {
+        int number = 0;
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         for (int i = 0; i < nodes.size(); i++) {
-            nodes.get(i).name = Character.toString(alphabet.charAt(i));
+            String numNode = "";
+            if (number >= alphabet.length())
+                numNode = Integer.toString(number / alphabet.length());
+            nodes.get(i).name = alphabet.charAt(i) + numNode;
+            number++;
         }
         for (Line line: lines) {
             line.name = line.start.name + line.stop.name;
         }
         for (Angle angle: angles) {
-            if (angle.line1.name.charAt(0) == angle.line2.name.charAt(0)) {
-                angle.name = "<" + angle.line1.name.charAt(1) + angle.line1.name.charAt(0) + angle.line2.name.charAt(1);
-            } else if (angle.line1.name.charAt(0) == angle.line2.name.charAt(1)){
-                angle.name = "<" + angle.line1.name.charAt(1) + angle.line1.name.charAt(0) + angle.line2.name.charAt(0);
-            }
+            angle.name = "<" + angle.node1.name + angle.center.name + angle.node2.name;
         }
-    }
-    public void createFirstFacts() {
-        createObjNames();
-        ArrayList<String> facts = new ArrayList<>();
-        for (Line line:lines) {
-            if (line.value != null){
-                facts.add(line.name + "=" + line.value);
-            }
-            for (Node node :line.subNodes){
-                facts.add(node.name + "(belong)" + line.name);
-            }
-        }
-        for (Angle angle: angles){
-            facts.add(angle.name + "=" + angle.valDeg);
-        }
-        this.facts = facts;
     }
 }

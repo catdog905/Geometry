@@ -10,4 +10,4 @@ To run this project simple open it in android-studio and build.
 If you want to contribution, you can:
 - create issue with bug;
 - create issue to decompose too big issue;
-- create Pull Reuest to solve any one issue (One PR = One Issue).
+- create Pull Request to solve any one issue (One PR = One Issue).

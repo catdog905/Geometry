@@ -6,16 +6,19 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_constructor"
+            app:actionLayout="@navigation/constructor_item_menu" />
+        <item
             android:id="@+id/nav_settings"
-            app:actionLayout="@layout/settings_item_menu" />
+            app:actionLayout="@navigation/settings_item_menu" />
         <item
             android:id="@+id/nav_lang"
-            app:actionLayout="@layout/lang_item_menu" />
+            app:actionLayout="@navigation/lang_item_menu" />
         <item
             android:id="@+id/nav_about"
-            app:actionLayout="@layout/about_item_menu" />
+            app:actionLayout="@navigation/about_item_menu" />
         <item
             android:id="@+id/nav_study"
-            app:actionLayout="@layout/tutorial_item_menu" />
+            app:actionLayout="@navigation/tutorial_item_menu" />
     </group>
 </menu>
