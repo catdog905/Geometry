@@ -1,8 +1,12 @@
 package com.example.geometry.FigureModel;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.example.geometry.LinearAlgebra;
+import com.example.geometry.Matrix;
 
 public class Angle {
     public Node center, node1, node2;
@@ -17,7 +21,13 @@ public class Angle {
     }
 
     public PointF getPointOnBisectorInRadius(Float radius) {
-        float angle = (new Line(node1, center)).getAngleWithLine(new Line(node2, center));
-        return new PointF(center.x + radius* (float)Math.cos(angle/2), center.y - radius* (float)Math.sin(angle/2));
+        float angle = LinearAlgebra.getAngleFrom2Vec(new PointF(node1.x - center.x, node1.y - center.y), new PointF(node2.x - center.x, node2.y - center.y));
+        float angleOX1 = LinearAlgebra.getAngleWithOX(new PointF(node1.x - center.x, node1.y - center.y));
+        float angleOX2 = LinearAlgebra.getAngleWithOX(new PointF(node2.x - center.x, node2.y - center.y));
+        if (Math.max(angleOX1, angleOX2) -  Math.min(angleOX1, angleOX2) <= Math.PI)
+            angle = angle/2 + Math.min(angleOX1, angleOX2);
+        else
+            angle = angle/2 + Math.max(angleOX1, angleOX2);
+        return new PointF(center.x + radius* (float)Math.cos(angle), center.y - radius* (float)Math.sin(angle));
     }
 }
