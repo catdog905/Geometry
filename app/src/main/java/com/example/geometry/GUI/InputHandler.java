@@ -260,7 +260,7 @@ public class InputHandler<T> {
                             Log.d("Tag", distance.dist + " " + figureUISingleton.lines.size());
                             stopLineAngle = line;
                         }
-                        float resultVal = Integer.parseInt(ANGLE_TEXT); //Float.parseFloat(MainActivity.editText.getText().toString());
+                        float resultVal = Float.parseFloat(BuilderFragment.editText.getText().toString());
 
                         if (startLineAngle == stopLineAngle) {
                             ((Line) currentElem).value = resultVal;

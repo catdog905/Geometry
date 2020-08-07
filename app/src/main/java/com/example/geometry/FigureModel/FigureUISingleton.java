@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class FigureUISingleton {
@@ -42,7 +44,9 @@ public class FigureUISingleton {
             }
             if (line.value != null) {
                 PointF tempPoint = line.getCenterPoint();
-                canvas.drawText(line.value.toString(), tempPoint.x, tempPoint.y, mPaintText);
+                DecimalFormat df = new DecimalFormat("###.###");
+                df.setRoundingMode (RoundingMode.HALF_UP);
+                canvas.drawText(df.format(line.value), tempPoint.x - mPaintText.measureText(df.format(line.value)) / 2, tempPoint.y, mPaintText);
             }
         }
         for (Node node : nodes) {
@@ -51,7 +55,9 @@ public class FigureUISingleton {
         for (Angle angle : angles) {
             if (angle.valDeg != null) {
                 PointF tempPoint = angle.getPointOnBisectorInRadius(100.0f);
-                canvas.drawText(angle.valDeg.toString(), tempPoint.x, tempPoint.y, mPaintText);
+                DecimalFormat df = new DecimalFormat("###.###");
+                df.setRoundingMode (RoundingMode.HALF_UP);
+                canvas.drawText(df.format(angle.valDeg), tempPoint.x - mPaintText.measureText(df.format(angle.valDeg)) / 2, tempPoint.y, mPaintText);
             }
         }
     }
