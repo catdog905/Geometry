@@ -65,6 +65,8 @@ public class BuilderFragment extends Fragment {
         // Install the key handler
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
 
+        builderFigure.setKeyboardView(keyboardView);
+
 
 
         menuButton.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +115,6 @@ public class BuilderFragment extends Fragment {
         solveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputHandler.ANGLE_TEXT = editText.getText().toString();
             }
         });
         return root;
@@ -124,10 +125,9 @@ public class BuilderFragment extends Fragment {
         {
             //Here check the primaryCode to see which key is pressed
             //based on the android:codes property
-            if(primaryCode==1)
-            {
-                Log.i("Key","You just pressed 1 button");
-            }
+
+            builderFigure.inputHandler.currentTitle.text += primaryCode;
+            Log.i("Key","hello");
         }
 
         @Override public void onPress(int arg0) {
@@ -151,11 +151,4 @@ public class BuilderFragment extends Fragment {
         @Override public void swipeUp() {
         }
     };
-
-    public void openKeyboard(Object obj)
-    {
-        keyboardView.setVisibility(View.VISIBLE);
-        keyboardView.setEnabled(true);
-        //if( v!=null)((InputMethodManager)getContext().getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(v.getWindowToken(), 0);
-    }
 }

@@ -8,16 +8,24 @@ import androidx.annotation.NonNull;
 import com.example.geometry.LinearAlgebra;
 import com.example.geometry.Matrix;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 public class Angle {
     public Node center, node1, node2;
     public Float valDeg;
     public String name;
+    public GUIObjTitle title;
 
     public Angle(Node center, Node node1, Node node2, float valDeg) {
         this.center = center;
         this.node1 = node1;
         this.node2 = node2;
         this.valDeg = valDeg;
+        DecimalFormat df = new DecimalFormat("###.###");
+        df.setRoundingMode (RoundingMode.HALF_UP);
+        PointF tempPoint = getPointOnBisectorInRadius(100.0f);
+        title = new GUIObjTitle(df.format(valDeg), tempPoint, 50);
     }
 
     public PointF getPointOnBisectorInRadius(Float radius) {

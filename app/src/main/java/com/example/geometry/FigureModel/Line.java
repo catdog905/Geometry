@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.example.geometry.GUI.Distance;
 import com.example.geometry.LinearAlgebra;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.example.geometry.LinearAlgebra.between;
@@ -21,11 +23,20 @@ public class Line {
     public ArrayList<Node> subNodes = new ArrayList<>();
     public String name;
     public float A, B, C;
+    public GUIObjTitle title = null;
 
     public Line(Node start, Node stop) {
         this.start = start;
         this.stop = stop;
         linearFunc(start.x, start.y, stop.x, stop.y);
+    }
+
+    public void setValue(Float value) {
+        this.value = value;
+        DecimalFormat df = new DecimalFormat("###.###");
+        df.setRoundingMode (RoundingMode.HALF_UP);
+        PointF tempPoint = getCenterPoint();
+        title = new GUIObjTitle(df.format(value), tempPoint, 50);
     }
 
     @NonNull public String toString() {

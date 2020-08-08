@@ -43,10 +43,7 @@ public class FigureUISingleton {
                 canvas.drawCircle(node.x, node.y, 10, mPaintNode);
             }
             if (line.value != null) {
-                PointF tempPoint = line.getCenterPoint();
-                DecimalFormat df = new DecimalFormat("###.###");
-                df.setRoundingMode (RoundingMode.HALF_UP);
-                canvas.drawText(df.format(line.value), tempPoint.x - mPaintText.measureText(df.format(line.value)) / 2, tempPoint.y, mPaintText);
+                line.title.drawTitle(canvas, mPaintText);
             }
         }
         for (Node node : nodes) {
@@ -54,10 +51,7 @@ public class FigureUISingleton {
         }
         for (Angle angle : angles) {
             if (angle.valDeg != null) {
-                PointF tempPoint = angle.getPointOnBisectorInRadius(100.0f);
-                DecimalFormat df = new DecimalFormat("###.###");
-                df.setRoundingMode (RoundingMode.HALF_UP);
-                canvas.drawText(df.format(angle.valDeg), tempPoint.x - mPaintText.measureText(df.format(angle.valDeg)) / 2, tempPoint.y, mPaintText);
+                angle.title.drawTitle(canvas, mPaintText);
             }
         }
     }
