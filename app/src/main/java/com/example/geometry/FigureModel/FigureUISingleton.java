@@ -2,7 +2,10 @@ package com.example.geometry.FigureModel;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class FigureUISingleton {
@@ -11,17 +14,19 @@ public class FigureUISingleton {
     public ArrayList<Angle> angles = new ArrayList<>();
     private Paint mPaintLine;
     private Paint mPaintNode;
+    private Paint mPaintText;
 
     private static FigureUISingleton instance;
 
-    private FigureUISingleton (Paint mPaintLine, Paint mPaintNode){
+    private FigureUISingleton (Paint mPaintLine, Paint mPaintNode, Paint mPaintText){
         this.mPaintLine = mPaintLine;
         this.mPaintNode = mPaintNode;
+        this.mPaintText = mPaintText;
     }
 
-    public static FigureUISingleton getInstance(Paint mPaintLine, Paint mPaintNode){
+    public static FigureUISingleton getInstance(Paint mPaintLine, Paint mPaintNode, Paint mPaintText){
         if (null == instance){
-            instance = new FigureUISingleton(mPaintLine, mPaintNode);
+            instance = new FigureUISingleton(mPaintLine, mPaintNode, mPaintText);
         }
         return instance;
     }
@@ -37,9 +42,19 @@ public class FigureUISingleton {
                 node.fitPositionRelativelyParentLine();
                 canvas.drawCircle(node.x, node.y, 10, mPaintNode);
             }
+            if (line.value != null) {
+                line.fitTitlePos();
+                line.title.drawTitle(canvas, mPaintText);
+            }
         }
         for (Node node : nodes) {
             canvas.drawCircle(node.x, node.y, 10, mPaintNode);
+        }
+        for (Angle angle : angles) {
+            if (angle.valDeg != null) {
+                angle.fitTitlePos();
+                angle.title.drawTitle(canvas, mPaintText);
+            }
         }
     }
 

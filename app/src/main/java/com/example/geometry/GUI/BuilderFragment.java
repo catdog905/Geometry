@@ -1,11 +1,16 @@
 package com.example.geometry.GUI;
 
+import android.app.Activity;
+import android.content.Context;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -28,7 +33,9 @@ public class BuilderFragment extends Fragment {
     ImageButton angleButton;
     ImageButton backButton;
     ImageButton solveButton;
-    EditText editText;
+    Keyboard keyboard;
+    KeyboardView keyboardView;
+    static EditText editText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +50,22 @@ public class BuilderFragment extends Fragment {
         backButton = root.findViewById(R.id.back);
         editText = root.findViewById(R.id.editText);
         solveButton = root.findViewById(R.id.solve_button);
+
+        // Create the Keyboard
+        keyboard= new Keyboard(getContext(),R.xml.keyboard);
+
+        // Lookup the KeyboardView
+        keyboardView= (KeyboardView)root.findViewById(R.id.keyboardView);
+        // Attach the keyboard to the view
+        keyboardView.setKeyboard( keyboard );
+
+        // Do not show the preview balloons
+        //mKeyboardView.setPreviewEnabled(false);
+
+        // Install the key handler
+        keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
+
+        builderFigure.setKeyboardView(keyboardView);
 
 
 
@@ -79,8 +102,8 @@ public class BuilderFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MathModel mathModel = new MathModel();
-                mathModel.getFactsFromFigure(builderFigure.getFigureUISingleton());
+                //MathModel mathModel = new MathModel();
+                //mathModel.getFactsFromFigure(builderFigure.getFigureUISingleton());
 
                 //String str = "";
                 //for (String fact : builderFigure.getFigureUI().facts){
@@ -92,9 +115,54 @@ public class BuilderFragment extends Fragment {
         solveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputHandler.ANGLE_TEXT = editText.getText().toString();
             }
         });
         return root;
+    }
+
+    private KeyboardView.OnKeyboardActionListener onKeyboardActionListener = new KeyboardView.OnKeyboardActionListener() {
+        @Override public void onKey(int primaryCode, int[] keyCodes)
+        {
+            //Here check the primaryCode to see which key is pressed
+            //based on the android:codes property
+            if (primaryCode == 100)
+                closeKeyboard();
+            else if (primaryCode == -1)
+                builderFigure.inputHandler.currentTitle.removeLastChar();
+            else if (primaryCode == 50)
+                builderFigure.inputHandler.currentTitle.addChar('.');
+            else
+                builderFigure.inputHandler.currentTitle.addChar((char)(primaryCode + '0'));
+            builderFigure.inputHandler.currentTitle.setHostValue(Float.parseFloat(builderFigure.inputHandler.currentTitle.text));
+            builderFigure.invalidate();
+            Log.i("Key","hello");
+        }
+
+        @Override public void onPress(int arg0) {
+        }
+
+        @Override public void onRelease(int primaryCode) {
+        }
+
+        @Override public void onText(CharSequence text) {
+        }
+
+        @Override public void swipeDown() {
+        }
+
+        @Override public void swipeLeft() {
+        }
+
+        @Override public void swipeRight() {
+        }
+
+        @Override public void swipeUp() {
+        }
+    };
+
+    public void closeKeyboard()
+    {
+        keyboardView.setVisibility(View.INVISIBLE);
+        keyboardView.setEnabled(false);
     }
 }

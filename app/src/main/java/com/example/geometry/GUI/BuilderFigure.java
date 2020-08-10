@@ -3,7 +3,9 @@ package com.example.geometry.GUI;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -21,8 +23,10 @@ public class BuilderFigure extends View {
 
 
     private FigureUISingleton figureUISingleton = null;
-    private InputHandler inputHandler;
+    public InputHandler inputHandler;
     private Stack<StepInput> stepInputStack = new Stack<>();
+
+    KeyboardView keyboardView;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -54,10 +58,12 @@ public class BuilderFigure extends View {
         mPaintLine.setStrokeWidth(5);
         mPaintLine.setColor(getContext().getColor(R.color.lightThemeColor));
 
+        Paint mPaintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintText.setColor(Color.BLACK);
+        mPaintText.setTextSize(50);
 
-        figureUISingleton = FigureUISingleton.getInstance(mPaintLine, mPaintNode);
+        figureUISingleton = FigureUISingleton.getInstance(mPaintLine, mPaintNode, mPaintText);
         inputHandler = new InputHandler(figureUISingleton);
-
     }
 
     @Override
@@ -69,6 +75,11 @@ public class BuilderFigure extends View {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         figureUISingleton.drawFigure(canvas);
+    }
+
+    public void setKeyboardView(KeyboardView keyboardView) {
+        this.keyboardView = keyboardView;
+        inputHandler.setKeyboardView(keyboardView);
     }
 
     @Override

@@ -38,16 +38,31 @@ public class LinearAlgebra {
     }
 
     /**
-     * Get cos from scalar multiplication of 2 vectors
+     * Get angle from scalar multiplication of 2 vectors
      * @param vec1
      * @param vec2
      * @return cos(vec1;vec2)
      */
-    public static float getCosFrom2Vec(PointF vec1, PointF vec2) {
+    public static float getAngleFrom2Vec(PointF vec1, PointF vec2) {
         float x1 = vec1.x;
         float y1 = vec1.y;
         float x2 = vec2.x;
         float y2 = vec2.y;
-        return (float) Math.acos((x1*x2 + y1+y2) /  (Math.sqrt(x1*x1+y1*y1) * Math.sqrt(x2*x2+y2*y2)));
+        return (float) Math.acos((x1*x2 + y1*y2) /  (Math.sqrt(x1*x1+y1*y1) * Math.sqrt(x2*x2+y2*y2)));
+    }
+    /**
+     * Get angle from scalar multiplication of vector and OX
+     * @param vec2
+     * @return cos(vec1;vec2)
+     */
+    public static float getAngleWithOX(PointF vec2) {
+        float x1 = 1;
+        float y1 = 0;
+        float x2 = vec2.x;
+        float y2 = vec2.y;
+        float angle =  (float) Math.acos((x1*x2 + y1*y2) /  (Math.sqrt(x1*x1+y1*y1) * Math.sqrt(x2*x2+y2*y2)));
+        if (y2 > 0)
+            angle *= -1;
+        return angle;
     }
 }

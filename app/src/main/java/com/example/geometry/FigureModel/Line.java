@@ -1,5 +1,6 @@
 package com.example.geometry.FigureModel;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.example.geometry.GUI.Distance;
 import com.example.geometry.LinearAlgebra;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.example.geometry.LinearAlgebra.between;
@@ -20,11 +23,20 @@ public class Line {
     public ArrayList<Node> subNodes = new ArrayList<>();
     public String name;
     public float A, B, C;
+    public GUIObjTitle title = null;
 
     public Line(Node start, Node stop) {
         this.start = start;
         this.stop = stop;
         linearFunc(start.x, start.y, stop.x, stop.y);
+        title = new GUIObjTitle("", getCenterPoint(), 50, this);
+    }
+
+    public void setValue(Float value) {
+        this.value = value;
+        //DecimalFormat df = new DecimalFormat("###.###");
+        //df.setRoundingMode (RoundingMode.HALF_UP);
+        //title.text = df.format(value);
     }
 
     @NonNull public String toString() {
@@ -125,6 +137,7 @@ public class Line {
             node.fitPositionRelativelyParentLine();
         start.fitPositionRelativelyParentLine();
         stop.fitPositionRelativelyParentLine();
+        fitTitlePos();
     }
 
     /**
@@ -216,5 +229,19 @@ public class Line {
         else {
             return start;
         }
+    }
+
+    public PointF getCenterPoint() {
+        return new PointF((start.x + stop.x) / 2, (start.y + stop.y) / 2);
+    }
+
+    public float getAngleWithLine(Line line) {
+        linearFunc();
+        float A2 = line.A, B2 = line.B;
+        return (A * A2 + B * B2) / ((float) Math.sqrt(A*A + B*B) * (float)Math.sqrt(A2*A2 + B2*B2));
+    }
+
+    public void fitTitlePos() {
+        title.pos = getCenterPoint();
     }
 }

@@ -2,14 +2,17 @@ package com.example.geometry.GUI;
 
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.inputmethodservice.KeyboardView;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import com.example.geometry.FigureModel.Angle;
 import com.example.geometry.FigureModel.Circle;
 import com.example.geometry.FigureModel.FigureUISingleton;
+import com.example.geometry.FigureModel.GUIObjTitle;
 import com.example.geometry.FigureModel.Line;
 import com.example.geometry.FigureModel.Node;
 import com.example.geometry.LinearAlgebra;
@@ -28,6 +31,8 @@ public class InputHandler<T> {
     private T currentElem;
     FigureUISingleton figureUISingleton;
 
+    KeyboardView keyboardView;
+
     private PointF lastTouch;
 
     private Node startNodeDrawingLine;
@@ -39,10 +44,16 @@ public class InputHandler<T> {
     private Line startLineAngle;
     private Line stopLineAngle;
 
+    public GUIObjTitle currentTitle;
+
     StepInput stepInput = null;
 
     public InputHandler(@NonNull FigureUISingleton figureUISingleton) {
         this.figureUISingleton = figureUISingleton;
+    }
+
+    public void setKeyboardView(KeyboardView keyboardView) {
+        this.keyboardView = keyboardView;
     }
 
     public StepInput catchTouch(MotionEvent event) {
@@ -261,11 +272,9 @@ public class InputHandler<T> {
                             stopLineAngle = line;
                         }
 
-
-                        float resultVal = Integer.parseInt(ANGLE_TEXT); //Float.parseFloat(MainActivity.editText.getText().toString());
-
                         if (startLineAngle == stopLineAngle) {
-                            ((Line) currentElem).value = resultVal;
+                            currentTitle = ((Line) currentElem).title;
+                            openKeyboard();
                             break;
                         }
                         if (startLineAngle != null && stopLineAngle != null) {
@@ -275,16 +284,27 @@ public class InputHandler<T> {
                                 secondAngleNode = stopLineAngle.getOtherNode(centerAngleNode);
                             for (Angle angle : figureUISingleton.angles) {
                                 if (angle.center == centerAngleNode && ((angle.node1 == firstAngleNode && angle.node2 == secondAngleNode) || (angle.node1 == secondAngleNode && angle.node2 == firstAngleNode))) {
-                                    angle.valDeg = resultVal;
+                                    currentTitle = angle.title;
+                                    openKeyboard();
                                     is_angle = true;
                                     break;
                                 }
                             }
-                            if (!is_angle && centerAngleNode.lines.contains(startLineAngle) && centerAngleNode.lines.contains(stopLineAngle))
-                                figureUISingleton.angles.add(new Angle(centerAngleNode, firstAngleNode, secondAngleNode, resultVal));
+                            if (!is_angle && centerAngleNode.lines.contains(startLineAngle) && centerAngleNode.lines.contains(stopLineAngle)) {
+                                Angle tempAngle = new Angle(centerAngleNode, firstAngleNode, secondAngleNode);
+                                figureUISingleton.angles.add(tempAngle);
+                                currentTitle = tempAngle.title;
+                                openKeyboard();
+                            }
                         }
                     }
         }
         return stepInput;
+    }
+
+    public void openKeyboard()
+    {
+        keyboardView.setVisibility(View.VISIBLE);
+        //keyboardView.setEnabled(true);
     }
 }
