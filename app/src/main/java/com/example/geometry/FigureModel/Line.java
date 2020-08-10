@@ -29,14 +29,14 @@ public class Line {
         this.start = start;
         this.stop = stop;
         linearFunc(start.x, start.y, stop.x, stop.y);
+        title = new GUIObjTitle("", getCenterPoint(), 50, this);
     }
 
     public void setValue(Float value) {
         this.value = value;
-        DecimalFormat df = new DecimalFormat("###.###");
-        df.setRoundingMode (RoundingMode.HALF_UP);
-        PointF tempPoint = getCenterPoint();
-        title = new GUIObjTitle(df.format(value), tempPoint, 50);
+        //DecimalFormat df = new DecimalFormat("###.###");
+        //df.setRoundingMode (RoundingMode.HALF_UP);
+        //title.text = df.format(value);
     }
 
     @NonNull public String toString() {
@@ -137,6 +137,7 @@ public class Line {
             node.fitPositionRelativelyParentLine();
         start.fitPositionRelativelyParentLine();
         stop.fitPositionRelativelyParentLine();
+        fitTitlePos();
     }
 
     /**
@@ -238,5 +239,9 @@ public class Line {
         linearFunc();
         float A2 = line.A, B2 = line.B;
         return (A * A2 + B * B2) / ((float) Math.sqrt(A*A + B*B) * (float)Math.sqrt(A2*A2 + B2*B2));
+    }
+
+    public void fitTitlePos() {
+        title.pos = getCenterPoint();
     }
 }

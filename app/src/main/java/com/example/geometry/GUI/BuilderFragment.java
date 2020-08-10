@@ -125,8 +125,16 @@ public class BuilderFragment extends Fragment {
         {
             //Here check the primaryCode to see which key is pressed
             //based on the android:codes property
-
-            builderFigure.inputHandler.currentTitle.text += primaryCode;
+            if (primaryCode == 100)
+                closeKeyboard();
+            else if (primaryCode == -1)
+                builderFigure.inputHandler.currentTitle.removeLastChar();
+            else if (primaryCode == 50)
+                builderFigure.inputHandler.currentTitle.addChar('.');
+            else
+                builderFigure.inputHandler.currentTitle.addChar((char)(primaryCode + '0'));
+            builderFigure.inputHandler.currentTitle.setHostValue(Float.parseFloat(builderFigure.inputHandler.currentTitle.text));
+            builderFigure.invalidate();
             Log.i("Key","hello");
         }
 
@@ -151,4 +159,10 @@ public class BuilderFragment extends Fragment {
         @Override public void swipeUp() {
         }
     };
+
+    public void closeKeyboard()
+    {
+        keyboardView.setVisibility(View.INVISIBLE);
+        keyboardView.setEnabled(false);
+    }
 }

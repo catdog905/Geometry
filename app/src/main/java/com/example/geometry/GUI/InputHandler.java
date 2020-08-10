@@ -271,10 +271,8 @@ public class InputHandler<T> {
                             Log.d("Tag", distance.dist + " " + figureUISingleton.lines.size());
                             stopLineAngle = line;
                         }
-                        float resultVal = Float.parseFloat(BuilderFragment.editText.getText().toString());
 
                         if (startLineAngle == stopLineAngle) {
-                            ((Line) currentElem).setValue(resultVal);
                             currentTitle = ((Line) currentElem).title;
                             openKeyboard();
                             break;
@@ -286,7 +284,6 @@ public class InputHandler<T> {
                                 secondAngleNode = stopLineAngle.getOtherNode(centerAngleNode);
                             for (Angle angle : figureUISingleton.angles) {
                                 if (angle.center == centerAngleNode && ((angle.node1 == firstAngleNode && angle.node2 == secondAngleNode) || (angle.node1 == secondAngleNode && angle.node2 == firstAngleNode))) {
-                                    angle.valDeg = resultVal;
                                     currentTitle = angle.title;
                                     openKeyboard();
                                     is_angle = true;
@@ -294,7 +291,7 @@ public class InputHandler<T> {
                                 }
                             }
                             if (!is_angle && centerAngleNode.lines.contains(startLineAngle) && centerAngleNode.lines.contains(stopLineAngle)) {
-                                Angle tempAngle = new Angle(centerAngleNode, firstAngleNode, secondAngleNode, resultVal);
+                                Angle tempAngle = new Angle(centerAngleNode, firstAngleNode, secondAngleNode);
                                 figureUISingleton.angles.add(tempAngle);
                                 currentTitle = tempAngle.title;
                                 openKeyboard();
@@ -308,12 +305,6 @@ public class InputHandler<T> {
     public void openKeyboard()
     {
         keyboardView.setVisibility(View.VISIBLE);
-        keyboardView.setEnabled(true);
-    }
-
-    public void closeKeyboard()
-    {
-        keyboardView.setVisibility(View.INVISIBLE);
-        keyboardView.setEnabled(false);
+        //keyboardView.setEnabled(true);
     }
 }

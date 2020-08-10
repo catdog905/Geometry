@@ -15,6 +15,7 @@
         <Key android:codes="8"    android:keyLabel="8" android:horizontalGap="4%p" />
         <Key android:codes="9"    android:keyLabel="9" android:horizontalGap="4%p" />
         <Key android:codes="0"    android:keyLabel="0" android:horizontalGap="4%p" />
+        <Key android:codes="50"    android:keyLabel="." android:horizontalGap="4%p" />
     </Row>
 
     <Row>

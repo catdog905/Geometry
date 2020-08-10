@@ -25,7 +25,16 @@ public class Angle {
         DecimalFormat df = new DecimalFormat("###.###");
         df.setRoundingMode (RoundingMode.HALF_UP);
         PointF tempPoint = getPointOnBisectorInRadius(100.0f);
-        title = new GUIObjTitle(df.format(valDeg), tempPoint, 50);
+        title = new GUIObjTitle(df.format(valDeg), tempPoint, 50, this);
+    }
+    public Angle(Node center, Node node1, Node node2) {
+        this.center = center;
+        this.node1 = node1;
+        this.node2 = node2;
+        DecimalFormat df = new DecimalFormat("###.###");
+        df.setRoundingMode (RoundingMode.HALF_UP);
+        PointF tempPoint = getPointOnBisectorInRadius(100.0f);
+        title = new GUIObjTitle("", tempPoint, 50, this);
     }
 
     public PointF getPointOnBisectorInRadius(Float radius) {
@@ -37,5 +46,9 @@ public class Angle {
         else
             angle = angle/2 + Math.max(angleOX1, angleOX2);
         return new PointF(center.x + radius* (float)Math.cos(angle), center.y - radius* (float)Math.sin(angle));
+    }
+
+    public void fitTitlePos(){
+        title.pos = getPointOnBisectorInRadius(100.0f);
     }
 }

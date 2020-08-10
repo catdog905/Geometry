@@ -43,6 +43,7 @@ public class FigureUISingleton {
                 canvas.drawCircle(node.x, node.y, 10, mPaintNode);
             }
             if (line.value != null) {
+                line.fitTitlePos();
                 line.title.drawTitle(canvas, mPaintText);
             }
         }
@@ -51,6 +52,7 @@ public class FigureUISingleton {
         }
         for (Angle angle : angles) {
             if (angle.valDeg != null) {
+                angle.fitTitlePos();
                 angle.title.drawTitle(canvas, mPaintText);
             }
         }
