@@ -10,7 +10,8 @@ import java.util.ArrayList;
 public class MathModel {
     ArrayList<Fact> facts;
 
-    public MathModel() {
+    public MathModel(FigureUISingleton figureUISingleton) {
+        getFactsFromFigure(figureUISingleton);
     }
 
     /**

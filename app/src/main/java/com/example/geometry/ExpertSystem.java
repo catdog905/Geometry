@@ -2,16 +2,22 @@ package com.example.geometry;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExpertSystem {
 
-    public static List<String> global_facts = new ArrayList(Arrays.asList("O(belong)AB", "K(belong)AB", "M(belong)AB", "K(belong)AO", "K(belong)AM", "O(belong)AM", "O(belong)KM", "O(belong)KB", "M(belong)KB", "M(belong)OB", "AK=KO", "OM=MB", "KM=8"));
-    private static List<List<List<String>>> global_rules = new ArrayList(Arrays.asList(
+
+    private ArrayList<Rule> baseOfRules = new ArrayList<Rule>();
+
+    public static List<String> gloddddbal_facts = new ArrayList(Arrays.asList("O(belong)AB", "K(belong)AB", "M(belong)AB", "K(belong)AO", "K(belong)AM", "O(belong)AM", "O(belong)KM", "O(belong)KB", "M(belong)KB", "M(belong)OB", "AK=KO", "OM=MB", "KM=8"));
+    private static List<List<List<String>>> glosbal_rules = new ArrayList(Arrays.asList(
             Arrays.asList(
                     Arrays.asList("AB(intersec)CD=O"), Arrays.asList("O(belong)AB", "O(belong)CD", "<AOC=<DOB", "<COB=<AOD")
             ),
@@ -24,13 +30,93 @@ public class ExpertSystem {
     ));
 
 
-    public static ArrayList<ArrayList<Float>> extended_matrix = new ArrayList<>();
-
-    public ExpertSystem(ArrayList<String> global_facts) {
-        this.global_facts = global_facts;
+    private void initRules() {
+        baseOfRules.add(new Rule(
+                new ArrayList<>(Arrays.asList(new Fact("AB(intersec)CD=O"))),
+                new ArrayList<>(Arrays.asList(new Fact("O(belong)AB"), new Fact("O(belong)CD"), new Fact("<AOC=<DOB"), new Fact("<COB=<AOD")))));
+        baseOfRules.add(new Rule(
+                new ArrayList<>(Arrays.asList(new Fact("D(belong)AO"), new Fact("O(belong)DB"))),
+                new ArrayList<>(Arrays.asList(new Fact("O(belong)AB"), new Fact("D(belong)AB")))));
+        baseOfRules.add(new Rule(
+                new ArrayList<>(Arrays.asList(new Fact("O(belong)AB"))),
+                new ArrayList<>(Arrays.asList(new Fact("AB=AO+OB")))));
     }
 
-    public static void addNewFactsFromExist () {
+    public static ArrayList<ArrayList<Float>> extended_matrix = new ArrayList<>();
+
+    private boolean checkSignature (Fact fact1, Fact fact2) {
+        String signature1 = fact1.statements.replaceAll("[A-Z]*", "");
+        String signature2 = fact2.statements.replaceAll("[A-Z]*", "");
+        return signature1.equals(signature2);
+    }
+
+    private boolean checkFactNamespace (Fact fact1rule, Fact fact2fact, ArrayList<String> ruleNamespace, ArrayList<String> factNamespace) {
+        Pattern ptrn = Pattern.compile("[A-Z]*");
+        Matcher matcher1 = ptrn.matcher(fact1rule.statements);
+        Matcher matcher2 = ptrn.matcher(fact2fact.statements);
+        String rule = "";
+        String fact = "";
+        while(matcher1.find()){
+            rule += matcher1.group();
+        }
+        while(matcher2.find()){
+            fact += matcher2.group();
+        }
+        if (rule.length() != fact.length())
+            return false;
+        for (int i = 0; i < rule.length(); i++) {
+            String tempName = factNamespace.get(ruleNamespace.indexOf(Character.toString(rule.charAt(i))));
+            if (tempName == null){
+                continue;
+            }
+            if (tempName.equals(fact.charAt(i))){
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private ArrayList<String> fillNamespace(Fact fact1rule, Fact fact2fact, ArrayList<String> ruleNamespace, ArrayList<String> factNamespace){
+        Pattern ptrn = Pattern.compile("[A-Z]*");
+        Matcher matcher1 = ptrn.matcher(fact1rule.statements);
+        Matcher matcher2 = ptrn.matcher(fact2fact.statements);
+        String rule = "";
+        String fact = "";
+        while(matcher1.find()){
+            rule += matcher1.group();
+        }
+        while(matcher2.find()){
+            fact += matcher2.group();
+        }
+        for (int i = 0; i < rule.length(); i++) {
+            String tempName = factNamespace.get(ruleNamespace.indexOf(Character.toString(rule.charAt(i))));
+            if (tempName == null){
+                factNamespace.set(ruleNamespace.indexOf(Character.toString(rule.charAt(i))), Character.toString(rule.charAt(i)));
+            }
+        }
+        return factNamespace;
+    }
+
+    public void addNewFactsFromExist (ArrayList<Fact> facts) {
+        for (Rule rule:baseOfRules) {
+            ArrayList<String> ruleNamespace = rule.getNamespace();
+            ArrayList<String> factNamespace = new ArrayList<>(ruleNamespace.size());
+            Collections.fill(factNamespace, null);
+            int f = 0;
+            int i = 0;
+            while(f < rule.conditions.size()) {
+                Fact fact = facts.get(i);
+                if (checkSignature(rule.conditions.get(f), fact) && checkFactNamespace(rule.conditions.get(f), fact, ruleNamespace, factNamespace)) {
+                    factNamespace = fillNamespace(rule.conditions.get(f), fact, ruleNamespace, factNamespace);
+                    f++;
+                    i = 0;
+                } else {
+                    i++;
+                }
+            }
+        }
+        /*
         for (int i = 0; i < global_facts.size(); i++) {
             Pattern patternOperator = Pattern.compile("\\([^,]*\\)");
             Matcher matcherOperator = patternOperator.matcher(global_facts.get(i));
@@ -76,10 +162,11 @@ public class ExpertSystem {
                 }
             }
         }
+         */
     }
 
     public static void createExtendedMatrix(){
-        ArrayList<String> extended_vars = new ArrayList<>();
+        /*ArrayList<String> extended_vars = new ArrayList<>();
         ArrayList<ArrayList<Float>> extended_matrix_X = new ArrayList<>();
         ArrayList<Float> extended_matrix_Y = new ArrayList<>();
         for (int i = 0; i < global_facts.size(); i++) {
@@ -153,6 +240,6 @@ public class ExpertSystem {
         for (String r: extended_vars) {
             strr += r + " ";
         }
-        Log.d("Mat", strr);
+        Log.d("Mat", strr);*/
     }
 }

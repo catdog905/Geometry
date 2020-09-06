@@ -90,17 +90,6 @@
 
         </LinearLayout>
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="290dp"
-        android:layout_height="98dp"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="3"
-        android:textSize="36sp" />
-
     <android.inputmethodservice.KeyboardView
         android:id="@+id/keyboardView"
         android:layout_width="fill_parent"
