@@ -35,7 +35,6 @@ public class BuilderFragment extends Fragment {
     ImageButton solveButton;
     Keyboard keyboard;
     KeyboardView keyboardView;
-    static EditText editText;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +47,6 @@ public class BuilderFragment extends Fragment {
         moveButton = root.findViewById(R.id.move);
         angleButton = root.findViewById(R.id.angle);
         backButton = root.findViewById(R.id.back);
-        editText = root.findViewById(R.id.editText);
         solveButton = root.findViewById(R.id.solve_button);
 
         // Create the Keyboard
@@ -102,14 +100,7 @@ public class BuilderFragment extends Fragment {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //MathModel mathModel = new MathModel();
-                //mathModel.getFactsFromFigure(builderFigure.getFigureUISingleton());
-
-                //String str = "";
-                //for (String fact : builderFigure.getFigureUI().facts){
-                //    str += fact + " ";
-                //}
-                //Log.d("FUItoF", str);
+                MathModel mathModel = new MathModel(builderFigure.getFigureUISingleton());
             }
         });
         solveButton.setOnClickListener(new View.OnClickListener() {
