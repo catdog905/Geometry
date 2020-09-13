@@ -8,7 +8,7 @@ import com.example.geometry.FigureModel.Node;
 import java.util.ArrayList;
 
 public class MathModel {
-    ArrayList<Fact> facts;
+    public ArrayList<Fact> facts;
 
     public MathModel(FigureUISingleton figureUISingleton) {
         getFactsFromFigure(figureUISingleton);
