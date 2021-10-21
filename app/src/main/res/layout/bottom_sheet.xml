@@ -1,46 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="340dp"
-    android:background="@android:color/darker_gray"
-    android:orientation="vertical"
+    android:background="@android:color/white"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="80dp"
+    android:orientation="vertical"
+    app:behavior_peekHeight="20dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-    <TextView
+
+    <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/cardview_shadow_end_color"
-        android:gravity="center"
-        android:text="bottom_sheet_peek"
-        android:textColor="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:fillViewport="false">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/one_instrument_of_figure"
+            android:textSize="20sp"/>
 
-            <include layout="@layout/fragment_dashboard" />
-            <include layout="@layout/fragment_home" />
-            <include layout="@layout/fragment_notifications" />
-        </LinearLayout>
-    </HorizontalScrollView>
+        <TableRow
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" >
 
-    <!--<fragment
-        android:id="@+id/nav_host_fragment_activity_main"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        android:gravity="center"
-        app:navGraph="@navigation/mobile_navigation" />-->
+        <ImageButton
+            android:layout_weight="1"
+            android:src="@drawable/cursor"/>
 
-</LinearLayout>
+        <ImageButton
+            android:layout_weight="1"
+            app:srcCompat="@drawable/camera" />
+
+        <ImageButton
+            android:layout_weight="1"
+            android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+        <TableRow
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" >
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor"/>
+
+            <ImageButton
+                android:layout_weight="1"
+                app:srcCompat="@drawable/camera" />
+
+            <ImageButton
+                android:layout_weight="1"
+                android:src="@drawable/cursor" />
+        </TableRow>
+
+    </LinearLayout>
+</ScrollView>
