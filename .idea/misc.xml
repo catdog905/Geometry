@@ -8,8 +8,11 @@
         <entry key="..\:/Users/user/Geometry/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/drawable/ic_launcher_background.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.14635416666666667" />
-        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/drawable/round.xml" value="0.1" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/bottom_sheet.xml" value="0.264" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/bottom_sheet_figurs.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/bottom_sheet_maths.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/botton_sheet_2.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/camera_fragment.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/figurs_fragment.xml" value="0.136" />
@@ -18,7 +21,7 @@
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_item.xml" value="0.72" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_item_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_notifications.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/maths_fragment.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/maths_fragment.xml" value="0.1" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/send_fragment.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2703125" />
