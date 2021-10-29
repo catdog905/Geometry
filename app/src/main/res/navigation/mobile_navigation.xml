@@ -5,25 +5,39 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_figurs" >
 
-
     <fragment
         android:id="@+id/navigation_camera"
         android:name="com.example.geometry.ui.camera.camera"
         android:label="camera_fragment"
-        tools:layout="@layout/camera_fragment" />
+        tools:layout="@layout/fragment_camera" />
     <fragment
         android:id="@+id/navigation_maths"
         android:name="com.example.geometry.ui.maths.maths"
         android:label="maths_fragment"
-        tools:layout="@layout/maths_fragment" />
+        tools:layout="@layout/fragment_maths" />
     <fragment
         android:id="@+id/navigation_figurs"
         android:name="com.example.geometry.ui.figurs.figurs"
         android:label="figurs_fragment"
-        tools:layout="@layout/figurs_fragment" />
+        tools:layout="@layout/fragment_figurs" />
     <fragment
         android:id="@+id/navigation_send"
         android:name="com.example.geometry.ui.send.send"
         android:label="send_fragment"
-        tools:layout="@layout/send_fragment" />
+        tools:layout="@layout/fragment_send" />
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.geometry.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_gallery"
+        android:name="com.example.geometry.ui.gallery.gallery"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+    <fragment
+        android:id="@+id/navigation_slideshow"
+        android:name="com.example.geometry.ui.slideshow.slideshow"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
 </navigation>

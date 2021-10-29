@@ -1,6 +1,5 @@
 package com.example.geometry.ui.maths
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,7 +19,7 @@ class maths : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.maths_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_maths, container, false)
     }
 
 }
