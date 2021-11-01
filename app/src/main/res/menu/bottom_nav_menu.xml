@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
         <item
             android:id="@+id/navigation_camera"
             android:icon="@drawable/camera"
@@ -14,8 +13,8 @@
             tools:ignore="MenuTitle" />
 
         <item
-            android:id="@+id/navigation_figurs"
-            android:icon="@drawable/figurs"
+            android:id="@+id/navigation_figures"
+            android:icon="@drawable/figures"
             tools:ignore="MenuTitle" />
 
         <item

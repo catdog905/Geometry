@@ -1,4 +1,4 @@
-package com.example.geometry.ui.figurs
+package com.example.geometry.ui.figures
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.geometry.R
 
-class figurs : Fragment() {
+class figures : Fragment() {
 
     companion object {
-        fun newInstance() = figurs()
+        fun newInstance() = figures()
     }
 
     private lateinit var viewModel: FigursViewModel
@@ -19,6 +19,6 @@ class figurs : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_figurs, container, false)
+        return inflater.inflate(R.layout.fragment_figures, container, false)
     }
 }

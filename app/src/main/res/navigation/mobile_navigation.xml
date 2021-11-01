@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_figurs" >
+    app:startDestination="@+id/navigation_figures" >
 
     <fragment
         android:id="@+id/navigation_camera"
@@ -16,10 +16,10 @@
         android:label="maths_fragment"
         tools:layout="@layout/fragment_maths" />
     <fragment
-        android:id="@+id/navigation_figurs"
-        android:name="com.example.geometry.ui.figurs.figurs"
-        android:label="figurs_fragment"
-        tools:layout="@layout/fragment_figurs" />
+        android:id="@+id/navigation_figures"
+        android:name="com.example.geometry.ui.figures.figures"
+        android:label="figures_fragment"
+        tools:layout="@layout/fragment_figures" />
     <fragment
         android:id="@+id/navigation_send"
         android:name="com.example.geometry.ui.send.send"
@@ -34,7 +34,7 @@
         android:id="@+id/navigation_gallery"
         android:name="com.example.geometry.ui.gallery.gallery"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/navigation_slideshow"
         android:name="com.example.geometry.ui.slideshow.slideshow"

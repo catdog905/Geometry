@@ -1,4 +1,4 @@
-package com.example.geometry.ui.figurs
+package com.example.geometry.ui.figures
 
 import androidx.lifecycle.ViewModel
 
