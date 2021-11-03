@@ -6,13 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.maths.maths">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center">
-
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/container"
+            android:layout_gravity="bottom|center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +20,5 @@
                 layout="@layout/bottom_sheet_maths" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

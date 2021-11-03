@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.example.geometry.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class figures : Fragment() {
 

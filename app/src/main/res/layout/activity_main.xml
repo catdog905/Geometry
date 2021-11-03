@@ -26,5 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
