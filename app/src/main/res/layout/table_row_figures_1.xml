@@ -39,10 +39,8 @@
                 android:textSize="@dimen/text_size_figures"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button_cursor"
-                app:layout_constraintVertical_bias="1.0" />
+                android:layout_marginBottom="@dimen/text_in_table_row" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +51,6 @@
                 android:id="@+id/point_with_letter"
                 android:layout_width="44px"
                 android:layout_height="46px"
-                android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@null"
                 android:cropToPadding="true"
@@ -68,18 +65,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/point"
-                android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_figures"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                android:layout_marginBottom="@dimen/text_in_table_row"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,7 +82,6 @@
             <ImageButton
                 android:layout_width="39px"
                 android:layout_height="39px"
-                android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@null"
                 android:cropToPadding="true"
@@ -105,18 +97,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/segment"
-                android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_figures"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                android:layout_marginBottom="@dimen/text_in_table_row"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,7 +114,6 @@
             <ImageButton
                 android:layout_width="52px"
                 android:layout_height="50px"
-                android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@null"
                 android:cropToPadding="true"
@@ -141,18 +128,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/line"
-                    android:textAlignment="gravity"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_figures"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.495"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    android:layout_marginBottom="@dimen/text_in_table_row" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </TableRow>
 </merge>

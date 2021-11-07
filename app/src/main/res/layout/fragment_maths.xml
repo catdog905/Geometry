@@ -6,19 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.maths.maths">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/container1"
-            android:layout_gravity="bottom|center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <include
-                android:id="@+id/include"
-                layout="@layout/bottom_sheet_maths" />
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <include
+        layout="@layout/scroll_maths"/>
 
 </FrameLayout>

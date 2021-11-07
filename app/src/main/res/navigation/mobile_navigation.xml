@@ -2,28 +2,28 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/nav_graph"
     app:startDestination="@+id/navigation_figures" >
 
     <fragment
         android:id="@+id/navigation_camera"
         android:name="com.example.geometry.ui.camera.camera"
-        android:label="camera_fragment"
+        android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
     <fragment
         android:id="@+id/navigation_maths"
         android:name="com.example.geometry.ui.maths.maths"
-        android:label="maths_fragment"
+        android:label="fragment_maths"
         tools:layout="@layout/fragment_maths" />
     <fragment
         android:id="@+id/navigation_figures"
         android:name="com.example.geometry.ui.figures.figures"
-        android:label="figures_fragment"
+        android:label="fragment_figures"
         tools:layout="@layout/fragment_figures" />
     <fragment
         android:id="@+id/navigation_send"
         android:name="com.example.geometry.ui.send.send"
-        android:label="send_fragment"
+        android:label="fragment_send"
         tools:layout="@layout/fragment_send" />
     <fragment
         android:id="@+id/navigation_home"

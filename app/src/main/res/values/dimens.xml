@@ -9,4 +9,6 @@
     <dimen name="text_size_figures">10sp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
+    <dimen name="text_in_table_row">4dp</dimen>
+    <dimen name="height_scroll_view">320dp</dimen>
 </resources>
