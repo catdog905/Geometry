@@ -3,23 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_figures" >
 
+    <fragment
+        android:id="@+id/navigation_camera"
+        android:name="com.example.geometry.ui.camera.camera"
+        android:label="camera_fragment"
+        tools:layout="@layout/fragment_camera" />
+    <fragment
+        android:id="@+id/navigation_maths"
+        android:name="com.example.geometry.ui.maths.maths"
+        android:label="maths_fragment"
+        tools:layout="@layout/fragment_maths" />
+    <fragment
+        android:id="@+id/navigation_figures"
+        android:name="com.example.geometry.ui.figures.figures"
+        android:label="figures_fragment"
+        tools:layout="@layout/fragment_figures" />
+    <fragment
+        android:id="@+id/navigation_send"
+        android:name="com.example.geometry.ui.send.send"
+        android:label="send_fragment"
+        tools:layout="@layout/fragment_send" />
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.geometry.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.geometry.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
-
+        android:id="@+id/navigation_gallery"
+        android:name="com.example.geometry.ui.gallery.gallery"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_settings" />
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.geometry.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_slideshow"
+        android:name="com.example.geometry.ui.slideshow.slideshow"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
 </navigation>
