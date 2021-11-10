@@ -7,12 +7,13 @@
     android:id="@+id/container"
     android:paddingTop="?attr/actionBarSize"
     tools:context=".MainActivity"
-    android:background="@color/red"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_gravity="bottom|center"
             android:id="@+id/bottom_navigation_view"
@@ -27,16 +28,25 @@
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/round_shadow"
+                app:layout_anchor="@id/bottom_sheet"
+                app:layout_anchorGravity="top|end" />
 
             <include
                 android:id="@+id/bottom_sheet"
                 layout="@layout/bottom_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="340dp"
-                app:behavior_hideable="false"
                 app:behavior_peekHeight="20dp"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 

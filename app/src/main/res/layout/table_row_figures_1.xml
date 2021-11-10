@@ -14,20 +14,19 @@
 
             <ImageButton
                 android:id="@+id/button_cursor"
-                android:layout_width="140px"
-                android:layout_height="140px"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"
-                android:padding="50px"
+                android:padding="@dimen/padding_in_the_button_1"
                 android:scaleType="centerInside"
-                android:src="@drawable/cursor"
+                android:src="@drawable/ic_cursor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black"
-                tools:ignore="PxUsage" />
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/text_cursor"
@@ -48,20 +47,23 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/point_with_letter"
-                android:layout_width="44px"
-                android:layout_height="46px"
+                android:id="@+id/button_point_with_letter"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
-                android:background="@null"
+                android:background="@color/white"
                 android:cropToPadding="true"
+                android:padding="@dimen/padding_in_the_button_1"
                 android:scaleType="centerInside"
+                android:src="@drawable/ic_point_with_letter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/point_with_letter" />
+                app:tint="@color/black" />
 
             <TextView
+                android:id="@+id/text_point_with_letter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -80,20 +82,23 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:layout_width="39px"
-                android:layout_height="39px"
+                android:id="@+id/button_segment"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
-                android:background="@null"
+                android:background="@color/white"
                 android:cropToPadding="true"
+                android:padding="@dimen/padding_in_the_button_1"
                 android:scaleType="centerInside"
-                android:src="@null"
+                android:src="@drawable/ic_segment"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/segment" />
+                app:tint="@color/black" />
 
             <TextView
+                android:id="@+id/text_segment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -112,30 +117,34 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:layout_width="52px"
-                android:layout_height="50px"
+                android:id="@+id/button_line"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
-                android:background="@null"
+                android:background="@color/white"
                 android:cropToPadding="true"
+                android:padding="@dimen/padding_in_the_button_2"
                 android:scaleType="centerInside"
-                android:src="@drawable/line"
+                android:src="@drawable/ic_line"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/line"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_figures"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginBottom="@dimen/text_in_table_row" />
+            <TextView
+                android:id="@+id/text_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/line"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_figures"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="@dimen/text_in_table_row" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </TableRow>
 </merge>

@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools">
         <item
             android:id="@+id/navigation_camera"
-            android:icon="@drawable/camera"
+            android:icon="@drawable/ic_camera"
             tools:ignore="MenuTitle" />
 
         <item
             android:id="@+id/navigation_maths"
-            android:icon="@drawable/maths"
+            android:icon="@drawable/ic_maths"
             tools:ignore="MenuTitle" />
 
         <item
             android:id="@+id/navigation_figures"
-            android:icon="@drawable/figures"
+            android:icon="@drawable/ic_figures"
             tools:ignore="MenuTitle" />
 
         <item
             android:id="@+id/navigation_send"
-            android:icon="@drawable/send"
+            android:icon="@drawable/ic_send"
             tools:ignore="MenuTitle" />
 </menu>

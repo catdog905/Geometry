@@ -13,18 +13,24 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:layout_width="48px"
-                android:layout_height="54px"
+                android:id="@+id/button_polygon"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
-                android:background="@null"
+                android:background="@color/white"
+                android:cropToPadding="true"
+                android:padding="@dimen/padding_in_the_button_2"
                 android:scaleType="centerInside"
-                android:src="@drawable/polygon"
+                android:src="@drawable/ic_polygon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
+
 
             <TextView
+                android:id="@+id/text_polygon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -46,20 +52,24 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
-                android:layout_width="50px"
-                android:layout_height="50px"
+                android:id="@+id/button_circle"
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:adjustViewBounds="true"
-                android:background="@null"
+                android:background="@color/white"
                 android:cropToPadding="true"
+                android:padding="@dimen/padding_in_the_button_2"
                 android:scaleType="centerInside"
+                android:src="@drawable/ic_circle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/circle" />
+                app:tint="@color/black" />
+
 
             <TextView
-
+                android:id="@+id/text_circle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

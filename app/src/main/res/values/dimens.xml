@@ -11,4 +11,7 @@
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="text_in_table_row">4dp</dimen>
     <dimen name="height_scroll_view">320dp</dimen>
+    <dimen name="radius_bottom_sheet">20dp</dimen>
+    <dimen name="padding_in_the_button_1">14dp</dimen>
+    <dimen name="padding_in_the_button_2">12dp</dimen>
 </resources>

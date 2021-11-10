@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/navigation_drawer"
-        android:icon="@drawable/drawer"
+        android:icon="@drawable/ic_camera"
         tools:ignore="MenuTitle" />
 
 </menu>

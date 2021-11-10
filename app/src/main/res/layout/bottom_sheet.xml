@@ -4,20 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/round_main"
+
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="340dp">
+        android:layout_height="340dp"
+        android:background="@drawable/round_main">
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="70px"
-            android:layout_height="10px"
+            android:layout_width="30dp"
+            android:layout_height="4dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/line_above_bottom_sheet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,7 @@
         <fragment
             android:id="@+id/navigation_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="410dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:defaultNavHost="true"
             android:layout_marginTop="20dp"
