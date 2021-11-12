@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_maths" />
     <fragment
         android:id="@+id/navigation_figures"
-        android:name="com.example.geometry.ui.figures.figures"
+        android:name="com.example.geometry.ui.figures.Figures"
         android:label="fragment_figures"
         tools:layout="@layout/fragment_figures" />
     <fragment
