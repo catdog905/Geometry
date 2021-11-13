@@ -35,7 +35,7 @@
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/content_main.xml" value="0.1" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/drawer_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_about.xml" value="0.14635416666666667" />
-        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_figures.xml" value="0.1" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_figures.xml" value="0.4" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_figurs.xml" value="0.4" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_home.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/fragment_item_list_dialog_list_dialog.xml" value="0.14583333333333334" />
@@ -48,8 +48,8 @@
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/scroll_figures.xml" value="0.264" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/selector.xml" value="0.1783783783783784" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/sketches.xml" value="0.1" />
-        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/table_row_figures_1.xml" value="0.4" />
-        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/table_row_figures_2.xml" value="0.536" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/table_row_figures_1.xml" value="0.2" />
+        <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/table_row_figures_2.xml" value="0.4417952314165498" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/table_row_figures_3.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/layout/table_row_maths_1.xml" value="0.275" />
         <entry key="..\:/Users/user/Geometry/app/src/main/res/menu/activity_main_drawer.xml" value="0.16" />

@@ -9,13 +9,13 @@
         android:layout_gravity="center">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="66dp"
+            android:layout_height="80dp"
             android:layout_weight="1">
 
             <ImageButton
                 android:id="@+id/button_polygon"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"
@@ -46,15 +46,15 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="66dp"
+            android:layout_height="80dp"
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
                 android:id="@+id/button_circle"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"

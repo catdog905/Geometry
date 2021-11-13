@@ -3,8 +3,8 @@
     android:interpolator="@android:anim/linear_interpolator">
     <alpha
         android:fromAlpha="1.0"
-        android:toAlpha="0.5"
-        android:duration="200"
+        android:toAlpha="0.6"
+        android:duration="150"
         android:repeatCount="1"
         android:repeatMode="reverse" />
 </set>

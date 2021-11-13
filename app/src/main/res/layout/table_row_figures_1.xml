@@ -9,13 +9,13 @@
         android:layout_gravity="center">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="66dp"
+            android:layout_height="80dp"
             android:layout_weight="1">
 
             <ImageButton
                 android:id="@+id/button_cursor"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"
@@ -43,13 +43,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="66dp"
+            android:layout_height="80dp"
             android:layout_weight="1">
 
             <ImageButton
                 android:id="@+id/button_point_with_letter"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"
@@ -78,13 +78,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="66dp"
+            android:layout_height="80dp"
             android:layout_weight="1">
 
             <ImageButton
                 android:id="@+id/button_segment"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"
@@ -113,13 +113,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="66dp"
+            android:layout_height="80dp"
             android:layout_weight="1">
 
             <ImageButton
                 android:id="@+id/button_line"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:background="@color/white"
                 android:cropToPadding="true"

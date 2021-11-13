@@ -1,9 +1,11 @@
 package com.example.geometry.ui.figures
 
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -12,19 +14,22 @@ import android.widget.TextView
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import com.example.geometry.R
+import java.util.ArrayList
 
 
-class Figures : Fragment(), View.OnClickListener {
+class Figures : Fragment(), View.OnTouchListener {
     
     companion object {
         fun newInstance() = Figures()
     }
 
     private val buttonHashMap: HashMap<ImageButton, TextView> = linkedMapOf()
-    
+    private val buttonList = listOf("button_cursor","button_point_with_letter","button_segment","button_line","button_polygon","button_circle")
+    private val textList = listOf("text_cursor","text_point_with_letter","text_segment","text_line","text_polygon","text_circle")
     private lateinit var viewModel: FiguresViewModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         buttonHashMap[view.findViewById(R.id.button_cursor)]=view.findViewById(R.id.text_cursor)
@@ -34,9 +39,10 @@ class Figures : Fragment(), View.OnClickListener {
         buttonHashMap[view.findViewById(R.id.button_polygon)]=view.findViewById(R.id.text_polygon)
         buttonHashMap[view.findViewById(R.id.button_circle)]=view.findViewById(R.id.text_circle)
 
-        buttonHashMap.forEach { (key) -> key.setOnClickListener(this) }
+        buttonHashMap.forEach { (key) -> key.setOnTouchListener(this) }
     }
-    override fun onClick(v: View) {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouch(v: View , p1: MotionEvent?): Boolean {
 
         buttonHashMap.forEach { (key, value) ->
             ImageViewCompat.setImageTintList(
@@ -50,8 +56,7 @@ class Figures : Fragment(), View.OnClickListener {
             v as ImageButton , ColorStateList.valueOf(
                 resources.getColor(R.color.red)))
         buttonHashMap[v]?.setTextColor(resources.getColor(R.color.red))
-
-
+    return false
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,4 +64,5 @@ class Figures : Fragment(), View.OnClickListener {
     ): View? {
         return inflater.inflate(R.layout.fragment_figures, container, false)
     }
+
 }
